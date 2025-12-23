@@ -156,19 +156,50 @@ class _LibraryPageState extends State<LibraryPage> {
           actions: [
             PopupMenuButton<LibrarySortMode>(
               icon: const Icon(Icons.sort, color: Colors.black, size: 28),
+              surfaceTintColor: Colors.transparent,
+              color: Colors.white,
+              shape: const RoundedRectangleBorder(
+                side: BorderSide(color: Colors.black, width: 3),
+              ),
               onSelected: (mode) {
                 setState(() {
                   _sortMode = mode;
                 });
               },
               itemBuilder: (context) => [
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: LibrarySortMode.name,
-                  child: Text('NAME'),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.sort_by_alpha, color: Colors.black),
+                      const SizedBox(width: 12),
+                      Text(
+                        'NAME',
+                        style: GoogleFonts.teko(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
-                const PopupMenuItem(
+                PopupMenuItem(
                   value: LibrarySortMode.lastUpdated,
-                  child: Text('LAST UPDATED'),
+                  child: Row(
+                    children: [
+                      const Icon(Icons.history, color: Colors.black),
+                      const SizedBox(width: 12),
+                      Text(
+                        'LAST UPDATED',
+                        style: GoogleFonts.teko(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 1.2,
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),
