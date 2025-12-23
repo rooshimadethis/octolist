@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -11,6 +12,8 @@ import '../widgets/anime_card_skeleton.dart';
 import '../widgets/outlined_star.dart';
 import '../utils/color_parser.dart';
 
+enum LibrarySortMode { name, lastUpdated }
+
 class LibraryPage extends StatefulWidget {
   final String? initialTabName;
   const LibraryPage({super.key, this.initialTabName});
@@ -20,6 +23,8 @@ class LibraryPage extends StatefulWidget {
 }
 
 class _LibraryPageState extends State<LibraryPage> {
+  LibrarySortMode _sortMode = LibrarySortMode.lastUpdated;
+
   @override
   void initState() {
     super.initState();
@@ -148,10 +153,35 @@ class _LibraryPageState extends State<LibraryPage> {
                 .map((name) => Tab(text: name.toUpperCase()))
                 .toList(),
           ),
+          actions: [
+            PopupMenuButton<LibrarySortMode>(
+              icon: const Icon(Icons.sort, color: Colors.black, size: 28),
+              onSelected: (mode) {
+                setState(() {
+                  _sortMode = mode;
+                });
+              },
+              itemBuilder: (context) => [
+                const PopupMenuItem(
+                  value: LibrarySortMode.name,
+                  child: Text('NAME'),
+                ),
+                const PopupMenuItem(
+                  value: LibrarySortMode.lastUpdated,
+                  child: Text('LAST UPDATED'),
+                ),
+              ],
+            ),
+            const SizedBox(width: 8),
+          ],
         ),
         body: TabBarView(
           children: listNames.map((name) {
-            return _LibraryTabContent(listName: name, onUpdate: _handleUpdate);
+            return _LibraryTabContent(
+              listName: name,
+              onUpdate: _handleUpdate,
+              sortMode: _sortMode,
+            );
           }).toList(),
         ),
       ),
@@ -162,8 +192,13 @@ class _LibraryPageState extends State<LibraryPage> {
 class _LibraryTabContent extends StatefulWidget {
   final String listName;
   final Future<void> Function(WatchingEntry, String, int) onUpdate;
+  final LibrarySortMode sortMode;
 
-  const _LibraryTabContent({required this.listName, required this.onUpdate});
+  const _LibraryTabContent({
+    required this.listName,
+    required this.onUpdate,
+    required this.sortMode,
+  });
 
   @override
   State<_LibraryTabContent> createState() => _LibraryTabContentState();
@@ -178,7 +213,19 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
   Widget build(BuildContext context) {
     super.build(context);
     final store = context.watch<AnimeStore>();
-    final entries = store.getListEntries(widget.listName);
+    final rawEntries = store.getListEntries(widget.listName);
+
+    // Apply sorting
+    final List<WatchingEntry> entries = List.from(rawEntries);
+    if (widget.sortMode == LibrarySortMode.name) {
+      entries.sort((a, b) => a.anime.title.compareTo(b.anime.title));
+    } else if (widget.sortMode == LibrarySortMode.lastUpdated) {
+      entries.sort((a, b) {
+        final timeA = a.updatedAt ?? 0;
+        final timeB = b.updatedAt ?? 0;
+        return timeB.compareTo(timeA); // Newest first
+      });
+    }
 
     if (entries.isEmpty) {
       if (store.isLoading) {
@@ -268,6 +315,7 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
 
     return GestureDetector(
       onTap: () {
+        HapticFeedback.lightImpact();
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => AnimeDetailsPage(anime: anime),

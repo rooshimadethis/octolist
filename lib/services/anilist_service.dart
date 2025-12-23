@@ -40,6 +40,7 @@ class AniListService implements IAnimeService {
   GraphQLClient get _client => _clientNotifier.value;
 
   /// Loads the current user's profile information.
+  @override
   Future<UserProfile?> getUserProfile() async {
     final QueryOptions options = QueryOptions(
       document: gql(AnimeQueries.getViewer),
@@ -60,6 +61,7 @@ class AniListService implements IAnimeService {
   }
 
   /// Loads the user's currently watching anime list.
+  @override
   Future<List<WatchingEntry>> getWatchingList() async {
     // We need the user ID first
     final user = await getUserProfile();
@@ -88,15 +90,17 @@ class AniListService implements IAnimeService {
 
     return entries.map((e) {
       return WatchingEntry(
-        id: e['id'],
         progress: e['progress'] ?? 0,
         userScore: (e['score'] as num?)?.toInt() ?? 0,
+        id: e['id'],
+        updatedAt: e['updatedAt'],
         anime: Anime.fromJson(e['media']),
       );
     }).toList();
   }
 
   /// Loads all of the user's library lists.
+  @override
   Future<Map<String, List<WatchingEntry>>> getLibraryLists() async {
     final user = await getUserProfile();
     if (user == null) return {};
@@ -123,9 +127,10 @@ class AniListService implements IAnimeService {
       final List entries = list['entries'];
       library[name] = entries.map((e) {
         return WatchingEntry(
-          id: e['id'],
           progress: e['progress'] ?? 0,
           userScore: (e['score'] as num?)?.toInt() ?? 0,
+          id: e['id'],
+          updatedAt: e['updatedAt'],
           anime: Anime.fromJson(e['media']),
         );
       }).toList();
@@ -135,6 +140,7 @@ class AniListService implements IAnimeService {
   }
 
   /// Loads the list of currently trending anime.
+  @override
   Future<List<Anime>> getTrendingAnime() async {
     final QueryOptions options = QueryOptions(
       document: gql(AnimeQueries.getTrendingAnime),
@@ -152,6 +158,7 @@ class AniListService implements IAnimeService {
   }
 
   /// Loads detailed information for a specific anime by ID.
+  @override
   Future<Anime?> getAnimeDetails(int id) async {
     final QueryOptions options = QueryOptions(
       document: gql(AnimeQueries.getAnimeDetails),
@@ -171,6 +178,7 @@ class AniListService implements IAnimeService {
   }
 
   /// Searches for anime matching the given query.
+  @override
   Future<List<Anime>> searchAnime(String query) async {
     final QueryOptions options = QueryOptions(
       document: gql(AnimeQueries.searchAnime),
@@ -189,12 +197,14 @@ class AniListService implements IAnimeService {
   }
 
   /// Retrieves the names of all available lists in the user's library.
+  @override
   Future<List<String>> getAvailableListNames() async {
     final lists = await getLibraryLists();
     return lists.keys.toList();
   }
 
   /// Check if an anime is in the user's library and return the entry
+  @override
   Future<WatchingEntry?> getMediaListEntry(int animeId) async {
     // This is inefficient but works for now without complex cache management
     // Ideally we would query for just this media entry directly from API
@@ -213,6 +223,7 @@ class AniListService implements IAnimeService {
   }
 
   /// Saves or updates an anime entry in the user's library.
+  @override
   Future<void> saveMediaListEntry(
     int animeId,
     String listName,
@@ -248,6 +259,7 @@ class AniListService implements IAnimeService {
   /// This method automatically handles:
   /// - Debouncing (500ms) to prevent API spam
   /// - Status updates (moves to CURRENT if started, COMPLETED if finished)
+  @override
   Future<void> updateEpisodeProgress(
     int animeId,
     int progress,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:confetti/confetti.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/watching_entry.dart';
@@ -64,6 +65,7 @@ class _WatchingCardState extends State<WatchingCard> {
     return RepaintBoundary(
       child: GestureDetector(
         onTap: () {
+          HapticFeedback.lightImpact();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => AnimeDetailsPage(anime: widget.entry.anime),
@@ -179,7 +181,10 @@ class _WatchingCardState extends State<WatchingCard> {
                               Material(
                                 color: Colors.transparent,
                                 child: InkWell(
-                                  onTap: widget.onDecrement,
+                                  onTap: () {
+                                    HapticFeedback.mediumImpact();
+                                    widget.onDecrement?.call();
+                                  },
                                   borderRadius: BorderRadius.zero,
                                   child: Container(
                                     padding: const EdgeInsets.all(6),
@@ -232,6 +237,7 @@ class _WatchingCardState extends State<WatchingCard> {
                                   color: Colors.transparent,
                                   child: InkWell(
                                     onTap: () {
+                                      HapticFeedback.mediumImpact();
                                       widget.onIncrement();
                                       _confettiController.play();
                                     },

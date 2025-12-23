@@ -45,6 +45,7 @@ class MockDataService implements IAnimeService {
         id: e['id'],
         progress: e['progress'] ?? 0,
         userScore: e['score'] ?? 0,
+        updatedAt: e['updatedAt'],
         anime: Anime.fromJson(e['media']),
       );
     }).toList();
@@ -69,6 +70,7 @@ class MockDataService implements IAnimeService {
           id: e['id'],
           progress: e['progress'] ?? 0,
           userScore: e['score'] ?? 0,
+          updatedAt: e['updatedAt'],
           anime: Anime.fromJson(e['media']),
         );
       }).toList();
@@ -187,6 +189,7 @@ class MockDataService implements IAnimeService {
             id: entry['id'],
             progress: entry['progress'] ?? 0,
             userScore: entry['score'] ?? 0,
+            updatedAt: entry['updatedAt'],
             anime: Anime.fromJson(entry['media']),
           );
         }

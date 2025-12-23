@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:confetti/confetti.dart';
@@ -123,6 +124,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
 
                   return InkWell(
                     onTap: () {
+                      HapticFeedback.lightImpact();
                       Navigator.pop(context);
                       _updateListStatus(anime, listName);
                     },
@@ -506,11 +508,13 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                             ElevatedButton.icon(
                                               onPressed: _isUpdating
                                                   ? null
-                                                  : () =>
-                                                        _showListSelectionDialog(
-                                                          anime,
-                                                          currentListName,
-                                                        ),
+                                                  : () {
+                                                      HapticFeedback.lightImpact();
+                                                      _showListSelectionDialog(
+                                                        anime,
+                                                        currentListName,
+                                                      );
+                                                    },
                                               icon: Icon(
                                                 currentListName == null
                                                     ? Icons.add
@@ -638,11 +642,13 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                       onPressed:
                                                           currentEpisode <= 0
                                                           ? null
-                                                          : () =>
-                                                                _updateEpisodeProgress(
-                                                                  anime,
-                                                                  -1,
-                                                                ),
+                                                          : () {
+                                                              HapticFeedback.mediumImpact();
+                                                              _updateEpisodeProgress(
+                                                                anime,
+                                                                -1,
+                                                              );
+                                                            },
                                                       style: ElevatedButton.styleFrom(
                                                         backgroundColor:
                                                             Colors.white,
@@ -684,11 +690,13 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                           currentEpisode >=
                                                               anime.episodes!
                                                           ? null
-                                                          : () =>
-                                                                _updateEpisodeProgress(
-                                                                  anime,
-                                                                  1,
-                                                                ),
+                                                          : () {
+                                                              HapticFeedback.mediumImpact();
+                                                              _updateEpisodeProgress(
+                                                                anime,
+                                                                1,
+                                                              );
+                                                            },
                                                       style: ElevatedButton.styleFrom(
                                                         backgroundColor:
                                                             Colors.black,

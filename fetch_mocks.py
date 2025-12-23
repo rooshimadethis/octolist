@@ -155,6 +155,7 @@ query GetViewerData($name: String) {{
         status
         score
         progress
+        updatedAt
         media {{
           ...MediaShort
         }}

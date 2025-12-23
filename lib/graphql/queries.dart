@@ -124,6 +124,7 @@ class AnimeQueries {
             id
             progress
             score
+            updatedAt
             media {
               ...MediaFragment
             }

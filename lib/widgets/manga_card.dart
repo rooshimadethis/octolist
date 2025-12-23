@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import '../models/anime.dart';
 import '../theme/expressive_theme.dart';
 import '../utils/color_parser.dart';
@@ -27,6 +28,7 @@ class MangaCard extends StatelessWidget {
     return RepaintBoundary(
       child: GestureDetector(
         onTap: () {
+          HapticFeedback.lightImpact();
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => AnimeDetailsPage(anime: anime),

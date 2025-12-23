@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -260,6 +261,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             if (avatarUrl != null && avatarUrl.isNotEmpty)
                               GestureDetector(
                                 onTap: () {
+                                  HapticFeedback.lightImpact();
                                   if (user != null) {
                                     UserProfileDialog.show(context, user);
                                   }
@@ -481,7 +483,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                     onChanged: (value) {
                       _searchQuery = value;
                     },
-                    onSubmitted: (_) => _performSearch(),
+                    onSubmitted: (_) {
+                      HapticFeedback.lightImpact();
+                      _performSearch();
+                    },
                     style: GoogleFonts.robotoMono(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
                       hintText: 'FIND ANIME...',
@@ -517,7 +522,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                   ),
                   const SizedBox(height: 16),
                   ElevatedButton(
-                    onPressed: _performSearch,
+                    onPressed: () {
+                      HapticFeedback.lightImpact();
+                      _performSearch();
+                    },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Colors.black,
                       foregroundColor: Colors.white,
@@ -660,12 +668,15 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
           child: NavigationBar(
             // height: 50,
             selectedIndex: _selectedIndex,
-            onDestinationSelected: (index) => setState(() {
-              _selectedIndex = index;
-              if (index != 2) {
-                _libraryInitialTab = null;
-              }
-            }),
+            onDestinationSelected: (index) {
+              HapticFeedback.lightImpact();
+              setState(() {
+                _selectedIndex = index;
+                if (index != 2) {
+                  _libraryInitialTab = null;
+                }
+              });
+            },
             elevation: 0,
             backgroundColor: Colors.white,
             indicatorColor:
