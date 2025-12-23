@@ -106,28 +106,33 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
     }
   }
 
-  Future<void> _incrementProgress(
+  Future<void> _updateProgress(
     WatchingEntry entry,
     int currentProgress,
+    int delta,
   ) async {
+    final newProgress = currentProgress + delta;
+    if (newProgress < 0) return;
+
     // Optimistic update
     setState(() {
-      _progressOverrides[entry.id] = currentProgress + 1;
+      _progressOverrides[entry.id] = newProgress;
     });
 
     try {
       await _aniListService.updateEpisodeProgress(
         entry.anime.id,
-        currentProgress + 1,
+        newProgress,
         entry.anime.episodes,
       );
 
       if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
-            content: Text('Progress updated successfully!'),
-            backgroundColor: Colors.black, // Consistent with app theme
-            duration: Duration(seconds: 1),
+            content: Text('Progress updated!'),
+            backgroundColor: Colors.black,
+            duration: Duration(milliseconds: 500),
           ),
         );
       }
@@ -392,9 +397,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                           entry: entry,
                                           progress: progress,
                                           heroPrefix: 'home',
-                                          onIncrement: () => _incrementProgress(
+                                          onIncrement: () => _updateProgress(
                                             entry,
                                             progress,
+                                            1,
                                           ),
                                         )
                                         .animate(
@@ -585,7 +591,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                           if (_searchQuery.isEmpty) {
                             return Center(
                               child: Text(
-                                'FIND SOMETHING...',
+                                '👀',
                                 style: GoogleFonts.teko(
                                   fontSize: 24,
                                   fontWeight: FontWeight.bold,

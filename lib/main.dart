@@ -3,11 +3,18 @@ import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'services/auth_service.dart';
 import 'screens/expressive_home_screen.dart';
+import 'package:flutter_displaymode/flutter_displaymode.dart';
 
 void main() async {
   // We need to initialize Hive for graphql_flutter's cache
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
+
+  try {
+    await FlutterDisplayMode.setHighRefreshRate();
+  } catch (e) {
+    debugPrint("Error setting high refresh rate: $e");
+  }
 
   try {
     await dotenv.load(fileName: ".env");

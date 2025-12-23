@@ -61,15 +61,21 @@ class _LibraryPageState extends State<LibraryPage> {
     }
   }
 
-  Future<void> _handleIncrement(WatchingEntry entry, String listName) async {
+  Future<void> _handleUpdate(
+    WatchingEntry entry,
+    String listName,
+    int delta,
+  ) async {
     final currentProgress = entry.progress;
     final totalEpisodes = entry.anime.episodes;
+    final newProgress = currentProgress + delta;
 
-    if (totalEpisodes != null && currentProgress >= totalEpisodes) {
+    if (newProgress < 0) return;
+    if (totalEpisodes != null &&
+        delta > 0 &&
+        currentProgress >= totalEpisodes) {
       return;
     }
-
-    final newProgress = currentProgress + 1;
 
     // Optimistic Update
     setState(() {
@@ -91,6 +97,18 @@ class _LibraryPageState extends State<LibraryPage> {
         newProgress,
         totalEpisodes,
       );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        // Minimal feedback for library list actions to keep flow smooth
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Updated!'),
+            duration: Duration(milliseconds: 300),
+            backgroundColor: Colors.black,
+          ),
+        );
+      }
     } catch (e) {
       // Revert on failure
       if (mounted) {
@@ -244,7 +262,7 @@ class _LibraryPageState extends State<LibraryPage> {
                       entry: entry,
                       progress: entry.progress,
                       heroPrefix: 'library',
-                      onIncrement: () => _handleIncrement(entry, listName),
+                      onIncrement: () => _handleUpdate(entry, listName, 1),
                       width: double.infinity,
                       height: 140,
                     )

@@ -225,24 +225,22 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   /// Moves from Planning/Dropped to Current when incrementing
   Future<void> _updateEpisodeProgress(Anime anime, int delta) async {
     final totalEpisodes = anime.episodes ?? 999;
+    final oldProgress = _currentEpisode;
+    final oldListName = _currentListName;
+
+    // Calculate new state based on current optimistic state
     final newProgress = (_currentEpisode + delta).clamp(0, totalEpisodes);
 
     if (newProgress == _currentEpisode) return; // No change
 
-    setState(() => _isUpdating = true);
-
-    // Determine target list based on progress and current state
-    String targetList = _currentListName ?? 'Current';
+    // Determine target list based on progress and current state (Optimistic)
+    String targetList = _currentListName ?? 'Watching';
 
     if (delta > 0) {
-      // When incrementing:
-      // - If not in any list, add to Current
-      // - If in Planning or Dropped, move to Current
-      // - If completing all episodes, move to Completed
       if (_currentListName == null ||
           _currentListName == 'Planning' ||
           _currentListName == 'Dropped') {
-        targetList = 'Current';
+        targetList = 'Watching';
       }
 
       if (newProgress >= totalEpisodes) {
@@ -253,14 +251,14 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
       _confettiController.play();
     }
 
-    try {
-      if (mounted) {
-        // Optional: Toast for "Updating..." might be too noisy for rapid clicks,
-        // but user asked for "any utils called".
-        // I'll skip the 'Updating...' distinct toast here to allow rapid clicking
-        // and just show success/fail, or shows it briefly.
-      }
+    // Optimistic Update
+    setState(() {
+      _currentEpisode = newProgress;
+      _currentListName = targetList;
+      // We don't set _isUpdating = true here to allow rapid clicks
+    });
 
+    try {
       await _dataService.updateEpisodeProgress(
         anime.id,
         newProgress,
@@ -268,12 +266,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
       );
 
       if (mounted) {
-        setState(() {
-          _currentEpisode = newProgress;
-          _currentListName = targetList;
-          _isUpdating = false;
-        });
-
+        ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Progress saved!'),
@@ -283,8 +276,12 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
         );
       }
     } catch (e) {
+      // Revert on error
       if (mounted) {
-        setState(() => _isUpdating = false);
+        setState(() {
+          _currentEpisode = oldProgress;
+          _currentListName = oldListName;
+        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to save progress: $e'),
@@ -668,8 +665,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               Expanded(
                                                 child: ElevatedButton(
                                                   onPressed:
-                                                      _isUpdating ||
-                                                          _currentEpisode <= 0
+                                                      _currentEpisode <= 0
                                                       ? null
                                                       : () =>
                                                             _updateEpisodeProgress(
@@ -712,9 +708,8 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               Expanded(
                                                 child: ElevatedButton(
                                                   onPressed:
-                                                      _isUpdating ||
-                                                          _currentEpisode >=
-                                                              anime.episodes!
+                                                      _currentEpisode >=
+                                                          anime.episodes!
                                                       ? null
                                                       : () =>
                                                             _updateEpisodeProgress(

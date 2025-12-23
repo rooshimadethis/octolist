@@ -9,6 +9,7 @@ class WatchingCard extends StatefulWidget {
   final WatchingEntry entry;
   final int progress;
   final VoidCallback onIncrement;
+  final VoidCallback? onDecrement;
   final double? width;
   final double? height;
   final String? heroPrefix;
@@ -18,6 +19,7 @@ class WatchingCard extends StatefulWidget {
     required this.entry,
     required this.progress,
     required this.onIncrement,
+    this.onDecrement,
     this.width,
     this.height,
     this.heroPrefix,
@@ -170,7 +172,41 @@ class _WatchingCardState extends State<WatchingCard> {
                             ),
                           ),
                           if (hasNext) ...[
-                            const SizedBox(width: 12),
+                            const SizedBox(width: 8),
+                            // Minus Button
+                            if (widget.progress > 0 &&
+                                widget.onDecrement != null)
+                              Material(
+                                color: Colors.transparent,
+                                child: InkWell(
+                                  onTap: widget.onDecrement,
+                                  borderRadius: BorderRadius.zero,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      border: Border.all(
+                                        color: Colors.black,
+                                        width: 2,
+                                      ),
+                                      shape: BoxShape.rectangle,
+                                      boxShadow: const [
+                                        BoxShadow(
+                                          color: Colors.black,
+                                          offset: Offset(2, 2),
+                                        ),
+                                      ],
+                                    ),
+                                    child: const Icon(
+                                      Icons.remove_sharp,
+                                      color: Colors.black,
+                                      size: 18,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            const SizedBox(width: 8),
+                            // Plus Button
                             Stack(
                               alignment: Alignment.center,
                               children: [

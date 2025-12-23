@@ -2,6 +2,12 @@
     "version": "0.2.0",
     "configurations": [
         {
+            "name": "octolist (CPH2551)",
+            "request": "launch",
+            "type": "dart",
+            "deviceId": "e6600b0"
+        },
+        {
             "name": "octolist (iOS Simulator)",
             "request": "launch",
             "type": "dart",
@@ -20,7 +26,7 @@
             "preLaunchTask": "Launch Pixel 9 Pro Fold"
         },
         {
-            "name": "octolist (Pixel 9 Pro Fold 2)",
+            "name": "octolist (Pixel 9 Pro Fold (2))",
             "request": "launch",
             "type": "dart",
             "preLaunchTask": "Launch Pixel 9 Pro Fold (2)"

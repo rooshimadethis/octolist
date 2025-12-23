@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../models/anime.dart';
@@ -12,7 +13,16 @@ import '../graphql/queries.dart';
 class AniListService {
   final ValueNotifier<GraphQLClient> _clientNotifier;
 
-  AniListService() : _clientNotifier = AniListClient.initClient();
+  static final AniListService _instance = AniListService._internal();
+
+  factory AniListService() => _instance;
+
+  AniListService._internal() : _clientNotifier = AniListClient.initClient();
+
+  // Debouncing state
+  final Map<int, Timer> _debounceTimers = {};
+  final Map<int, _PendingUpdate> _pendingUpdates = {};
+  final Map<int, List<Completer<void>>> _pendingCompleters = {};
 
   GraphQLClient get _client => _clientNotifier.value;
 
@@ -220,29 +230,95 @@ class AniListService {
     }
   }
 
-  /// Updates the episode progress for an anime.
+  /// Updates the episode progress for an anime with debouncing.
+  ///
+  /// This method automatically handles:
+  /// - Debouncing (500ms) to prevent API spam
+  /// - Status updates (moves to CURRENT if started, COMPLETED if finished)
   Future<void> updateEpisodeProgress(
     int animeId,
     int progress,
     int? totalEpisodes,
   ) async {
-    String? status;
-    if (totalEpisodes != null && progress >= totalEpisodes) {
-      status = 'COMPLETED';
-    }
+    // 1. Create a Completer for this request
+    final completer = Completer<void>();
 
-    final MutationOptions options = MutationOptions(
-      document: gql(AnimeQueries.saveMediaListEntry),
-      variables: {
-        'mediaId': animeId,
-        'progress': progress,
-        if (status != null) 'status': status,
-      },
+    if (!_pendingCompleters.containsKey(animeId)) {
+      _pendingCompleters[animeId] = [];
+    }
+    _pendingCompleters[animeId]!.add(completer);
+
+    // 2. Store the latest update data
+    _pendingUpdates[animeId] = _PendingUpdate(
+      progress: progress,
+      totalEpisodes: totalEpisodes,
     );
 
-    final QueryResult result = await _client.mutate(options);
-    if (result.hasException) {
-      throw result.exception!;
+    // 3. Cancel existing timer (debounce)
+    _debounceTimers[animeId]?.cancel();
+
+    // 4. Set new timer
+    _debounceTimers[animeId] = Timer(const Duration(milliseconds: 1000), () {
+      _executeDebouncedUpdate(animeId);
+    });
+
+    // 5. Return the Future so the UI can await the *eventual* result (if it wants)
+    // Note: In a debounced scenario, usually only the last await 'matters' for error handling,
+    // but we will complete ALL pending completers with the result of the batch.
+    return completer.future;
+  }
+
+  Future<void> _executeDebouncedUpdate(int animeId) async {
+    final updateData = _pendingUpdates[animeId];
+    _pendingUpdates.remove(animeId);
+    _debounceTimers.remove(animeId); // Clean up timer
+
+    final completers = _pendingCompleters[animeId] ?? [];
+    _pendingCompleters.remove(animeId);
+
+    if (updateData == null) return;
+
+    try {
+      String? status;
+      if (updateData.totalEpisodes != null &&
+          updateData.progress >= updateData.totalEpisodes!) {
+        status = 'COMPLETED';
+      } else if (updateData.progress > 0) {
+        // If we are making progress, assume we are watching it
+        status = 'CURRENT';
+      }
+
+      final MutationOptions options = MutationOptions(
+        document: gql(AnimeQueries.saveMediaListEntry),
+        variables: {
+          'mediaId': animeId,
+          'progress': updateData.progress,
+          if (status != null) 'status': status,
+        },
+      );
+
+      final QueryResult result = await _client.mutate(options);
+
+      if (result.hasException) {
+        throw result.exception!;
+      }
+
+      // Success! Complete all waiting futures
+      for (var c in completers) {
+        if (!c.isCompleted) c.complete();
+      }
+    } catch (e) {
+      // Failure! Error all waiting futures
+      for (var c in completers) {
+        if (!c.isCompleted) c.completeError(e);
+      }
     }
   }
+}
+
+class _PendingUpdate {
+  final int progress;
+  final int? totalEpisodes;
+
+  _PendingUpdate({required this.progress, this.totalEpisodes});
 }
