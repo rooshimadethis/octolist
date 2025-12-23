@@ -1,0 +1,20 @@
+import '../models/anime.dart';
+import '../models/user_profile.dart';
+import '../models/watching_entry.dart';
+
+abstract class IAnimeService {
+  Future<UserProfile?> getUserProfile();
+  Future<List<WatchingEntry>> getWatchingList();
+  Future<Map<String, List<WatchingEntry>>> getLibraryLists();
+  Future<List<Anime>> getTrendingAnime();
+  Future<Anime?> getAnimeDetails(int id);
+  Future<List<Anime>> searchAnime(String query);
+  Future<List<String>> getAvailableListNames();
+  Future<WatchingEntry?> getMediaListEntry(int animeId);
+  Future<void> saveMediaListEntry(int animeId, String listName, int progress);
+  Future<void> updateEpisodeProgress(
+    int animeId,
+    int progress,
+    int? totalEpisodes,
+  );
+}

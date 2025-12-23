@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'services/auth_service.dart';
-import 'services/anime_store.dart';
-import 'screens/expressive_home_screen.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
 import 'package:provider/provider.dart';
+
+import 'services/auth_service.dart';
+import 'services/anime_store.dart';
+import 'services/mock_data_service.dart';
+import 'services/anilist_service.dart';
+import 'screens/expressive_home_screen.dart';
+
+// SET THIS TO TRUE TO USE MOCK DATA
+const bool useMocks = true;
 
 void main() async {
   // We need to initialize Hive for graphql_flutter's cache
@@ -30,7 +36,8 @@ void main() async {
 
   runApp(
     ChangeNotifierProvider(
-      create: (_) => AnimeStore(),
+      create: (_) =>
+          AnimeStore(service: useMocks ? MockDataService() : AniListService()),
       child: const ExpressiveApp(),
     ),
   );

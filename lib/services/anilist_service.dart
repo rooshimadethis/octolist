@@ -7,10 +7,12 @@ import '../models/watching_entry.dart';
 import '../graphql/anilist_client.dart';
 import '../graphql/queries.dart';
 
+import 'anime_service_interface.dart';
+
 /// Service for interacting with the AniList GraphQL API.
 ///
 /// This service replaces MockDataService for production use.
-class AniListService {
+class AniListService implements IAnimeService {
   final ValueNotifier<GraphQLClient> _clientNotifier;
 
   static final AniListService _instance = AniListService._internal();

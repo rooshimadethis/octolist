@@ -1,10 +1,15 @@
 import 'package:flutter/foundation.dart';
 import '../models/watching_entry.dart';
+import 'anime_service_interface.dart';
 import 'anilist_service.dart';
 
 /// Single source of truth for Anime data and User Library.
 class AnimeStore extends ChangeNotifier {
-  final AniListService _service = AniListService();
+  final IAnimeService _service;
+
+  AnimeStore({IAnimeService? service}) : _service = service ?? AniListService();
+
+  IAnimeService get service => _service;
 
   // Primary store: Media ID -> WatchingEntry
   final Map<int, WatchingEntry> _allEntries = {};

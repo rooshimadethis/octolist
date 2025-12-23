@@ -5,7 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:confetti/confetti.dart';
 import 'package:provider/provider.dart';
 import '../models/anime.dart';
-import '../services/anilist_service.dart';
+import '../services/anime_service_interface.dart';
 import '../services/anime_store.dart';
 import '../widgets/expressive_image.dart';
 import '../widgets/outlined_star.dart';
@@ -23,14 +23,15 @@ class AnimeDetailsPage extends StatefulWidget {
 
 class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   late Future<Anime?> _fullDetailsFuture;
-  final _aniListService = AniListService();
+  late IAnimeService _animeService;
   late ConfettiController _confettiController;
   bool _isUpdating = false;
 
   @override
   void initState() {
     super.initState();
-    _fullDetailsFuture = _aniListService.getAnimeDetails(widget.anime.id);
+    _animeService = context.read<AnimeStore>().service;
+    _fullDetailsFuture = _animeService.getAnimeDetails(widget.anime.id);
 
     // Defer the snackbar
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -60,7 +61,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
     Anime anime,
     String? currentList,
   ) async {
-    final listNames = await _aniListService.getAvailableListNames();
+    final listNames = await _animeService.getAvailableListNames();
 
     if (!mounted) return;
 

@@ -6,7 +6,7 @@ import 'package:provider/provider.dart';
 import '../models/anime.dart';
 import '../models/user_profile.dart';
 import '../models/watching_entry.dart';
-import '../services/anilist_service.dart';
+import '../services/anime_service_interface.dart';
 import '../services/auth_service.dart';
 import '../services/anime_store.dart';
 import 'library_page.dart';
@@ -46,7 +46,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   String? _libraryInitialTab;
   Key _libraryKey = const PageStorageKey('library_page');
 
-  late AniListService _aniListService;
+  late IAnimeService _animeService;
   late Future<UserProfile?> _profileFuture;
   late Future<List<Anime>> _trendingFuture;
   late Future<List<Anime>> _searchFuture;
@@ -54,7 +54,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   @override
   void initState() {
     super.initState();
-    _aniListService = AniListService();
+    _animeService = context.read<AnimeStore>().service;
     _loadData();
 
     // Listen for auth changes to refresh data
@@ -80,13 +80,13 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
         );
       }
     });
-    _profileFuture = _aniListService.getUserProfile();
+    _profileFuture = _animeService.getUserProfile();
     // Use the store for watching data
     context.read<AnimeStore>().fetchLibrary();
-    _trendingFuture = _aniListService.getTrendingAnime();
+    _trendingFuture = _animeService.getTrendingAnime();
     _searchFuture = _searchQuery.isEmpty
         ? Future.value([])
-        : _aniListService.searchAnime(_searchQuery);
+        : _animeService.searchAnime(_searchQuery);
   }
 
   void _onAuthChanged() {
@@ -102,8 +102,6 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
       }
       setState(() {
         _loadData();
-        // Force library page rebuild to fetch new data
-        _libraryKey = UniqueKey();
       });
     }
   }
@@ -142,7 +140,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
     setState(() {
       _searchFuture = _searchQuery.isEmpty
           ? Future.value([])
-          : _aniListService.searchAnime(_searchQuery);
+          : _animeService.searchAnime(_searchQuery);
     });
 
     if (_searchQuery.isNotEmpty) {
@@ -310,7 +308,6 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                     setState(() {
                                       _libraryInitialTab = 'Watching';
                                       _selectedIndex = 2;
-                                      _libraryKey = UniqueKey();
                                     });
                                   },
                                 )
@@ -351,7 +348,6 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   setState(() {
                                     _libraryInitialTab = 'Watching';
                                     _selectedIndex = 2;
-                                    _libraryKey = UniqueKey();
                                   });
                                 },
                               )
@@ -362,6 +358,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                           SizedBox(
                             height: 180,
                             child: ListView.separated(
+                              cacheExtent:
+                                  2000, // Pre-cache more items horizontally
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
                               ),
@@ -430,6 +428,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         }
                         final animeList = snapshot.data ?? [];
                         return ListView.separated(
+                          cacheExtent: 2000,
                           padding: const EdgeInsets.symmetric(horizontal: 24),
                           scrollDirection: Axis.horizontal,
                           itemCount: animeList.length,
@@ -596,6 +595,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         }
 
                         return GridView.builder(
+                          cacheExtent: 1000,
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,

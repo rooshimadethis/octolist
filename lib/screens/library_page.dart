@@ -151,26 +151,59 @@ class _LibraryPageState extends State<LibraryPage> {
         ),
         body: TabBarView(
           children: listNames.map((name) {
-            final entries = store.getListEntries(name);
-            return _buildListContent(context, name, entries);
+            return _LibraryTabContent(listName: name, onUpdate: _handleUpdate);
           }).toList(),
         ),
       ),
     );
   }
+}
 
-  Widget _buildListContent(
-    BuildContext context,
-    String listName,
-    List<WatchingEntry> entries,
-  ) {
+class _LibraryTabContent extends StatefulWidget {
+  final String listName;
+  final Future<void> Function(WatchingEntry, String, int) onUpdate;
+
+  const _LibraryTabContent({required this.listName, required this.onUpdate});
+
+  @override
+  State<_LibraryTabContent> createState() => _LibraryTabContentState();
+}
+
+class _LibraryTabContentState extends State<_LibraryTabContent>
+    with AutomaticKeepAliveClientMixin {
+  @override
+  bool get wantKeepAlive => true;
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final store = context.watch<AnimeStore>();
+    final entries = store.getListEntries(widget.listName);
+
     if (entries.isEmpty) {
+      if (store.isLoading) {
+        return GridView.builder(
+          padding: const EdgeInsets.all(24),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 24,
+            crossAxisSpacing: 24,
+            childAspectRatio: 0.65,
+          ),
+          itemCount: 6,
+          itemBuilder: (context, index) => const AnimeCardSkeleton()
+              .animate(delay: (index * 100).ms)
+              .fadeIn(),
+        );
+      }
       return const _EmptyLibraryState();
     }
 
-    if (listName == 'Watching' || listName == 'Current') {
+    if (widget.listName == 'Watching' || widget.listName == 'Current') {
       return ListView.builder(
-        key: PageStorageKey<String>('library_list_$listName'),
+        key: PageStorageKey<String>('library_list_${widget.listName}'),
+        cacheExtent:
+            1000, // Keep more items in memory to prevent re-animation on scroll
         padding: const EdgeInsets.all(24),
         itemCount: entries.length,
         itemBuilder: (context, index) {
@@ -188,7 +221,8 @@ class _LibraryPageState extends State<LibraryPage> {
                       entry: entry,
                       progress: entry.progress,
                       heroPrefix: 'library',
-                      onIncrement: () => _handleUpdate(entry, listName, 1),
+                      onIncrement: () =>
+                          widget.onUpdate(entry, widget.listName, 1),
                       width: double.infinity,
                       height: 140,
                     )
@@ -201,8 +235,10 @@ class _LibraryPageState extends State<LibraryPage> {
         },
       );
     }
+
     return GridView.builder(
-      key: PageStorageKey<String>('library_grid_$listName'),
+      key: PageStorageKey<String>('library_grid_${widget.listName}'),
+      cacheExtent: 1000, // Keep more items in memory
       padding: const EdgeInsets.all(24),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -218,7 +254,7 @@ class _LibraryPageState extends State<LibraryPage> {
             const AnimeCardSkeleton(),
             _buildLibraryCard(context, entry).animate().fadeIn().scale(
               begin: const Offset(0.9, 0.9),
-              end: const Offset(1, 1),
+              end: const Offset(1.0, 1.0),
             ),
           ],
         );
@@ -258,7 +294,6 @@ class _LibraryPageState extends State<LibraryPage> {
                     fit: BoxFit.cover,
                     skeletonColor: anime.parsedColor,
                   ),
-                  // Progress Badge if watching
                   if (entry.progress > 0)
                     Positioned(
                       bottom: 8,
@@ -282,7 +317,6 @@ class _LibraryPageState extends State<LibraryPage> {
                         ),
                       ),
                     ),
-                  // Score Badge
                   if (entry.userScore > 0)
                     Positioned(
                       top: 8,
