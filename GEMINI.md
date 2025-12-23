@@ -16,16 +16,32 @@ OctoList is a Flutter application for tracking anime. It consumes the [AniList G
   - `lib/screens/`: Contains UI screens (e.g., `home_screen.dart`).
 - **Styling**: Material 3 (`useMaterial3: true`), `Colors.deepPurple` seed.
 
+## API & Data Strategy
+> [!WARNING]
+> **Strict Rate Limit**: AniList allows **30 requests/minute**.
+> - **Batching**: Home Page and User Library must be fetched in single batch requests.
+> - **Search**: Input must be debounced (500ms+).
+> - **Caching**: Use `Hive` to persist generic data (Home, Profile) and User Library.
+> - **Pagination**: Avoid pagination for User Library (Fetch All Strategy).
+
+### Core Data Convention (`MediaShort`)
+All lists (Home, Search, Library) must use the standardized `MediaShort` fragment to prevent layout shifts.
+- **Fields**: `id`, `title`, `coverImage`, `type`, `format`, `status`, `score`, `episodes`, `isAdult`.
+- **Details Only**: `bannerImage`, `description`, `relations`, `recommendations`.
+
 ## Feature Roadmap
 
 ### Priority 1: Media Discovery & Search (Core)
-- **Advanced Search**: Genre, tags, year, season, format, status filters.
-- **Trending & Popular**: Seasonal trends and all-time popular media.
-- **Details Page**: Descriptions, countdowns, relations, studios, recommendations, and reviews.
+- **Advanced Search**: Filters for `genre`, `year`, `season`, `format`, `status`.
+- **Trending**: Seasonal trends
+- **Details Page**: 
+  - Rich data: `bannerImage`, `studios`, `relations`.
+  - **Adult Content**: Allowed (no forced filtering).
 
-### Priority 2: User List Management (Tracking)
-- **Personal List Sync**: View Current, Planning, Completed, etc.
-- **Progress Updates**: Episode increments, status changes, and scoring.
+### Priority 2: User Tracking & Profile
+- **Library Sync**: One-shot fetch of all lists (Planning, Current, etc.).
+- **Mutations**: `SaveMediaListEntry` for updating progress/score.
+- **User Profile**: Dedicated page for Avatar, Stats (minutes watched), and Favorites.
 
 ### Priority 3: Global Discovery (Future)
 - **Global Activity Feed**: Community-wide watching updates.
@@ -33,11 +49,3 @@ OctoList is a Flutter application for tracking anime. It consumes the [AniList G
 ## Important Commands
 - **Run**: `flutter run`
 - **Test**: `flutter test`
-
-## Development Preferences
-> [!IMPORTANT]
-> **Hands-On Approach**: The user wants to be hands-on.
-> - **DO NOT** write any code unless the user specifically asks for it.
-> - **DO** provide clear instructions, tutorials, and complete code snippets in the implementation plans.
-> - **DO** explain *how* to implement something and let the user write the code where possible, or ask for permission before writing large chunks.
-> - **DO** focus on *teaching* and *guiding*.

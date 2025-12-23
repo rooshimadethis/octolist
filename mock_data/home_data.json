@@ -1,0 +1,188 @@
+{
+  "data": {
+    "trending": {
+      "media": [
+        {
+          "id": 186794,
+          "title": {
+            "userPreferred": "Ansatsusha de Aru Ore no Status ga Yuusha yori mo Akiraka ni Tsuyoi no da ga",
+            "english": "My Status as an Assassin Obviously Exceeds the Hero\u2019s"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx186794-Ns8xWNdMdOxq.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx186794-Ns8xWNdMdOxq.jpg",
+            "color": "#4378e4"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "FINISHED",
+          "averageScore": 66,
+          "episodes": 12,
+          "isAdult": false
+        },
+        {
+          "id": 178025,
+          "title": {
+            "userPreferred": "Gachiakuta",
+            "english": "Gachiakuta"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx178025-cWJKEsZynkil.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx178025-cWJKEsZynkil.jpg",
+            "color": "#e4a150"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "FINISHED",
+          "averageScore": 81,
+          "episodes": 24,
+          "isAdult": false
+        },
+        {
+          "id": 21,
+          "title": {
+            "userPreferred": "ONE PIECE",
+            "english": "ONE PIECE"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21-ELSYx3yMPcKM.jpg",
+            "color": "#e49335"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "RELEASING",
+          "averageScore": 88,
+          "episodes": null,
+          "isAdult": false
+        },
+        {
+          "id": 177937,
+          "title": {
+            "userPreferred": "SPY\u00d7FAMILY Season 3",
+            "english": "SPY x FAMILY Season 3"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx177937-Tzgg6rAdhCoH.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx177937-Tzgg6rAdhCoH.jpg",
+            "color": "#e4935d"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "RELEASING",
+          "averageScore": 81,
+          "episodes": 13,
+          "isAdult": false
+        },
+        {
+          "id": 153800,
+          "title": {
+            "userPreferred": "One Punch Man 3",
+            "english": "One-Punch Man Season 3"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx153800-8SpzdHOaZCoU.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx153800-8SpzdHOaZCoU.jpg",
+            "color": "#e4ae50"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "RELEASING",
+          "averageScore": 54,
+          "episodes": 12,
+          "isAdult": false
+        },
+        {
+          "id": 194447,
+          "title": {
+            "userPreferred": "Isekai Quartet 3",
+            "english": "Isekai Quartet 3"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx194447-sgmaOpJ0VIUI.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx194447-sgmaOpJ0VIUI.jpg",
+            "color": "#28a1e4"
+          },
+          "type": "ANIME",
+          "format": "TV_SHORT",
+          "status": "FINISHED",
+          "averageScore": 73,
+          "episodes": 11,
+          "isAdult": false
+        },
+        {
+          "id": 184322,
+          "title": {
+            "userPreferred": "Shinjiteita Nakamatachi ni Dungeon Okuchi de Korosarekaketa ga Gift \"Mugen Gacha\" de Level 9999 no Nakamatachi wo Te ni Irete Moto Party Member to Sekai ni Fukushuu & \"Zamaa!\" Shimasu!",
+            "english": "My Gift Lvl 9999 Unlimited Gacha: Backstabbed in a Backwater Dungeon, I'm Out for Revenge!"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx184322-rRkaMQ7J1zOI.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx184322-rRkaMQ7J1zOI.jpg",
+            "color": "#28a1e4"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "FINISHED",
+          "averageScore": 69,
+          "episodes": 12,
+          "isAdult": false
+        },
+        {
+          "id": 182896,
+          "title": {
+            "userPreferred": "Boku no Hero Academia FINAL SEASON",
+            "english": "My Hero Academia FINAL SEASON"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx182896-mvxTVHGdDB4q.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx182896-mvxTVHGdDB4q.jpg",
+            "color": "#c9d6f1"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "FINISHED",
+          "averageScore": 87,
+          "episodes": 11,
+          "isAdult": false
+        },
+        {
+          "id": 181447,
+          "title": {
+            "userPreferred": "Saigo ni Hitotsu dake Onegai Shite mo Yoroshii Deshou ka",
+            "english": "May I Ask for One Final Thing?"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx181447-aCmaQmtdwuU5.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx181447-aCmaQmtdwuU5.jpg",
+            "color": "#43bbf1"
+          },
+          "type": "ANIME",
+          "format": "ONA",
+          "status": "FINISHED",
+          "averageScore": 73,
+          "episodes": 13,
+          "isAdult": false
+        },
+        {
+          "id": 204436,
+          "title": {
+            "userPreferred": "Gachiakuta 2nd Season",
+            "english": null
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx204436-gGUp9DNszIY5.png",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx204436-gGUp9DNszIY5.png",
+            "color": null
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "NOT_YET_RELEASED",
+          "averageScore": null,
+          "episodes": null,
+          "isAdult": false
+        }
+      ]
+    }
+  }
+}

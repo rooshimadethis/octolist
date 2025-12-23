@@ -1,0 +1,438 @@
+{
+  "data": {
+    "Media": {
+      "id": 20,
+      "title": {
+        "userPreferred": "NARUTO",
+        "english": "Naruto"
+      },
+      "coverImage": {
+        "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-dE6UHbFFg1A5.jpg",
+        "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20-dE6UHbFFg1A5.jpg",
+        "color": "#e47850"
+      },
+      "type": "ANIME",
+      "format": "TV",
+      "status": "FINISHED",
+      "averageScore": 80,
+      "episodes": 220,
+      "isAdult": false,
+      "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/20-HHxhPj5JD13a.jpg",
+      "description": "Naruto Uzumaki, a hyperactive and knuckle-headed ninja, lives in Konohagakure, the Hidden Leaf village. Moments prior to his birth, a huge demon known as the Kyuubi, the Nine-tailed Fox, attacked Konohagakure and wreaked havoc. In order to put an end to the Kyuubi's rampage, the leader of the village, the 4th Hokage, sacrificed his life and sealed the monstrous beast inside the newborn Naruto. <br><br>\nShunned because of the presence of the Kyuubi inside him, Naruto struggles to find his place in the village. He strives to become the Hokage of Konohagakure, and he meets many friends and foes along the way. <br><br>\n(Source: MAL Rewrite)",
+      "startDate": {
+        "year": 2002,
+        "month": 10,
+        "day": 3
+      },
+      "season": "FALL",
+      "seasonYear": 2002,
+      "studios": {
+        "nodes": [
+          {
+            "name": "Studio Pierrot"
+          }
+        ]
+      },
+      "relations": {
+        "edges": [
+          {
+            "relationType": "SEQUEL",
+            "node": {
+              "id": 1735,
+              "title": {
+                "userPreferred": "NARUTO: Shippuuden",
+                "english": "Naruto: Shippuden"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1735-kGfVm0YqCPcu.png",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1735-kGfVm0YqCPcu.png",
+                "color": "#e4865d"
+              },
+              "type": "ANIME",
+              "format": "TV",
+              "status": "FINISHED",
+              "averageScore": 82,
+              "episodes": 500,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "ADAPTATION",
+            "node": {
+              "id": 30011,
+              "title": {
+                "userPreferred": "NARUTO",
+                "english": "Naruto"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/nx30011-9yUF1dXWgDOx.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/nx30011-9yUF1dXWgDOx.jpg",
+                "color": "#fe7828"
+              },
+              "type": "MANGA",
+              "format": "MANGA",
+              "status": "FINISHED",
+              "averageScore": 79,
+              "episodes": null,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "SIDE_STORY",
+            "node": {
+              "id": 442,
+              "title": {
+                "userPreferred": "NARUTO: Dai Katsugeki! Yuki Hime Ninpouchou Dattebayo!!",
+                "english": "Naruto the Movie: Ninja Clash in the Land of Snow"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx442-VJbmIVTgmne3.png",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx442-VJbmIVTgmne3.png",
+                "color": "#e46b50"
+              },
+              "type": "ANIME",
+              "format": "MOVIE",
+              "status": "FINISHED",
+              "averageScore": 67,
+              "episodes": 1,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "SIDE_STORY",
+            "node": {
+              "id": 594,
+              "title": {
+                "userPreferred": "NARUTO: Takigakure no Shitou - Ore ga Eiyuu Dattebayo!",
+                "english": "Naruto: The Lost Story - Mission: Protect the Waterfall Village"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/594.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/594.jpg",
+                "color": "#d6ae5d"
+              },
+              "type": "ANIME",
+              "format": "SPECIAL",
+              "status": "FINISHED",
+              "averageScore": 64,
+              "episodes": 1,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "SIDE_STORY",
+            "node": {
+              "id": 761,
+              "title": {
+                "userPreferred": "NARUTO: Akaki Yotsuba no Clover wo Sagase",
+                "english": null
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/761.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/761.jpg",
+                "color": "#f17843"
+              },
+              "type": "ANIME",
+              "format": "SPECIAL",
+              "status": "FINISHED",
+              "averageScore": 62,
+              "episodes": 1,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "SIDE_STORY",
+            "node": {
+              "id": 936,
+              "title": {
+                "userPreferred": "NARUTO: Dai Gekitotsu! Maboroshi no Chitei Iseki Dattebayo",
+                "english": "Naruto the Movie: Legend of the Stone of Gelel"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx936-P1ogcIs07UR8.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx936-P1ogcIs07UR8.jpg",
+                "color": "#f18643"
+              },
+              "type": "ANIME",
+              "format": "MOVIE",
+              "status": "FINISHED",
+              "averageScore": 65,
+              "episodes": 1,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "SIDE_STORY",
+            "node": {
+              "id": 1074,
+              "title": {
+                "userPreferred": "NARUTO: Narutimate Hero 3: Tsui ni Gekitotsu! Jounin VS Genin!! Musabetsu Dairansen Taikai Kaisai!!",
+                "english": null
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/1074.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/1074.jpg",
+                "color": "#e48628"
+              },
+              "type": "ANIME",
+              "format": "OVA",
+              "status": "FINISHED",
+              "averageScore": 63,
+              "episodes": 1,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "SIDE_STORY",
+            "node": {
+              "id": 2144,
+              "title": {
+                "userPreferred": "NARUTO: Dai Koufun! Mikazukijima no Animal Panic Dattebayo!",
+                "english": "Naruto the Movie: Guardians of the Crescent Moon Kingdom"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2144-9FITEzdGnlWC.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2144-9FITEzdGnlWC.jpg",
+                "color": "#e48650"
+              },
+              "type": "ANIME",
+              "format": "MOVIE",
+              "status": "FINISHED",
+              "averageScore": 66,
+              "episodes": 1,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "SIDE_STORY",
+            "node": {
+              "id": 7367,
+              "title": {
+                "userPreferred": "NARUTO: THE CROSS ROADS",
+                "english": null
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/7367.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/7367.jpg",
+                "color": "#e4780d"
+              },
+              "type": "ANIME",
+              "format": "SPECIAL",
+              "status": "FINISHED",
+              "averageScore": 63,
+              "episodes": 1,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "SIDE_STORY",
+            "node": {
+              "id": 10659,
+              "title": {
+                "userPreferred": "NARUTO: Soyokazeden - Naruto to Mashin to Mitsu no Onegai Dattebayo!!",
+                "english": null
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/10659.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/10659.jpg",
+                "color": "#e48650"
+              },
+              "type": "ANIME",
+              "format": "SPECIAL",
+              "status": "FINISHED",
+              "averageScore": 64,
+              "episodes": 1,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "SUMMARY",
+            "node": {
+              "id": 155348,
+              "title": {
+                "userPreferred": "ROAD OF NARUTO",
+                "english": null
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx155348-4ipji8SvTjyh.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155348-4ipji8SvTjyh.jpg",
+                "color": "#f18650"
+              },
+              "type": "ANIME",
+              "format": "SPECIAL",
+              "status": "FINISHED",
+              "averageScore": 82,
+              "episodes": 1,
+              "isAdult": false
+            }
+          },
+          {
+            "relationType": "OTHER",
+            "node": {
+              "id": 162561,
+              "title": {
+                "userPreferred": "NARUTO (Shinsaku Anime)",
+                "english": null
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx162561-Uk4eZAwcmcWk.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx162561-Uk4eZAwcmcWk.jpg",
+                "color": "#43bbe4"
+              },
+              "type": "ANIME",
+              "format": "TV",
+              "status": "NOT_YET_RELEASED",
+              "averageScore": null,
+              "episodes": 4,
+              "isAdult": false
+            }
+          }
+        ]
+      },
+      "recommendations": {
+        "nodes": [
+          {
+            "mediaRecommendation": {
+              "id": 21,
+              "title": {
+                "userPreferred": "ONE PIECE",
+                "english": "ONE PIECE"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21-ELSYx3yMPcKM.jpg",
+                "color": "#e49335"
+              },
+              "type": "ANIME",
+              "format": "TV",
+              "status": "RELEASING",
+              "averageScore": 88,
+              "episodes": null,
+              "isAdult": false
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 97940,
+              "title": {
+                "userPreferred": "Black Clover",
+                "english": "Black Clover"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97940-fyh8o7gNbha0.png",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97940-fyh8o7gNbha0.png",
+                "color": "#d6c96b"
+              },
+              "type": "ANIME",
+              "format": "TV",
+              "status": "FINISHED",
+              "averageScore": 79,
+              "episodes": 170,
+              "isAdult": false
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 21459,
+              "title": {
+                "userPreferred": "Boku no Hero Academia",
+                "english": "My Hero Academia"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21459-nYh85uj2Fuwr.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21459-nYh85uj2Fuwr.jpg",
+                "color": "#ffd600"
+              },
+              "type": "ANIME",
+              "format": "TV",
+              "status": "FINISHED",
+              "averageScore": 76,
+              "episodes": 13,
+              "isAdult": false
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 269,
+              "title": {
+                "userPreferred": "BLEACH",
+                "english": "Bleach"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx269-d2GmRkJbMopq.png",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx269-d2GmRkJbMopq.png",
+                "color": "#f1a150"
+              },
+              "type": "ANIME",
+              "format": "TV",
+              "status": "FINISHED",
+              "averageScore": 79,
+              "episodes": 366,
+              "isAdult": false
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 113415,
+              "title": {
+                "userPreferred": "Jujutsu Kaisen",
+                "english": "JUJUTSU KAISEN"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-LHBAeoZDIsnF.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx113415-LHBAeoZDIsnF.jpg",
+                "color": "#e45d5d"
+              },
+              "type": "ANIME",
+              "format": "TV",
+              "status": "FINISHED",
+              "averageScore": 84,
+              "episodes": 24,
+              "isAdult": false
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 97938,
+              "title": {
+                "userPreferred": "BORUTO: NARUTO NEXT GENERATIONS",
+                "english": "Boruto: Naruto Next Generations"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97938-BnF6M5yTaNB1.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97938-BnF6M5yTaNB1.jpg",
+                "color": "#00c9ff"
+              },
+              "type": "ANIME",
+              "format": "TV",
+              "status": "FINISHED",
+              "averageScore": 56,
+              "episodes": 293,
+              "isAdult": false
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 11061,
+              "title": {
+                "userPreferred": "HUNTER\u00d7HUNTER (2011)",
+                "english": "Hunter x Hunter (2011)"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-y5gsT1hoHuHw.png",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx11061-y5gsT1hoHuHw.png",
+                "color": "#f1d65d"
+              },
+              "type": "ANIME",
+              "format": "TV",
+              "status": "FINISHED",
+              "averageScore": 89,
+              "episodes": 148,
+              "isAdult": false
+            }
+          }
+        ]
+      }
+    }
+  }
+}

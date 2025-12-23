@@ -1,0 +1,2553 @@
+{
+  "data": {
+    "Viewer": {
+      "id": 7612289,
+      "name": "VoltAndVeg",
+      "avatar": {
+        "large": "https://s4.anilist.co/file/anilistcdn/user/avatar/large/default.png"
+      },
+      "statistics": {
+        "anime": {
+          "count": 52,
+          "minutesWatched": 35529,
+          "episodesWatched": 1487,
+          "meanScore": 84,
+          "statuses": [
+            {
+              "count": 50,
+              "status": "PLANNING"
+            },
+            {
+              "count": 31,
+              "status": "COMPLETED"
+            },
+            {
+              "count": 13,
+              "status": "CURRENT"
+            },
+            {
+              "count": 8,
+              "status": "DROPPED"
+            }
+          ]
+        }
+      },
+      "favourites": {
+        "anime": {
+          "nodes": []
+        },
+        "characters": {
+          "nodes": []
+        }
+      },
+      "mediaListOptions": {
+        "scoreFormat": "POINT_10",
+        "rowOrder": "score",
+        "animeList": {
+          "sectionOrder": [
+            "Watching",
+            "Rewatching",
+            "Completed",
+            "Completed TV",
+            "Completed Movie",
+            "Completed OVA",
+            "Completed ONA",
+            "Completed TV Short",
+            "Completed Special",
+            "Completed Music",
+            "Paused",
+            "Dropped",
+            "Planning"
+          ],
+          "customLists": []
+        },
+        "mangaList": {
+          "sectionOrder": [
+            "Reading",
+            "Rereading",
+            "Completed",
+            "Completed Manga",
+            "Completed Novel",
+            "Completed One Shot",
+            "Paused",
+            "Dropped",
+            "Planning"
+          ],
+          "customLists": []
+        }
+      }
+    },
+    "MediaListCollection": {
+      "lists": [
+        {
+          "name": "Planning",
+          "entries": [
+            {
+              "id": 521837638,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 47,
+                "title": {
+                  "userPreferred": "AKIRA",
+                  "english": "Akira"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx47-4CR68arv452h.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx47-4CR68arv452h.jpg",
+                  "color": "#e45d50"
+                },
+                "type": "ANIME",
+                "format": "MOVIE",
+                "status": "FINISHED",
+                "averageScore": 79,
+                "episodes": 1,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837639,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 8676,
+                "title": {
+                  "userPreferred": "Amagami SS",
+                  "english": "Amagami SS"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx8676-rpRpE8lD4tbw.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/nx8676-rpRpE8lD4tbw.png",
+                  "color": "#50aefe"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 69,
+                "episodes": 25,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837641,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 11111,
+                "title": {
+                  "userPreferred": "Another",
+                  "english": "Another"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11111-gvvE5bBYsyFo.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx11111-gvvE5bBYsyFo.png",
+                  "color": "#e47850"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 70,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837644,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 13535,
+                "title": {
+                  "userPreferred": "Binbougami ga!",
+                  "english": "Good Luck Girl!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx13535-3TFMnKs0CDls.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx13535-3TFMnKs0CDls.jpg",
+                  "color": "#e4a128"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 74,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837648,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 21459,
+                "title": {
+                  "userPreferred": "Boku no Hero Academia",
+                  "english": "My Hero Academia"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21459-nYh85uj2Fuwr.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21459-nYh85uj2Fuwr.jpg",
+                  "color": "#ffd600"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 76,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837651,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 1575,
+                "title": {
+                  "userPreferred": "Code Geass: Hangyaku no Lelouch",
+                  "english": "Code Geass: Lelouch of the Rebellion"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1575-hsmWM2ydNm1m.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1575-hsmWM2ydNm1m.jpg",
+                  "color": "#c9d678"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 85,
+                "episodes": 25,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837653,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 120377,
+                "title": {
+                  "userPreferred": "Cyberpunk: Edgerunners",
+                  "english": "Cyberpunk: Edgerunners"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx120377-ayZPoxiWt4Li.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx120377-ayZPoxiWt4Li.jpg",
+                  "color": "#6be443"
+                },
+                "type": "ANIME",
+                "format": "ONA",
+                "status": "FINISHED",
+                "averageScore": 85,
+                "episodes": 10,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837654,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 11843,
+                "title": {
+                  "userPreferred": "Danshi Koukousei no Nichijou",
+                  "english": "Daily Lives of High School Boys"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11843-ui2jBcuQUqnl.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx11843-ui2jBcuQUqnl.jpg",
+                  "color": "#aee4ae"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 80,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837656,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 98460,
+                "title": {
+                  "userPreferred": "DEVILMAN crybaby",
+                  "english": "Devilman Crybaby"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx98460-bLtH2c3jd6sV.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx98460-bLtH2c3jd6sV.png",
+                  "color": "#f1e4c9"
+                },
+                "type": "ANIME",
+                "format": "ONA",
+                "status": "FINISHED",
+                "averageScore": 76,
+                "episodes": 10,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837660,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 6746,
+                "title": {
+                  "userPreferred": "Durarara!!",
+                  "english": "Durarara!!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6746-3LTwM95Uqeoa.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx6746-3LTwM95Uqeoa.png",
+                  "color": "#e4d6ae"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 79,
+                "episodes": 24,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837661,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 226,
+                "title": {
+                  "userPreferred": "Elfen Lied",
+                  "english": "Elfen Lied"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx226-MibyRKhIrnTe.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx226-MibyRKhIrnTe.png",
+                  "color": "#e45d93"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 68,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837662,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 21685,
+                "title": {
+                  "userPreferred": "Eromanga Sensei",
+                  "english": "Eromanga Sensei"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21685-h1SrcpaNnrIq.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21685-h1SrcpaNnrIq.jpg",
+                  "color": "#5093fe"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 59,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837664,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 10087,
+                "title": {
+                  "userPreferred": "Fate/Zero",
+                  "english": "Fate/Zero"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10087-M4Hd9qrHGrXk.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx10087-M4Hd9qrHGrXk.png",
+                  "color": "#e4d65d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 81,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837666,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 21714,
+                "title": {
+                  "userPreferred": "Flip Flappers",
+                  "english": "FLIP FLAPPERS"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21714-wfvIxPvc2wo4.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21714-wfvIxPvc2wo4.jpg",
+                  "color": "#35aef1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 74,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837669,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 100093,
+                "title": {
+                  "userPreferred": "Gaikotsu Shotenin Honda-san",
+                  "english": "Skull-face Bookseller Honda-san"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100093-93Stk25kws5e.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx100093-93Stk25kws5e.jpg",
+                  "color": "#50f135"
+                },
+                "type": "ANIME",
+                "format": "TV_SHORT",
+                "status": "FINISHED",
+                "averageScore": 70,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837671,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 97766,
+                "title": {
+                  "userPreferred": "Gamers!",
+                  "english": "GAMERS!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97766-AKr0m3uHkKyW.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97766-AKr0m3uHkKyW.jpg",
+                  "color": "#f1d643"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 65,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837675,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 10793,
+                "title": {
+                  "userPreferred": "Guilty Crown",
+                  "english": "Guilty Crown"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10793-KCysCbrVNqK9.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx10793-KCysCbrVNqK9.jpg",
+                  "color": "#2893a1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 69,
+                "episodes": 22,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837676,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 1,
+              "media": {
+                "id": 263,
+                "title": {
+                  "userPreferred": "Hajime no Ippo: THE FIGHTING!",
+                  "english": "Hajime no Ippo: The Fighting!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx263-ivVyn9xAgwSZ.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx263-ivVyn9xAgwSZ.png",
+                  "color": "#f1935d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 87,
+                "episodes": 75,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837681,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 104461,
+                "title": {
+                  "userPreferred": "Heya Camp\u25b3",
+                  "english": "ROOM CAMP"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx104461-rdwSQwNxFIyu.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx104461-rdwSQwNxFIyu.jpg",
+                  "color": "#f1e4c9"
+                },
+                "type": "ANIME",
+                "format": "TV_SHORT",
+                "status": "FINISHED",
+                "averageScore": 72,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837682,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 967,
+                "title": {
+                  "userPreferred": "Hokuto no Ken",
+                  "english": "Fist of the North Star"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/n967-84jNBaInec98.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/n967-84jNBaInec98.png",
+                  "color": "#ffbb43"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 75,
+                "episodes": 109,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837684,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 12189,
+                "title": {
+                  "userPreferred": "Hyouka",
+                  "english": "Hyouka"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx12189-zj5AWUYO53Fv.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx12189-zj5AWUYO53Fv.jpg",
+                  "color": "#f1e4bb"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 79,
+                "episodes": 22,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837685,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 185,
+                "title": {
+                  "userPreferred": "Initial D",
+                  "english": "Initial D 1st Stage"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b185-GvXiR8AKTmdn.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b185-GvXiR8AKTmdn.jpg",
+                  "color": "#e45043"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 82,
+                "episodes": 26,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837686,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 249,
+                "title": {
+                  "userPreferred": "Inuyasha",
+                  "english": "InuYasha"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx249-jVBkyLnBvnRE.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx249-jVBkyLnBvnRE.png",
+                  "color": "#f15093"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 76,
+                "episodes": 167,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837688,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 33,
+                "title": {
+                  "userPreferred": "Kenpuu Denki Berserk",
+                  "english": "Berserk"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx33-PSwfE5B0gejI.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx33-PSwfE5B0gejI.jpg",
+                  "color": "#e49350"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 84,
+                "episodes": 25,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837690,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 101922,
+                "title": {
+                  "userPreferred": "Kimetsu no Yaiba",
+                  "english": "Demon Slayer: Kimetsu no Yaiba"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101922-WBsBl0ClmgYL.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx101922-WBsBl0ClmgYL.jpg",
+                  "color": "#e4bba1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 82,
+                "episodes": 26,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837691,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 21519,
+                "title": {
+                  "userPreferred": "Kimi no Na wa.",
+                  "english": "Your Name."
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21519-SUo3ZQuCbYhJ.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21519-SUo3ZQuCbYhJ.png",
+                  "color": "#0da1e4"
+                },
+                "type": "ANIME",
+                "format": "MOVIE",
+                "status": "FINISHED",
+                "averageScore": 85,
+                "episodes": 1,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837692,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 20954,
+                "title": {
+                  "userPreferred": "Koe no Katachi",
+                  "english": "A Silent Voice"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20954-sYRfE5jQRtSB.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20954-sYRfE5jQRtSB.jpg",
+                  "color": "#5dbbe4"
+                },
+                "type": "ANIME",
+                "format": "MOVIE",
+                "status": "FINISHED",
+                "averageScore": 88,
+                "episodes": 1,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837693,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 21202,
+                "title": {
+                  "userPreferred": "Kono Subarashii Sekai ni Shukufuku wo!",
+                  "english": "KONOSUBA -God's blessing on this wonderful world!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21202-qQoJeKz76vRT.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21202-qQoJeKz76vRT.png",
+                  "color": "#5daee4"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 79,
+                "episodes": 10,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837696,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 11771,
+                "title": {
+                  "userPreferred": "Kuroko no Basket",
+                  "english": "Kuroko's Basketball"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11771-uvr44RAwRxPw.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx11771-uvr44RAwRxPw.jpg",
+                  "color": "#50aefe"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 78,
+                "episodes": 25,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837697,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 97986,
+                "title": {
+                  "userPreferred": "Made in Abyss",
+                  "english": "Made in Abyss"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97986-TQ7dCgbS3y5s.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97986-TQ7dCgbS3y5s.jpg",
+                  "color": "#e4c9ae"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 84,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837698,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 10620,
+                "title": {
+                  "userPreferred": "Mirai Nikki",
+                  "english": "The Future Diary"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10620-dUZeNej0W4QN.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx10620-dUZeNej0W4QN.png",
+                  "color": null
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 68,
+                "episodes": 26,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837699,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 1,
+              "media": {
+                "id": 21507,
+                "title": {
+                  "userPreferred": "Mob Psycho 100",
+                  "english": "Mob Psycho 100"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21507-6YUSbh2m0N1p.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21507-6YUSbh2m0N1p.jpg",
+                  "color": "#d65d1a"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 84,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837702,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 323,
+                "title": {
+                  "userPreferred": "Mousou Dairinin",
+                  "english": "Paranoia Agent"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx323-ZGkUcJOn4ngy.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx323-ZGkUcJOn4ngy.png",
+                  "color": "#f1bb28"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 76,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837706,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 10165,
+                "title": {
+                  "userPreferred": "Nichijou",
+                  "english": "Nichijou - My Ordinary Life"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10165-tw8Cz7K9tfVJ.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx10165-tw8Cz7K9tfVJ.png",
+                  "color": "#e4bb93"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 83,
+                "episodes": 26,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837708,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 20447,
+                "title": {
+                  "userPreferred": "Noragami",
+                  "english": "Noragami"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20447-EoQXeygHaVCK.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20447-EoQXeygHaVCK.jpg",
+                  "color": "#bbe4f1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 77,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837712,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 21804,
+                "title": {
+                  "userPreferred": "Saiki Kusuo no \u03a8-nan",
+                  "english": "The Disastrous Life of Saiki K."
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21804-As6tDLAvEvNY.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21804-As6tDLAvEvNY.jpg",
+                  "color": "#f1bb1a"
+                },
+                "type": "ANIME",
+                "format": "TV_SHORT",
+                "status": "FINISHED",
+                "averageScore": 83,
+                "episodes": 120,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837714,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 97903,
+                "title": {
+                  "userPreferred": "Sakura Quest",
+                  "english": "Sakura Quest"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97903-x34aD15XP8hZ.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97903-x34aD15XP8hZ.jpg",
+                  "color": "#788628"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 73,
+                "episodes": 25,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837716,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 15751,
+                "title": {
+                  "userPreferred": "Senyuu.",
+                  "english": "Senyuu"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx15751-ozQ3AyCfaUgJ.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx15751-ozQ3AyCfaUgJ.jpg",
+                  "color": "#e4bb50"
+                },
+                "type": "ANIME",
+                "format": "TV_SHORT",
+                "status": "FINISHED",
+                "averageScore": 69,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837720,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 12815,
+                "title": {
+                  "userPreferred": "Shirokuma Cafe",
+                  "english": "Polar Bear's Caf\u00e9"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/12815.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/12815.jpg",
+                  "color": "#c9e4a1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 72,
+                "episodes": 50,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837721,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 20923,
+                "title": {
+                  "userPreferred": "Shokugeki no Souma",
+                  "english": "Food Wars!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20923-pNT38pjW3RFH.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20923-pNT38pjW3RFH.jpg",
+                  "color": "#e48643"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 78,
+                "episodes": 24,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837722,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 154587,
+                "title": {
+                  "userPreferred": "Sousou no Frieren",
+                  "english": "Frieren: Beyond Journey\u2019s End"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx154587-qQTzQnEJJ3oB.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx154587-qQTzQnEJJ3oB.jpg",
+                  "color": "#bbf1a1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 91,
+                "episodes": 28,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837728,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 101280,
+                "title": {
+                  "userPreferred": "Tensei Shitara Slime Datta Ken",
+                  "english": "That Time I Got Reincarnated as a Slime"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101280-tDxCVJm714nt.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx101280-tDxCVJm714nt.jpg",
+                  "color": "#43a1f1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 80,
+                "episodes": 24,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837730,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 20605,
+                "title": {
+                  "userPreferred": "Tokyo Ghoul",
+                  "english": "Tokyo Ghoul"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b20605-k665mVkSug8D.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b20605-k665mVkSug8D.jpg",
+                  "color": "#fe5d28"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 76,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837731,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 759,
+                "title": {
+                  "userPreferred": "Tokyo Godfathers",
+                  "english": "Tokyo Godfathers"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx759-XSKBju6xutdR.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx759-XSKBju6xutdR.jpg",
+                  "color": "#e49350"
+                },
+                "type": "ANIME",
+                "format": "MOVIE",
+                "status": "FINISHED",
+                "averageScore": 81,
+                "episodes": 1,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837733,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 98202,
+                "title": {
+                  "userPreferred": "Tsuki ga Kirei",
+                  "english": "Tsukigakirei"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx98202-H6RtsIMZPALF.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx98202-H6RtsIMZPALF.png",
+                  "color": "#1a506b"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 78,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837734,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 104723,
+                "title": {
+                  "userPreferred": "Tsuujou Kougeki ga Zentai Kougeki de Ni-kai Kougeki no Okaasan wa Suki desu ka?",
+                  "english": "Do You Love Your Mom and Her Two-Hit Multi-Target Attacks?"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx104723-pmcUwRbKTFWB.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx104723-pmcUwRbKTFWB.jpg",
+                  "color": null
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 51,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837735,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 6956,
+                "title": {
+                  "userPreferred": "WORKING!!",
+                  "english": "Wagnaria!!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6956-Nxs7H25yHLNS.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx6956-Nxs7H25yHLNS.jpg",
+                  "color": "#e49350"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 74,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837736,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 14813,
+                "title": {
+                  "userPreferred": "Yahari Ore no Seishun Love Come wa Machigatteiru.",
+                  "english": "My Teen Romantic Comedy SNAFU"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx14813-3mNvcKNEQcDs.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx14813-3mNvcKNEQcDs.jpg",
+                  "color": "#e4780d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 78,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837737,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 101759,
+                "title": {
+                  "userPreferred": "Yakusoku no Neverland",
+                  "english": "The Promised Neverland"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx101759-8UR7r9MNVpz2.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx101759-8UR7r9MNVpz2.jpg",
+                  "color": "#e4ae50"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 83,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837739,
+              "status": "PLANNING",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 21709,
+                "title": {
+                  "userPreferred": "Yuuri!!! on ICE",
+                  "english": "Yuri!!! on ICE"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21709-aqPBDxJPruYR.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21709-aqPBDxJPruYR.png",
+                  "color": "#1a86e4"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 77,
+                "episodes": 12,
+                "isAdult": false
+              }
+            }
+          ]
+        },
+        {
+          "name": "Completed",
+          "entries": [
+            {
+              "id": 521837640,
+              "status": "COMPLETED",
+              "score": 9,
+              "progress": 13,
+              "media": {
+                "id": 6547,
+                "title": {
+                  "userPreferred": "Angel Beats!",
+                  "english": "Angel Beats!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6547-SYexAn5aFyss.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx6547-SYexAn5aFyss.png",
+                  "color": "#5d78f1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 77,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837646,
+              "status": "COMPLETED",
+              "score": 8,
+              "progress": 1,
+              "media": {
+                "id": 21498,
+                "title": {
+                  "userPreferred": "BLAME!",
+                  "english": "BLAME!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx21498-8GWg2HVFdShU.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/nx21498-8GWg2HVFdShU.jpg",
+                  "color": "#5dc9f1"
+                },
+                "type": "ANIME",
+                "format": "MOVIE",
+                "status": "FINISHED",
+                "averageScore": 67,
+                "episodes": 1,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837647,
+              "status": "COMPLETED",
+              "score": 10,
+              "progress": 12,
+              "media": {
+                "id": 21234,
+                "title": {
+                  "userPreferred": "Boku dake ga Inai Machi",
+                  "english": "ERASED"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21234-XmqW39aQ9o7O.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21234-XmqW39aQ9o7O.jpg",
+                  "color": "#f1a150"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 81,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837649,
+              "status": "COMPLETED",
+              "score": 10,
+              "progress": 26,
+              "media": {
+                "id": 59,
+                "title": {
+                  "userPreferred": "Chobits",
+                  "english": "Chobits"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx59-0J95ZHgt4uyP.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/nx59-0J95ZHgt4uyP.jpg",
+                  "color": "#5daef1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 71,
+                "episodes": 26,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837652,
+              "status": "COMPLETED",
+              "score": 9,
+              "progress": 26,
+              "media": {
+                "id": 1,
+                "title": {
+                  "userPreferred": "Cowboy Bebop",
+                  "english": "Cowboy Bebop"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-GCsPm7waJ4kS.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1-GCsPm7waJ4kS.png",
+                  "color": "#f16b50"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 86,
+                "episodes": 26,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837655,
+              "status": "COMPLETED",
+              "score": 10,
+              "progress": 37,
+              "media": {
+                "id": 1535,
+                "title": {
+                  "userPreferred": "DEATH NOTE",
+                  "english": "Death Note"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1535-kUgkcrfOrkUM.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1535-kUgkcrfOrkUM.jpg",
+                  "color": null
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 84,
+                "episodes": 37,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837657,
+              "status": "COMPLETED",
+              "score": 8,
+              "progress": 153,
+              "media": {
+                "id": 223,
+                "title": {
+                  "userPreferred": "Dragon Ball",
+                  "english": "Dragon Ball"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx223-scE5uJfXqqj8.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx223-scE5uJfXqqj8.png",
+                  "color": "#e48635"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 78,
+                "episodes": 153,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837663,
+              "status": "COMPLETED",
+              "score": 10,
+              "progress": 6,
+              "media": {
+                "id": 3167,
+                "title": {
+                  "userPreferred": "Eve no Jikan: Are you enjoying the time of EVE?",
+                  "english": "Time of Eve"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx3167-IBEzQTk9wvbr.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx3167-IBEzQTk9wvbr.jpg",
+                  "color": "#78351a"
+                },
+                "type": "ANIME",
+                "format": "ONA",
+                "status": "FINISHED",
+                "averageScore": 77,
+                "episodes": 6,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837665,
+              "status": "COMPLETED",
+              "score": 10,
+              "progress": 6,
+              "media": {
+                "id": 227,
+                "title": {
+                  "userPreferred": "FLCL",
+                  "english": "FLCL"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx227-qOB9ZhVvNnqO.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx227-qOB9ZhVvNnqO.jpg",
+                  "color": "#e4865d"
+                },
+                "type": "ANIME",
+                "format": "OVA",
+                "status": "FINISHED",
+                "averageScore": 78,
+                "episodes": 6,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837667,
+              "status": "COMPLETED",
+              "score": 7,
+              "progress": 51,
+              "media": {
+                "id": 121,
+                "title": {
+                  "userPreferred": "Hagane no Renkinjutsushi",
+                  "english": "Fullmetal Alchemist"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx121-zjmixZ428Mwv.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx121-zjmixZ428Mwv.png",
+                  "color": "#e4bb43"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 79,
+                "episodes": 51,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837668,
+              "status": "COMPLETED",
+              "score": 8,
+              "progress": 64,
+              "media": {
+                "id": 5114,
+                "title": {
+                  "userPreferred": "Hagane no Renkinjutsushi: FULLMETAL ALCHEMIST",
+                  "english": "Fullmetal Alchemist: Brotherhood"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5114-nSWCgQlmOMtj.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx5114-nSWCgQlmOMtj.jpg",
+                  "color": "#e4c993"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 90,
+                "episodes": 64,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837673,
+              "status": "COMPLETED",
+              "score": 8,
+              "progress": 6,
+              "media": {
+                "id": 268,
+                "title": {
+                  "userPreferred": "GOLDEN BOY: Sasurai no Obenkyou Yarou",
+                  "english": "GOLDEN BOY"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx268-0T6bdW9CzVvz.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx268-0T6bdW9CzVvz.png",
+                  "color": null
+                },
+                "type": "ANIME",
+                "format": "OVA",
+                "status": "FINISHED",
+                "averageScore": 78,
+                "episodes": 6,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837674,
+              "status": "COMPLETED",
+              "score": 9,
+              "progress": 43,
+              "media": {
+                "id": 245,
+                "title": {
+                  "userPreferred": "GTO",
+                  "english": "GTO: Great Teacher Onizuka"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx245-NcQAyTipUMeO.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx245-NcQAyTipUMeO.jpg",
+                  "color": "#e4930d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 84,
+                "episodes": 43,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837677,
+              "status": "COMPLETED",
+              "score": 9,
+              "progress": 13,
+              "media": {
+                "id": 15809,
+                "title": {
+                  "userPreferred": "Hataraku Maou-sama!",
+                  "english": "The Devil is a Part-Timer!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx15809-ECv3HyOYJKrk.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx15809-ECv3HyOYJKrk.jpg",
+                  "color": "#e4356b"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 75,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837678,
+              "status": "COMPLETED",
+              "score": 9,
+              "progress": 12,
+              "media": {
+                "id": 100873,
+                "title": {
+                  "userPreferred": "Hataraku Onii-san!",
+                  "english": "Working Buddies!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx100873-UrcidqbT35jd.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/nx100873-UrcidqbT35jd.jpg",
+                  "color": "#e4865d"
+                },
+                "type": "ANIME",
+                "format": "TV_SHORT",
+                "status": "FINISHED",
+                "averageScore": 59,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837687,
+              "status": "COMPLETED",
+              "score": 9,
+              "progress": 13,
+              "media": {
+                "id": 5680,
+                "title": {
+                  "userPreferred": "K-ON!",
+                  "english": "K-ON!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5680-r3AI3Cwfv0Aq.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx5680-r3AI3Cwfv0Aq.png",
+                  "color": "#e47843"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 78,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837694,
+              "status": "COMPLETED",
+              "score": 7,
+              "progress": 1,
+              "media": {
+                "id": 43,
+                "title": {
+                  "userPreferred": "GHOST IN THE SHELL: Koukaku Kidoutai",
+                  "english": "Ghost in the Shell"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx43-Y6EjeEMM14dj.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx43-Y6EjeEMM14dj.png",
+                  "color": null
+                },
+                "type": "ANIME",
+                "format": "MOVIE",
+                "status": "FINISHED",
+                "averageScore": 80,
+                "episodes": 1,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837700,
+              "status": "COMPLETED",
+              "score": 7,
+              "progress": 1,
+              "media": {
+                "id": 164,
+                "title": {
+                  "userPreferred": "Mononoke-hime",
+                  "english": "Princess Mononoke"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx164-ySuGzCWVw2cL.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx164-ySuGzCWVw2cL.jpg",
+                  "color": null
+                },
+                "type": "ANIME",
+                "format": "MOVIE",
+                "status": "FINISHED",
+                "averageScore": 85,
+                "episodes": 1,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837701,
+              "status": "COMPLETED",
+              "score": 7,
+              "progress": 74,
+              "media": {
+                "id": 19,
+                "title": {
+                  "userPreferred": "MONSTER",
+                  "english": "Monster"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx19-gtMC64182sm4.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx19-gtMC64182sm4.jpg",
+                  "color": null
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 88,
+                "episodes": 74,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837704,
+              "status": "COMPLETED",
+              "score": 8,
+              "progress": 220,
+              "media": {
+                "id": 20,
+                "title": {
+                  "userPreferred": "NARUTO",
+                  "english": "Naruto"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-dE6UHbFFg1A5.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20-dE6UHbFFg1A5.jpg",
+                  "color": "#e47850"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 80,
+                "episodes": 220,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837707,
+              "status": "COMPLETED",
+              "score": 6,
+              "progress": 12,
+              "media": {
+                "id": 19815,
+                "title": {
+                  "userPreferred": "No Game No Life",
+                  "english": "No Game, No Life"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b19815-sEOQ9yQaPKlk.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b19815-sEOQ9yQaPKlk.jpg",
+                  "color": "#f1a135"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 77,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837710,
+              "status": "COMPLETED",
+              "score": 7,
+              "progress": 12,
+              "media": {
+                "id": 21087,
+                "title": {
+                  "userPreferred": "One Punch Man",
+                  "english": "One-Punch Man"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21087-B5DHjqZ3kW4b.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21087-B5DHjqZ3kW4b.jpg",
+                  "color": "#e4ae5d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 83,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837711,
+              "status": "COMPLETED",
+              "score": 8,
+              "progress": 22,
+              "media": {
+                "id": 13601,
+                "title": {
+                  "userPreferred": "PSYCHO-PASS",
+                  "english": "PSYCHO-PASS"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx13601-i42VFuHpqEOJ.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx13601-i42VFuHpqEOJ.jpg",
+                  "color": "#288686"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 81,
+                "episodes": 22,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837715,
+              "status": "COMPLETED",
+              "score": 10,
+              "progress": 1,
+              "media": {
+                "id": 199,
+                "title": {
+                  "userPreferred": "Sen to Chihiro no Kamikakushi",
+                  "english": "Spirited Away"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx199-sWefXJvXkDOb.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx199-sWefXJvXkDOb.jpg",
+                  "color": "#e45d5d"
+                },
+                "type": "ANIME",
+                "format": "MOVIE",
+                "status": "FINISHED",
+                "averageScore": 86,
+                "episodes": 1,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837717,
+              "status": "COMPLETED",
+              "score": 9,
+              "progress": 22,
+              "media": {
+                "id": 20665,
+                "title": {
+                  "userPreferred": "Shigatsu wa Kimi no Uso",
+                  "english": "Your lie in April"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20665-TLgkL8T8IRFd.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20665-TLgkL8T8IRFd.png",
+                  "color": "#e4bb50"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 84,
+                "episodes": 22,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837718,
+              "status": "COMPLETED",
+              "score": 10,
+              "progress": 25,
+              "media": {
+                "id": 16498,
+                "title": {
+                  "userPreferred": "Shingeki no Kyojin",
+                  "english": "Attack on Titan"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16498-buvcRTBx4NSm.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx16498-buvcRTBx4NSm.jpg",
+                  "color": "#f1a143"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 85,
+                "episodes": 25,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837724,
+              "status": "COMPLETED",
+              "score": 8,
+              "progress": 24,
+              "media": {
+                "id": 9253,
+                "title": {
+                  "userPreferred": "Steins;Gate",
+                  "english": "Steins;Gate"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx9253-tIUXF2gfU8Sg.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx9253-tIUXF2gfU8Sg.jpg",
+                  "color": "#ffd6ae"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 89,
+                "episodes": 24,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837725,
+              "status": "COMPLETED",
+              "score": 10,
+              "progress": 25,
+              "media": {
+                "id": 11757,
+                "title": {
+                  "userPreferred": "Sword Art Online",
+                  "english": "Sword Art Online"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11757-SxYDUzdr9rh2.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx11757-SxYDUzdr9rh2.jpg",
+                  "color": "#e4ae5d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 69,
+                "episodes": 25,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837726,
+              "status": "COMPLETED",
+              "score": 0,
+              "progress": 1,
+              "media": {
+                "id": 20021,
+                "title": {
+                  "userPreferred": "Sword Art Online: Extra Edition",
+                  "english": "Sword Art Online EXTRA EDITION"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx20021-BZA5XTwahXPj.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/nx20021-BZA5XTwahXPj.png",
+                  "color": "#50bbf1"
+                },
+                "type": "ANIME",
+                "format": "SPECIAL",
+                "status": "FINISHED",
+                "averageScore": 61,
+                "episodes": 1,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837727,
+              "status": "COMPLETED",
+              "score": 7,
+              "progress": 27,
+              "media": {
+                "id": 2001,
+                "title": {
+                  "userPreferred": "Tengen Toppa Gurren Lagann",
+                  "english": "Gurren Lagann"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2001-XwRnjzGeFWRQ.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2001-XwRnjzGeFWRQ.png",
+                  "color": "#f15d35"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 85,
+                "episodes": 27,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837732,
+              "status": "COMPLETED",
+              "score": 9,
+              "progress": 25,
+              "media": {
+                "id": 4224,
+                "title": {
+                  "userPreferred": "Toradora!",
+                  "english": "Toradora!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx4224-PXVMBLNwy2aF.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx4224-PXVMBLNwy2aF.jpg",
+                  "color": "#f15d78"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 77,
+                "episodes": 25,
+                "isAdult": false
+              }
+            }
+          ]
+        },
+        {
+          "name": "Watching",
+          "entries": [
+            {
+              "id": 521837642,
+              "status": "CURRENT",
+              "score": 9,
+              "progress": 12,
+              "media": {
+                "id": 20755,
+                "title": {
+                  "userPreferred": "Ansatsu Kyoushitsu",
+                  "english": "Assassination Classroom"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20755-dWrhs569YGUO.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20755-dWrhs569YGUO.jpg",
+                  "color": "#f1e45d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 79,
+                "episodes": 22,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837643,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 4,
+              "media": {
+                "id": 66,
+                "title": {
+                  "userPreferred": "Azumanga Daiou THE ANIMATION",
+                  "english": "Azumanga Daioh"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx66-ZqYQWl6LsfeI.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx66-ZqYQWl6LsfeI.png",
+                  "color": null
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 79,
+                "episodes": 26,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837645,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 4,
+              "media": {
+                "id": 530,
+                "title": {
+                  "userPreferred": "Bishoujo Senshi Sailor Moon",
+                  "english": "Sailor Moon"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx530-O8q6KpJ244Qk.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx530-O8q6KpJ244Qk.jpg",
+                  "color": "#e48650"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 76,
+                "episodes": 46,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837658,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 19,
+              "media": {
+                "id": 6033,
+                "title": {
+                  "userPreferred": "Dragon Ball Kai",
+                  "english": "Dragon Ball Z Kai"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6033-TKDWyjZN3dXk.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx6033-TKDWyjZN3dXk.png",
+                  "color": "#f1e450"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 76,
+                "episodes": 97,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837659,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 83,
+              "media": {
+                "id": 813,
+                "title": {
+                  "userPreferred": "Dragon Ball Z",
+                  "english": "Dragon Ball Z"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx813-ZhnFNOeCU5dQ.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx813-ZhnFNOeCU5dQ.png",
+                  "color": "#e49343"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 80,
+                "episodes": 291,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837670,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 15,
+              "media": {
+                "id": 1281,
+                "title": {
+                  "userPreferred": "Gakkou no Kaidan",
+                  "english": "Ghost Stories"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1281-1D6fuMnHwor0.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1281-1D6fuMnHwor0.png",
+                  "color": "#f1ae1a"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 74,
+                "episodes": 19,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837679,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 2,
+              "media": {
+                "id": 101435,
+                "title": {
+                  "userPreferred": "Hataraku Onii-san! No 2!",
+                  "english": "Working Buddies! 2"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/nx101435-mPX5AWDgenk8.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/nx101435-mPX5AWDgenk8.png",
+                  "color": "#f1865d"
+                },
+                "type": "ANIME",
+                "format": "TV_SHORT",
+                "status": "FINISHED",
+                "averageScore": 60,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837705,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 278,
+              "media": {
+                "id": 1735,
+                "title": {
+                  "userPreferred": "NARUTO: Shippuuden",
+                  "english": "Naruto: Shippuden"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1735-kGfVm0YqCPcu.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1735-kGfVm0YqCPcu.png",
+                  "color": "#e4865d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 82,
+                "episodes": 500,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837709,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 1,
+              "media": {
+                "id": 128547,
+                "title": {
+                  "userPreferred": "Odd Taxi",
+                  "english": "ODDTAXI"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx128547-nNekWTKqmvEi.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx128547-nNekWTKqmvEi.jpg",
+                  "color": "#f1bb00"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 85,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837719,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 0,
+              "media": {
+                "id": 128545,
+                "title": {
+                  "userPreferred": "Shiroi Suna no Aquatope",
+                  "english": "The aquatope on white sand"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx128545-8oL2w1DYd2ur.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx128545-8oL2w1DYd2ur.png",
+                  "color": "#2886e4"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 73,
+                "episodes": 24,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837723,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 1,
+              "media": {
+                "id": 140960,
+                "title": {
+                  "userPreferred": "SPY\u00d7FAMILY",
+                  "english": "SPY x FAMILY"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx140960-Kb6R5nYQfjmP.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx140960-Kb6R5nYQfjmP.jpg",
+                  "color": "#c9f1f1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 83,
+                "episodes": 12,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837729,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 17,
+              "media": {
+                "id": 166910,
+                "title": {
+                  "userPreferred": "The Fable",
+                  "english": "The Fable"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx166910-pdgLmHMLdzUR.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166910-pdgLmHMLdzUR.jpg",
+                  "color": "#f1bb43"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 77,
+                "episodes": 25,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837738,
+              "status": "CURRENT",
+              "score": 0,
+              "progress": 3,
+              "media": {
+                "id": 166794,
+                "title": {
+                  "userPreferred": "Yubisaki to Renren",
+                  "english": "A Sign of Affection"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx166794-1MAXFMgND6qS.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx166794-1MAXFMgND6qS.jpg",
+                  "color": "#e4a15d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 82,
+                "episodes": 12,
+                "isAdult": false
+              }
+            }
+          ]
+        },
+        {
+          "name": "Dropped",
+          "entries": [
+            {
+              "id": 521837650,
+              "status": "DROPPED",
+              "score": 6,
+              "progress": 6,
+              "media": {
+                "id": 2167,
+                "title": {
+                  "userPreferred": "CLANNAD",
+                  "english": "Clannad"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2167-pSDBcyc0vjej.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2167-pSDBcyc0vjej.jpg",
+                  "color": "#bbbbff"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 77,
+                "episodes": 23,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837672,
+              "status": "DROPPED",
+              "score": 8,
+              "progress": 11,
+              "media": {
+                "id": 918,
+                "title": {
+                  "userPreferred": "Gintama",
+                  "english": "Gintama"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx918-iOaeBVUn4uK7.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx918-iOaeBVUn4uK7.jpg",
+                  "color": "#f1865d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 85,
+                "episodes": 201,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837680,
+              "status": "DROPPED",
+              "score": 0,
+              "progress": 2,
+              "media": {
+                "id": 100977,
+                "title": {
+                  "userPreferred": "Hataraku Saibou",
+                  "english": "Cells at Work!"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx100977-nH1J2dR7GGAk.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx100977-nH1J2dR7GGAk.jpg",
+                  "color": "#f1d6ae"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 73,
+                "episodes": 13,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837683,
+              "status": "DROPPED",
+              "score": 9,
+              "progress": 25,
+              "media": {
+                "id": 11061,
+                "title": {
+                  "userPreferred": "HUNTER\u00d7HUNTER (2011)",
+                  "english": "Hunter x Hunter (2011)"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-y5gsT1hoHuHw.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx11061-y5gsT1hoHuHw.png",
+                  "color": "#f1d65d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 89,
+                "episodes": 148,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837689,
+              "status": "DROPPED",
+              "score": 0,
+              "progress": 17,
+              "media": {
+                "id": 18679,
+                "title": {
+                  "userPreferred": "Kill la Kill",
+                  "english": "Kill la Kill"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b18679-lbkq7iYESoFW.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b18679-lbkq7iYESoFW.png",
+                  "color": "#e40d0d"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 79,
+                "episodes": 24,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837695,
+              "status": "DROPPED",
+              "score": 0,
+              "progress": 4,
+              "media": {
+                "id": 103632,
+                "title": {
+                  "userPreferred": "Kumo desu ga, Nani ka?",
+                  "english": "So I'm a Spider, So What?"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx103632-2wsy9wFUdm1C.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx103632-2wsy9wFUdm1C.jpg",
+                  "color": "#bbc9f1"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 72,
+                "episodes": 24,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837703,
+              "status": "DROPPED",
+              "score": 6,
+              "progress": 5,
+              "media": {
+                "id": 457,
+                "title": {
+                  "userPreferred": "Mushishi",
+                  "english": "MUSHI-SHI"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx457-l6cTtNgI9Bi6.png",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx457-l6cTtNgI9Bi6.png",
+                  "color": "#d6bb78"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 85,
+                "episodes": 26,
+                "isAdult": false
+              }
+            },
+            {
+              "id": 521837713,
+              "status": "DROPPED",
+              "score": 0,
+              "progress": 4,
+              "media": {
+                "id": 149326,
+                "title": {
+                  "userPreferred": "Saikin Yatotta Maid ga Ayashii",
+                  "english": "The Maid I Hired Recently is Mysterious"
+                },
+                "coverImage": {
+                  "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx149326-qDJGf7IELKbL.jpg",
+                  "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx149326-qDJGf7IELKbL.jpg",
+                  "color": "#ffe4bb"
+                },
+                "type": "ANIME",
+                "format": "TV",
+                "status": "FINISHED",
+                "averageScore": 63,
+                "episodes": 11,
+                "isAdult": false
+              }
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

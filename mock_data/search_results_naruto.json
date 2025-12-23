@@ -1,0 +1,188 @@
+{
+  "data": {
+    "Page": {
+      "media": [
+        {
+          "id": 20,
+          "title": {
+            "userPreferred": "NARUTO",
+            "english": "Naruto"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-dE6UHbFFg1A5.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20-dE6UHbFFg1A5.jpg",
+            "color": "#e47850"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "FINISHED",
+          "averageScore": 80,
+          "episodes": 220,
+          "isAdult": false
+        },
+        {
+          "id": 1735,
+          "title": {
+            "userPreferred": "NARUTO: Shippuuden",
+            "english": "Naruto: Shippuden"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1735-kGfVm0YqCPcu.png",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1735-kGfVm0YqCPcu.png",
+            "color": "#e4865d"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "FINISHED",
+          "averageScore": 82,
+          "episodes": 500,
+          "isAdult": false
+        },
+        {
+          "id": 97938,
+          "title": {
+            "userPreferred": "BORUTO: NARUTO NEXT GENERATIONS",
+            "english": "Boruto: Naruto Next Generations"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97938-BnF6M5yTaNB1.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97938-BnF6M5yTaNB1.jpg",
+            "color": "#00c9ff"
+          },
+          "type": "ANIME",
+          "format": "TV",
+          "status": "FINISHED",
+          "averageScore": 56,
+          "episodes": 293,
+          "isAdult": false
+        },
+        {
+          "id": 16870,
+          "title": {
+            "userPreferred": "THE LAST: NARUTO THE MOVIE",
+            "english": "The Last: Naruto the Movie"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16870-BD4K9rzlhCP4.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx16870-BD4K9rzlhCP4.jpg",
+            "color": "#e45d6b"
+          },
+          "type": "ANIME",
+          "format": "MOVIE",
+          "status": "FINISHED",
+          "averageScore": 76,
+          "episodes": 1,
+          "isAdult": false
+        },
+        {
+          "id": 21220,
+          "title": {
+            "userPreferred": "BORUTO: NARUTO THE MOVIE",
+            "english": "Boruto: Naruto the Movie"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21220-3cWAUtR1Ih5h.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21220-3cWAUtR1Ih5h.jpg",
+            "color": "#e46b50"
+          },
+          "type": "ANIME",
+          "format": "MOVIE",
+          "status": "FINISHED",
+          "averageScore": 70,
+          "episodes": 1,
+          "isAdult": false
+        },
+        {
+          "id": 13667,
+          "title": {
+            "userPreferred": "ROAD TO NINJA: NARUTO THE MOVIE",
+            "english": "Road to Ninja: Naruto the Movie"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx13667-gAKuIXI2avRq.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx13667-gAKuIXI2avRq.jpg",
+            "color": "#e48650"
+          },
+          "type": "ANIME",
+          "format": "MOVIE",
+          "status": "FINISHED",
+          "averageScore": 74,
+          "episodes": 1,
+          "isAdult": false
+        },
+        {
+          "id": 2472,
+          "title": {
+            "userPreferred": "NARUTO: Shippuuden Movie",
+            "english": "Naruto Shippuden the Movie"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2472-mYApVxceStn5.png",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2472-mYApVxceStn5.png",
+            "color": "#f1e450"
+          },
+          "type": "ANIME",
+          "format": "MOVIE",
+          "status": "FINISHED",
+          "averageScore": 69,
+          "episodes": 1,
+          "isAdult": false
+        },
+        {
+          "id": 10589,
+          "title": {
+            "userPreferred": "NARUTO: Blood Prison",
+            "english": "Naruto Shippuden the Movie: Blood Prison"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10589-VhXWWMm24Dso.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx10589-VhXWWMm24Dso.jpg",
+            "color": "#e45d6b"
+          },
+          "type": "ANIME",
+          "format": "MOVIE",
+          "status": "FINISHED",
+          "averageScore": 71,
+          "episodes": 1,
+          "isAdult": false
+        },
+        {
+          "id": 8246,
+          "title": {
+            "userPreferred": "NARUTO: Shippuuden - The Lost Tower",
+            "english": "Naruto Shippuden the Movie: The Lost Tower"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx8246-KAi3bLLdJ4OI.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx8246-KAi3bLLdJ4OI.jpg",
+            "color": "#d6936b"
+          },
+          "type": "ANIME",
+          "format": "MOVIE",
+          "status": "FINISHED",
+          "averageScore": 70,
+          "episodes": 1,
+          "isAdult": false
+        },
+        {
+          "id": 4437,
+          "title": {
+            "userPreferred": "NARUTO: Shippuuden - Kizuna",
+            "english": "Naruto Shippuden the Movie: Bonds"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx4437-8LQbBZo4N6yi.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx4437-8LQbBZo4N6yi.jpg",
+            "color": "#f1935d"
+          },
+          "type": "ANIME",
+          "format": "MOVIE",
+          "status": "FINISHED",
+          "averageScore": 69,
+          "episodes": 1,
+          "isAdult": false
+        }
+      ]
+    }
+  }
+}
