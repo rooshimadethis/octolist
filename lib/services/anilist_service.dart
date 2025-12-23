@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import '../models/anime.dart';
 import '../models/user_profile.dart';
-import 'mock_data_service.dart'; // For WatchingEntry class
+import '../models/watching_entry.dart';
 import '../graphql/anilist_client.dart';
 import '../graphql/queries.dart';
 
@@ -23,73 +23,54 @@ class AniListService {
       fetchPolicy: FetchPolicy.networkOnly,
     );
 
-    try {
-      final QueryResult result = await _client.query(options);
+    final QueryResult result = await _client.query(options);
 
-      if (result.hasException) {
-        debugPrint(
-          'Error fetching user profile: ${result.exception.toString()}',
-        );
-        return null;
-      }
+    if (result.hasException) {
+      throw result.exception!;
+    }
 
-      if (result.data?['Viewer'] == null) {
-        return null;
-      }
-
-      return UserProfile.fromJson(result.data!['Viewer']);
-    } catch (e) {
-      debugPrint('Exception fetching user profile: $e');
+    if (result.data?['Viewer'] == null) {
       return null;
     }
+
+    return UserProfile.fromJson(result.data!['Viewer']);
   }
 
   /// Loads the user's currently watching anime list.
   Future<List<WatchingEntry>> getWatchingList() async {
     // We need the user ID first
     final user = await getUserProfile();
+    // If not logged in, return empty list (or throw? Empty seems fine for unauth state unless we enforce auth)
     if (user == null) return [];
 
     final QueryOptions options = QueryOptions(
       document: gql(AnimeQueries.getMediaList),
-      variables: {
-        'userId':
-            user.id, // We need to add ID to UserProfile model if not there
-        'status': 'CURRENT',
-      },
+      variables: {'userId': user.id, 'status': 'CURRENT'},
       fetchPolicy: FetchPolicy.networkOnly,
     );
 
-    try {
-      final QueryResult result = await _client.query(options);
+    final QueryResult result = await _client.query(options);
 
-      if (result.hasException) {
-        debugPrint(
-          'Error fetching watching list: ${result.exception.toString()}',
-        );
-        return [];
-      }
-
-      final lists = result.data?['MediaListCollection']?['lists'] as List?;
-      if (lists == null || lists.isEmpty) return [];
-
-      // Usually only one list returned directly if filtered by status,
-      // but AniList structure nests it in 'lists' array
-      final watchingList = lists.first;
-      final entries = watchingList['entries'] as List;
-
-      return entries.map((e) {
-        return WatchingEntry(
-          id: e['id'],
-          progress: e['progress'] ?? 0,
-          userScore: (e['score'] as num?)?.toInt() ?? 0,
-          anime: Anime.fromJson(e['media']),
-        );
-      }).toList();
-    } catch (e) {
-      debugPrint('Exception fetching watching list: $e');
-      return [];
+    if (result.hasException) {
+      throw result.exception!;
     }
+
+    final lists = result.data?['MediaListCollection']?['lists'] as List?;
+    if (lists == null || lists.isEmpty) return [];
+
+    // Usually only one list returned directly if filtered by status,
+    // but AniList structure nests it in 'lists' array
+    final watchingList = lists.first;
+    final entries = watchingList['entries'] as List;
+
+    return entries.map((e) {
+      return WatchingEntry(
+        id: e['id'],
+        progress: e['progress'] ?? 0,
+        userScore: (e['score'] as num?)?.toInt() ?? 0,
+        anime: Anime.fromJson(e['media']),
+      );
+    }).toList();
   }
 
   /// Loads all of the user's library lists.
@@ -103,37 +84,31 @@ class AniListService {
       fetchPolicy: FetchPolicy.networkOnly,
     );
 
-    try {
-      final QueryResult result = await _client.query(options);
+    final QueryResult result = await _client.query(options);
 
-      if (result.hasException) {
-        debugPrint('Error fetching library: ${result.exception.toString()}');
-        return {};
-      }
-
-      final lists = result.data?['MediaListCollection']?['lists'] as List?;
-      if (lists == null) return {};
-
-      final Map<String, List<WatchingEntry>> library = {};
-
-      for (var list in lists) {
-        final String name = list['name'];
-        final List entries = list['entries'];
-        library[name] = entries.map((e) {
-          return WatchingEntry(
-            id: e['id'],
-            progress: e['progress'] ?? 0,
-            userScore: (e['score'] as num?)?.toInt() ?? 0,
-            anime: Anime.fromJson(e['media']),
-          );
-        }).toList();
-      }
-
-      return library;
-    } catch (e) {
-      debugPrint('Exception fetching library: $e');
-      return {};
+    if (result.hasException) {
+      throw result.exception!;
     }
+
+    final lists = result.data?['MediaListCollection']?['lists'] as List?;
+    if (lists == null) return {};
+
+    final Map<String, List<WatchingEntry>> library = {};
+
+    for (var list in lists) {
+      final String name = list['name'];
+      final List entries = list['entries'];
+      library[name] = entries.map((e) {
+        return WatchingEntry(
+          id: e['id'],
+          progress: e['progress'] ?? 0,
+          userScore: (e['score'] as num?)?.toInt() ?? 0,
+          anime: Anime.fromJson(e['media']),
+        );
+      }).toList();
+    }
+
+    return library;
   }
 
   /// Loads the list of currently trending anime.
@@ -143,20 +118,14 @@ class AniListService {
       fetchPolicy: FetchPolicy.cacheAndNetwork,
     );
 
-    try {
-      final QueryResult result = await _client.query(options);
+    final QueryResult result = await _client.query(options);
 
-      if (result.hasException) {
-        debugPrint('Error fetching trending: ${result.exception.toString()}');
-        return [];
-      }
-
-      final List media = result.data?['trending']?['media'] ?? [];
-      return media.map((e) => Anime.fromJson(e)).toList();
-    } catch (e) {
-      debugPrint('Exception fetching trending: $e');
-      return [];
+    if (result.hasException) {
+      throw result.exception!;
     }
+
+    final List media = result.data?['trending']?['media'] ?? [];
+    return media.map((e) => Anime.fromJson(e)).toList();
   }
 
   /// Loads detailed information for a specific anime by ID.
@@ -167,21 +136,15 @@ class AniListService {
       fetchPolicy: FetchPolicy.cacheFirst,
     );
 
-    try {
-      final QueryResult result = await _client.query(options);
+    final QueryResult result = await _client.query(options);
 
-      if (result.hasException) {
-        debugPrint('Error fetching details: ${result.exception.toString()}');
-        return null;
-      }
-
-      if (result.data?['Media'] == null) return null;
-
-      return Anime.fromJson(result.data!['Media']);
-    } catch (e) {
-      debugPrint('Exception fetching details: $e');
-      return null;
+    if (result.hasException) {
+      throw result.exception!;
     }
+
+    if (result.data?['Media'] == null) return null;
+
+    return Anime.fromJson(result.data!['Media']);
   }
 
   /// Searches for anime matching the given query.
@@ -192,20 +155,14 @@ class AniListService {
       fetchPolicy: FetchPolicy.networkOnly,
     );
 
-    try {
-      final QueryResult result = await _client.query(options);
+    final QueryResult result = await _client.query(options);
 
-      if (result.hasException) {
-        debugPrint('Error searching anime: ${result.exception.toString()}');
-        return [];
-      }
-
-      final List media = result.data?['Page']?['media'] ?? [];
-      return media.map((e) => Anime.fromJson(e)).toList();
-    } catch (e) {
-      debugPrint('Exception searching anime: $e');
-      return [];
+    if (result.hasException) {
+      throw result.exception!;
     }
+
+    final List media = result.data?['Page']?['media'] ?? [];
+    return media.map((e) => Anime.fromJson(e)).toList();
   }
 
   /// Retrieves the names of all available lists in the user's library.
@@ -242,27 +199,24 @@ class AniListService {
     // or using string keys if custom lists.
     // For simplicity, we map standard names to statuses.
     String status = 'CURRENT';
-    if (listName == 'Planning')
+    if (listName == 'Planning') {
       status = 'PLANNING';
-    else if (listName == 'Completed')
+    } else if (listName == 'Completed') {
       status = 'COMPLETED';
-    else if (listName == 'Dropped')
+    } else if (listName == 'Dropped') {
       status = 'DROPPED';
-    else if (listName == 'Paused')
+    } else if (listName == 'Paused') {
       status = 'PAUSED';
+    }
 
     final MutationOptions options = MutationOptions(
       document: gql(AnimeQueries.saveMediaListEntry),
       variables: {'mediaId': animeId, 'status': status, 'progress': progress},
     );
 
-    try {
-      final QueryResult result = await _client.mutate(options);
-      if (result.hasException) {
-        debugPrint('Error saving entry: ${result.exception.toString()}');
-      }
-    } catch (e) {
-      debugPrint('Exception saving entry: $e');
+    final QueryResult result = await _client.mutate(options);
+    if (result.hasException) {
+      throw result.exception!;
     }
   }
 
@@ -286,13 +240,9 @@ class AniListService {
       },
     );
 
-    try {
-      final QueryResult result = await _client.mutate(options);
-      if (result.hasException) {
-        debugPrint('Error updating progress: ${result.exception.toString()}');
-      }
-    } catch (e) {
-      debugPrint('Exception updating progress: $e');
+    final QueryResult result = await _client.mutate(options);
+    if (result.hasException) {
+      throw result.exception!;
     }
   }
 }

@@ -3,8 +3,9 @@ import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/anime.dart';
 import '../models/user_profile.dart';
+import '../models/watching_entry.dart';
 import '../services/anilist_service.dart';
-import '../services/mock_data_service.dart';
+import '../services/auth_service.dart';
 import 'library_page.dart';
 import '../widgets/watching_card.dart';
 import '../widgets/anime_card_skeleton.dart';
@@ -38,10 +39,8 @@ class ExpressiveHomePage extends StatefulWidget {
 class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   int _selectedIndex = 0;
   final Map<int, int> _progressOverrides = {};
-  String _searchQuery = 'naruto';
-  final TextEditingController _searchController = TextEditingController(
-    text: 'naruto',
-  );
+  String _searchQuery = '';
+  final TextEditingController _searchController = TextEditingController();
   String? _libraryInitialTab;
   Key _libraryKey = const PageStorageKey('library_page');
 
@@ -55,23 +54,115 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   void initState() {
     super.initState();
     _aniListService = AniListService();
-    _profileFuture = _aniListService.getUserProfile();
-    _watchingFuture = _aniListService.getWatchingList();
-    _trendingFuture = _aniListService.getTrendingAnime();
-    _searchFuture = _aniListService.searchAnime(_searchQuery);
+    _loadData();
+
+    // Listen for auth changes to refresh data
+    AuthService().isLoggedIn.addListener(_onAuthChanged);
   }
 
   @override
   void dispose() {
+    AuthService().isLoggedIn.removeListener(_onAuthChanged);
     _searchController.dispose();
     super.dispose();
   }
 
-  void _incrementProgress(int entryId, int currentProgress) {
-    // TODO: Stub - In a real app, this would call an API to update progress
-    setState(() {
-      _progressOverrides[entryId] = currentProgress + 1;
+  void _loadData() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Refreshing home data...'),
+            duration: Duration(seconds: 1),
+            backgroundColor: Colors.black,
+          ),
+        );
+      }
     });
+    _profileFuture = _aniListService.getUserProfile();
+    _watchingFuture = _aniListService.getWatchingList();
+    _trendingFuture = _aniListService.getTrendingAnime();
+    _searchFuture = _searchQuery.isEmpty
+        ? Future.value([])
+        : _aniListService.searchAnime(_searchQuery);
+  }
+
+  void _onAuthChanged() {
+    if (mounted) {
+      if (AuthService().isLoggedIn.value) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Successfully logged in to AniList!'),
+            backgroundColor: Colors.green,
+            duration: Duration(seconds: 2),
+          ),
+        );
+      }
+      setState(() {
+        _loadData();
+        // Force library page rebuild to fetch new data
+        _libraryKey = UniqueKey();
+      });
+    }
+  }
+
+  Future<void> _incrementProgress(
+    WatchingEntry entry,
+    int currentProgress,
+  ) async {
+    // Optimistic update
+    setState(() {
+      _progressOverrides[entry.id] = currentProgress + 1;
+    });
+
+    try {
+      await _aniListService.updateEpisodeProgress(
+        entry.anime.id,
+        currentProgress + 1,
+        entry.anime.episodes,
+      );
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Progress updated successfully!'),
+            backgroundColor: Colors.black, // Consistent with app theme
+            duration: Duration(seconds: 1),
+          ),
+        );
+      }
+    } catch (e) {
+      // Revert on error
+      if (mounted) {
+        setState(() {
+          _progressOverrides.remove(entry.id);
+        });
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update progress: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _performSearch() {
+    setState(() {
+      _searchFuture = _searchQuery.isEmpty
+          ? Future.value([])
+          : _aniListService.searchAnime(_searchQuery);
+    });
+
+    if (_searchQuery.isNotEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Searching for "$_searchQuery"...'),
+          duration: const Duration(milliseconds: 500),
+          backgroundColor: Colors.black,
+        ),
+      );
+    }
   }
 
   @override
@@ -95,6 +186,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         final user = snapshot.data;
                         final name = user?.name ?? 'Guest';
                         final avatarUrl = user?.avatarLarge;
+                        final isGuest = user == null;
 
                         final greeting = GreetingHelper.getGreeting();
 
@@ -118,21 +210,58 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                         ),
                                   ),
                                   const SizedBox(height: 4),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 8,
-                                      vertical: 2,
-                                    ),
-                                    color: Colors.black,
-                                    child: Text(
-                                      'Let\'s find some anime.',
-                                      style: GoogleFonts.teko(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                        letterSpacing: 2.0,
+                                  if (isGuest)
+                                    ElevatedButton(
+                                      onPressed: () async {
+                                        try {
+                                          // TODO: Use dependency injection for AuthService
+                                          // Creating a temporary instance here just to trigger login
+                                          // Ideally AuthService should be a singleton or provider
+                                          await AuthService().login();
+                                        } catch (e) {
+                                          if (context.mounted) {
+                                            ScaffoldMessenger.of(
+                                              context,
+                                            ).showSnackBar(
+                                              SnackBar(
+                                                content: Text(
+                                                  'Login failed: $e',
+                                                ),
+                                                backgroundColor: Colors.red,
+                                              ),
+                                            );
+                                          }
+                                        }
+                                      },
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.black,
+                                        foregroundColor: Colors.white,
+                                        shape: const RoundedRectangleBorder(),
+                                      ),
+                                      child: Text(
+                                        'LOGIN WITH ANILIST',
+                                        style: GoogleFonts.teko(
+                                          fontSize: 18,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    )
+                                  else
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
+                                      color: Colors.black,
+                                      child: Text(
+                                        'Let\'s find some anime.',
+                                        style: GoogleFonts.teko(
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                          letterSpacing: 2.0,
+                                        ),
                                       ),
                                     ),
-                                  ),
                                 ],
                               ),
                             ),
@@ -179,71 +308,109 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                   const SizedBox(height: 32),
                   // Watching Section
                   // Watching Section
-                  SectionTitle(
-                    title: 'Continue Watching',
-                    onPressed: () {
-                      setState(() {
-                        _libraryInitialTab = 'Watching';
-                        _selectedIndex = 2;
-                        _libraryKey = UniqueKey();
-                      });
-                    },
-                  ).animate().fadeIn(delay: 100.ms).slideX(begin: -0.2, end: 0),
-                  const SizedBox(height: 16),
-                  SizedBox(
-                    height: 180, // Reduced height for better aspect ratio
-                    child: FutureBuilder<List<WatchingEntry>>(
-                      future: _watchingFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return ListView.separated(
-                            padding: const EdgeInsets.symmetric(horizontal: 24),
-                            scrollDirection: Axis.horizontal,
-                            itemCount: 3,
-                            separatorBuilder: (_, __) =>
-                                const SizedBox(width: 16),
-                            itemBuilder: (context, index) =>
-                                const AnimeCardSkeleton(
-                                  isHorizontal: true,
-                                ).animate(delay: (index * 100).ms).fadeIn(),
-                          );
-                        }
-                        final entries = snapshot.data ?? [];
-                        return ListView.separated(
-                          padding: const EdgeInsets.symmetric(horizontal: 24),
-                          scrollDirection: Axis.horizontal,
-                          itemCount: entries.length,
-                          separatorBuilder: (_, __) =>
-                              const SizedBox(width: 16),
-                          itemBuilder: (context, index) {
-                            final entry = entries[index];
-                            final progress =
-                                _progressOverrides[entry.id] ?? entry.progress;
-                            return Stack(
-                              key: ValueKey('watching_${entry.id}'),
-                              children: [
-                                const AnimeCardSkeleton(isHorizontal: true),
-                                WatchingCard(
-                                      entry: entry,
-                                      progress: progress,
-                                      heroPrefix: 'home',
-                                      onIncrement: () => _incrementProgress(
-                                        entry.id,
-                                        progress,
-                                      ),
-                                    )
-                                    .animate(
-                                      delay: (index < 6 ? index * 100 : 0).ms,
-                                    )
-                                    .fadeIn()
-                                    .slideX(begin: 0.1, end: 0),
-                              ],
-                            );
-                          },
+                  FutureBuilder<List<WatchingEntry>>(
+                    future: _watchingFuture,
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return Column(
+                          children: [
+                            SectionTitle(
+                                  title: 'Continue Watching',
+                                  onPressed: () {
+                                    setState(() {
+                                      _libraryInitialTab = 'Watching';
+                                      _selectedIndex = 2;
+                                      _libraryKey = UniqueKey();
+                                    });
+                                  },
+                                )
+                                .animate()
+                                .fadeIn(delay: 100.ms)
+                                .slideX(begin: -0.2, end: 0),
+                            const SizedBox(height: 16),
+                            SizedBox(
+                              height: 180,
+                              child: ListView.separated(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                ),
+                                scrollDirection: Axis.horizontal,
+                                itemCount: 3,
+                                separatorBuilder: (_, __) =>
+                                    const SizedBox(width: 16),
+                                itemBuilder: (context, index) =>
+                                    const AnimeCardSkeleton(
+                                      isHorizontal: true,
+                                    ).animate(delay: (index * 100).ms).fadeIn(),
+                              ),
+                            ),
+                          ],
                         );
-                      },
-                    ),
+                      }
+
+                      final entries = snapshot.data ?? [];
+                      if (entries.isEmpty) {
+                        return const SizedBox.shrink();
+                      }
+
+                      return Column(
+                        children: [
+                          SectionTitle(
+                                title: 'Continue Watching',
+                                onPressed: () {
+                                  setState(() {
+                                    _libraryInitialTab = 'Watching';
+                                    _selectedIndex = 2;
+                                    _libraryKey = UniqueKey();
+                                  });
+                                },
+                              )
+                              .animate()
+                              .fadeIn(delay: 100.ms)
+                              .slideX(begin: -0.2, end: 0),
+                          const SizedBox(height: 16),
+                          SizedBox(
+                            height: 180,
+                            child: ListView.separated(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 24,
+                              ),
+                              scrollDirection: Axis.horizontal,
+                              itemCount: entries.length,
+                              separatorBuilder: (_, __) =>
+                                  const SizedBox(width: 16),
+                              itemBuilder: (context, index) {
+                                final entry = entries[index];
+                                final progress =
+                                    _progressOverrides[entry.id] ??
+                                    entry.progress;
+                                return Stack(
+                                  key: ValueKey('watching_${entry.id}'),
+                                  children: [
+                                    const AnimeCardSkeleton(isHorizontal: true),
+                                    WatchingCard(
+                                          entry: entry,
+                                          progress: progress,
+                                          heroPrefix: 'home',
+                                          onIncrement: () => _incrementProgress(
+                                            entry,
+                                            progress,
+                                          ),
+                                        )
+                                        .animate(
+                                          delay:
+                                              (index < 6 ? index * 100 : 0).ms,
+                                        )
+                                        .fadeIn()
+                                        .slideX(begin: 0.1, end: 0),
+                                  ],
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   const SizedBox(height: 32),
                   // Trending Section
@@ -322,14 +489,11 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                   const SizedBox(height: 16),
                   TextField(
                     controller: _searchController,
+                    textInputAction: TextInputAction.search,
                     onChanged: (value) {
-                      setState(() {
-                        _searchQuery = value.isEmpty ? 'naruto' : value;
-                        _searchFuture = MockDataService().searchAnime(
-                          _searchQuery,
-                        );
-                      });
+                      _searchQuery = value;
                     },
+                    onSubmitted: (_) => _performSearch(),
                     style: GoogleFonts.robotoMono(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
                       hintText: 'FIND MANGA...',
@@ -363,6 +527,25 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                       ),
                     ),
                   ),
+                  const SizedBox(height: 16),
+                  ElevatedButton(
+                    onPressed: _performSearch,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.black,
+                      foregroundColor: Colors.white,
+                      minimumSize: const Size(double.infinity, 56),
+                      elevation: 0,
+                      shape: const RoundedRectangleBorder(),
+                    ),
+                    child: Text(
+                      'SEARCH',
+                      style: GoogleFonts.teko(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        letterSpacing: 1.5,
+                      ),
+                    ),
+                  ),
                   const SizedBox(height: 24),
                   Expanded(
                     child: FutureBuilder<List<Anime>>(
@@ -385,7 +568,44 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                     .fadeIn(),
                           );
                         }
+
+                        // New Error Handling UI for Search
+                        if (snapshot.hasError) {
+                          return Center(
+                            child: Text(
+                              'Error searching: ${snapshot.error}',
+                              style: GoogleFonts.robotoMono(color: Colors.red),
+                            ),
+                          );
+                        }
+
                         final animeList = snapshot.data ?? [];
+
+                        if (animeList.isEmpty) {
+                          if (_searchQuery.isEmpty) {
+                            return Center(
+                              child: Text(
+                                'FIND SOMETHING...',
+                                style: GoogleFonts.teko(
+                                  fontSize: 24,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            );
+                          }
+                          return Center(
+                            child: Text(
+                              'NO RESULTS FOUND',
+                              style: GoogleFonts.teko(
+                                fontSize: 24,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          );
+                        }
+
                         return GridView.builder(
                           gridDelegate:
                               const SliverGridDelegateWithFixedCrossAxisCount(

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:confetti/confetti.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../services/mock_data_service.dart';
+import '../models/watching_entry.dart';
 import '../screens/anime_details_page.dart';
 import 'expressive_image.dart';
 

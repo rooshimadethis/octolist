@@ -33,6 +33,19 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
     super.initState();
     _fullDetailsFuture = _dataService.getAnimeDetails(widget.anime.id);
     _loadUserListData();
+
+    // Defer the snackbar
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Loading details...'),
+            duration: Duration(milliseconds: 500),
+            backgroundColor: Colors.black,
+          ),
+        );
+      }
+    });
     _confettiController = ConfettiController(
       duration: const Duration(seconds: 3),
     );
@@ -54,7 +67,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
         if (entry.progress == entry.anime.episodes) {
           _currentListName = 'Completed';
         } else if (entry.progress > 0) {
-          _currentListName = 'Current';
+          _currentListName = 'Watching';
         } else {
           _currentListName = 'Planning';
         }
@@ -163,13 +176,46 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   Future<void> _updateListStatus(Anime anime, String listName) async {
     setState(() => _isUpdating = true);
 
-    await _dataService.saveMediaListEntry(anime.id, listName, _currentEpisode);
+    try {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Adding to $listName...'),
+            duration: const Duration(milliseconds: 500),
+            backgroundColor: Colors.black,
+          ),
+        );
+      }
 
-    if (mounted) {
-      setState(() {
-        _currentListName = listName;
-        _isUpdating = false;
-      });
+      await _dataService.saveMediaListEntry(
+        anime.id,
+        listName,
+        _currentEpisode,
+      );
+
+      if (mounted) {
+        setState(() {
+          _currentListName = listName;
+          _isUpdating = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Added to $listName!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isUpdating = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to update list: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 
@@ -207,18 +253,45 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
       _confettiController.play();
     }
 
-    await _dataService.updateEpisodeProgress(
-      anime.id,
-      newProgress,
-      totalEpisodes,
-    );
+    try {
+      if (mounted) {
+        // Optional: Toast for "Updating..." might be too noisy for rapid clicks,
+        // but user asked for "any utils called".
+        // I'll skip the 'Updating...' distinct toast here to allow rapid clicking
+        // and just show success/fail, or shows it briefly.
+      }
 
-    if (mounted) {
-      setState(() {
-        _currentEpisode = newProgress;
-        _currentListName = targetList;
-        _isUpdating = false;
-      });
+      await _dataService.updateEpisodeProgress(
+        anime.id,
+        newProgress,
+        totalEpisodes,
+      );
+
+      if (mounted) {
+        setState(() {
+          _currentEpisode = newProgress;
+          _currentListName = targetList;
+          _isUpdating = false;
+        });
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Progress saved!'),
+            duration: Duration(milliseconds: 500),
+            backgroundColor: Colors.black,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isUpdating = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to save progress: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
     }
   }
 

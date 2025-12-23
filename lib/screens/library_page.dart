@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../services/anilist_service.dart';
-import '../services/mock_data_service.dart';
+import '../models/watching_entry.dart';
 import 'anime_details_page.dart';
 import '../widgets/watching_card.dart';
 import '../widgets/expressive_image.dart';
@@ -19,107 +19,199 @@ class LibraryPage extends StatefulWidget {
 }
 
 class _LibraryPageState extends State<LibraryPage> {
-  late Future<Map<String, List<WatchingEntry>>> _libraryFuture;
+  Map<String, List<WatchingEntry>>? _libraryData;
+  bool _isLoading = true;
+  String? _errorMessage;
 
   @override
   void initState() {
     super.initState();
-    _libraryFuture = AniListService().getLibraryLists();
+    // Defer the snackbar until after the build phase
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Fetching library...'),
+            duration: Duration(seconds: 1),
+            backgroundColor: Colors.black,
+          ),
+        );
+      }
+    });
+    _fetchLibrary();
+  }
+
+  Future<void> _fetchLibrary() async {
+    try {
+      final data = await AniListService().getLibraryLists();
+      if (mounted) {
+        setState(() {
+          _libraryData = data;
+          _isLoading = false;
+          _errorMessage = null;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+          _errorMessage = e.toString();
+        });
+      }
+    }
+  }
+
+  Future<void> _handleIncrement(WatchingEntry entry, String listName) async {
+    final currentProgress = entry.progress;
+    final totalEpisodes = entry.anime.episodes;
+
+    if (totalEpisodes != null && currentProgress >= totalEpisodes) {
+      return;
+    }
+
+    final newProgress = currentProgress + 1;
+
+    // Optimistic Update
+    setState(() {
+      final list = _libraryData![listName]!;
+      final index = list.indexWhere((e) => e.id == entry.id);
+      if (index != -1) {
+        list[index] = WatchingEntry(
+          id: entry.id,
+          anime: entry.anime,
+          userScore: entry.userScore,
+          progress: newProgress,
+        );
+      }
+    });
+
+    try {
+      await AniListService().updateEpisodeProgress(
+        entry.anime.id,
+        newProgress,
+        totalEpisodes,
+      );
+    } catch (e) {
+      // Revert on failure
+      if (mounted) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text('Update failed: $e')));
+        setState(() {
+          final list = _libraryData![listName]!;
+          final index = list.indexWhere((e) => e.id == entry.id);
+          if (index != -1) {
+            list[index] = entry; // Revert to original
+          }
+        });
+      }
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Map<String, List<WatchingEntry>>>(
-      future: _libraryFuture,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              title: Container(
-                width: 200,
-                height: 32,
-                color: Colors.grey[300],
-              ).animate(onPlay: (c) => c.repeat()).shimmer(),
-            ),
-            body: GridView.builder(
-              padding: const EdgeInsets.all(24),
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                mainAxisSpacing: 24,
-                crossAxisSpacing: 24,
-                childAspectRatio: 0.65,
-              ),
-              itemCount: 6,
-              itemBuilder: (context, index) => const AnimeCardSkeleton()
-                  .animate(delay: (index * 100).ms)
-                  .fadeIn(),
-            ),
-          );
-        }
+    if (_isLoading) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Container(
+            width: 200,
+            height: 32,
+            color: Colors.grey[300],
+          ).animate(onPlay: (c) => c.repeat()).shimmer(),
+        ),
+        body: GridView.builder(
+          padding: const EdgeInsets.all(24),
+          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            crossAxisCount: 2,
+            mainAxisSpacing: 24,
+            crossAxisSpacing: 24,
+            childAspectRatio: 0.65,
+          ),
+          itemCount: 6,
+          itemBuilder: (context, index) => const AnimeCardSkeleton()
+              .animate(delay: (index * 100).ms)
+              .fadeIn(),
+        ),
+      );
+    }
 
-        if (snapshot.hasError || !snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Scaffold(
-            backgroundColor: Colors.white,
-            body: _EmptyLibraryState(),
-          );
-        }
+    if (_errorMessage != null ||
+        _libraryData == null ||
+        _libraryData!.isEmpty) {
+      return const Scaffold(
+        backgroundColor: Colors.white,
+        body: _EmptyLibraryState(),
+      );
+    }
 
-        final library = snapshot.data!;
-        final listNames = library.keys.toList();
+    final library = _libraryData!;
+    final listNames = library.keys.toList()
+      ..sort((a, b) {
+        const order = [
+          'Watching',
+          'Planning',
+          'Completed',
+          'Dropped',
+          'Paused',
+          'Rewatching',
+        ];
+        int indexA = order.indexOf(a);
+        int indexB = order.indexOf(b);
+        if (indexA == -1) indexA = 999;
+        if (indexB == -1) indexB = 999;
+        return indexA.compareTo(indexB);
+      });
 
-        int initialIndex = 0;
-        if (widget.initialTabName != null) {
-          initialIndex = listNames.indexWhere(
-            (name) =>
-                name.toLowerCase() == widget.initialTabName!.toLowerCase(),
-          );
-          if (initialIndex == -1) initialIndex = 0;
-        }
+    int initialIndex = 0;
+    if (widget.initialTabName != null) {
+      initialIndex = listNames.indexWhere(
+        (name) => name.toLowerCase() == widget.initialTabName!.toLowerCase(),
+      );
+      if (initialIndex == -1) initialIndex = 0;
+    }
 
-        return DefaultTabController(
-          length: listNames.length,
-          initialIndex: initialIndex,
-          child: Scaffold(
-            backgroundColor: Colors.white,
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              elevation: 0,
-              title: Text(
-                'YOUR LIBRARY',
-                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                  fontWeight: FontWeight.bold,
-                  fontStyle: FontStyle.italic,
-                  fontSize: 32,
-                ),
-              ),
-              bottom: TabBar(
-                isScrollable: true,
-                indicatorColor: Colors.black,
-                indicatorWeight: 4,
-                labelColor: Colors.black,
-                unselectedLabelColor: Colors.grey,
-                labelStyle: GoogleFonts.teko(
-                  fontSize: 20,
-                  fontWeight: FontWeight.bold,
-                  letterSpacing: 1.2,
-                ),
-                tabs: listNames
-                    .map((name) => Tab(text: name.toUpperCase()))
-                    .toList(),
-              ),
-            ),
-            body: TabBarView(
-              children: listNames.map((name) {
-                final entries = library[name]!;
-                return _buildListContent(context, name, entries);
-              }).toList(),
+    return DefaultTabController(
+      length: listNames.length,
+      initialIndex: initialIndex,
+      child: Scaffold(
+        backgroundColor: Colors.white,
+        appBar: AppBar(
+          backgroundColor: Colors.white,
+          elevation: 0,
+          title: Text(
+            'YOUR LIBRARY',
+            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+              fontWeight: FontWeight.bold,
+              fontStyle: FontStyle.italic,
+              fontSize: 32,
             ),
           ),
-        );
-      },
+          bottom: TabBar(
+            isScrollable: true,
+            indicatorColor: Colors.black,
+            indicatorWeight: 4,
+            labelColor: Colors.black,
+            unselectedLabelColor: Colors.grey,
+            labelStyle: GoogleFonts.teko(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.2,
+            ),
+            tabs: listNames
+                .map((name) => Tab(text: name.toUpperCase()))
+                .toList(),
+          ),
+        ),
+        body: TabBarView(
+          children: listNames.map((name) {
+            final entries = library[name]!;
+            return _buildListContent(context, name, entries);
+          }).toList(),
+        ),
+      ),
     );
   }
 
@@ -152,7 +244,7 @@ class _LibraryPageState extends State<LibraryPage> {
                       entry: entry,
                       progress: entry.progress,
                       heroPrefix: 'library',
-                      onIncrement: () {},
+                      onIncrement: () => _handleIncrement(entry, listName),
                       width: double.infinity,
                       height: 140,
                     )
@@ -334,7 +426,7 @@ class _EmptyLibraryState extends StatelessWidget {
                     .shimmer(duration: 2.seconds, color: Colors.grey[200]),
                 const SizedBox(height: 16),
                 Text(
-                  'SCRAPBOOK IS EMPTY',
+                  'LIBRARY IS EMPTY',
                   style: GoogleFonts.teko(
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
@@ -343,7 +435,7 @@ class _EmptyLibraryState extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'GO EXPLORE AND FIND SOME PEAK FICTION!',
+                  'Login to see your library!',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.teko(
                     fontSize: 18,

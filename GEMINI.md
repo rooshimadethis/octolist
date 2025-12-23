@@ -9,6 +9,7 @@ OctoList is a Flutter application for tracking anime. It consumes the [AniList G
   - Uses `GraphQLProvider` at the root.
   - Uses `Query` widgets for fetching data in the UI.
   - `Hive` is used for caching (via `initHiveForFlutter`).
+  - Uses `flutter_image_compress` for client-side image optimization.
 
 ## Architecture & Conventions
 - **Feature-first or Layer-first**: Currently simple layer-based.

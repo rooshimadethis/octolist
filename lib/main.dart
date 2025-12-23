@@ -1,10 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'services/auth_service.dart';
 import 'screens/expressive_home_screen.dart';
 
 void main() async {
   // We need to initialize Hive for graphql_flutter's cache
+  WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
+
+  try {
+    await dotenv.load(fileName: ".env");
+    debugPrint("Dotenv loaded. Keys: ${dotenv.env.keys.toList()}");
+  } catch (e) {
+    debugPrint("Error loading .env: $e");
+  }
+
+  // Initialize AuthService
+  await AuthService().init();
 
   runApp(const ExpressiveApp());
 }
