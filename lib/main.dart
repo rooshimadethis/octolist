@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'graphql/anilist_client.dart';
-import 'screens/home_screen.dart';
+import 'screens/expressive_home_screen.dart';
 
 void main() async {
   // We need to initialize Hive for graphql_flutter's cache
   await initHiveForFlutter();
 
-  runApp(const MyApp());
+  runApp(const ExpressiveApp());
 }
 
+/*
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
@@ -30,3 +30,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+*/
