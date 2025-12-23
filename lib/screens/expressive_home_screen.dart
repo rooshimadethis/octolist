@@ -496,7 +496,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                     onSubmitted: (_) => _performSearch(),
                     style: GoogleFonts.robotoMono(fontWeight: FontWeight.bold),
                     decoration: InputDecoration(
-                      hintText: 'FIND MANGA...',
+                      hintText: 'FIND ANIME...',
                       hintStyle: GoogleFonts.teko(
                         fontSize: 20,
                         color: Colors.grey,
