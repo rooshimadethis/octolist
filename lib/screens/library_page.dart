@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
-import '../services/anilist_service.dart';
+import 'package:provider/provider.dart';
+import '../services/anime_store.dart';
 import '../models/watching_entry.dart';
 import 'anime_details_page.dart';
 import '../widgets/watching_card.dart';
@@ -19,46 +20,18 @@ class LibraryPage extends StatefulWidget {
 }
 
 class _LibraryPageState extends State<LibraryPage> {
-  Map<String, List<WatchingEntry>>? _libraryData;
-  bool _isLoading = true;
-  String? _errorMessage;
-
   @override
   void initState() {
     super.initState();
-    // Defer the snackbar until after the build phase
+    // Fetch if needed, though usually Home or previous page might have started it
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Fetching library...'),
-            duration: Duration(seconds: 1),
-            backgroundColor: Colors.black,
-          ),
-        );
-      }
+      context.read<AnimeStore>().fetchLibrary();
     });
-    _fetchLibrary();
   }
 
-  Future<void> _fetchLibrary() async {
-    try {
-      final data = await AniListService().getLibraryLists();
-      if (mounted) {
-        setState(() {
-          _libraryData = data;
-          _isLoading = false;
-          _errorMessage = null;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-          _errorMessage = e.toString();
-        });
-      }
-    }
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   Future<void> _handleUpdate(
@@ -66,41 +39,11 @@ class _LibraryPageState extends State<LibraryPage> {
     String listName,
     int delta,
   ) async {
-    final currentProgress = entry.progress;
-    final totalEpisodes = entry.anime.episodes;
-    final newProgress = currentProgress + delta;
-
-    if (newProgress < 0) return;
-    if (totalEpisodes != null &&
-        delta > 0 &&
-        currentProgress >= totalEpisodes) {
-      return;
-    }
-
-    // Optimistic Update
-    setState(() {
-      final list = _libraryData![listName]!;
-      final index = list.indexWhere((e) => e.id == entry.id);
-      if (index != -1) {
-        list[index] = WatchingEntry(
-          id: entry.id,
-          anime: entry.anime,
-          userScore: entry.userScore,
-          progress: newProgress,
-        );
-      }
-    });
-
     try {
-      await AniListService().updateEpisodeProgress(
-        entry.anime.id,
-        newProgress,
-        totalEpisodes,
-      );
+      await context.read<AnimeStore>().updateProgress(entry.anime.id, delta);
 
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        // Minimal feedback for library list actions to keep flow smooth
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             content: Text('Updated!'),
@@ -110,25 +53,19 @@ class _LibraryPageState extends State<LibraryPage> {
         );
       }
     } catch (e) {
-      // Revert on failure
       if (mounted) {
         ScaffoldMessenger.of(
           context,
         ).showSnackBar(SnackBar(content: Text('Update failed: $e')));
-        setState(() {
-          final list = _libraryData![listName]!;
-          final index = list.indexWhere((e) => e.id == entry.id);
-          if (index != -1) {
-            list[index] = entry; // Revert to original
-          }
-        });
       }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    if (_isLoading) {
+    final store = context.watch<AnimeStore>();
+
+    if (store.isLoading && store.listNames.isEmpty) {
       return Scaffold(
         backgroundColor: Colors.white,
         appBar: AppBar(
@@ -156,32 +93,21 @@ class _LibraryPageState extends State<LibraryPage> {
       );
     }
 
-    if (_errorMessage != null ||
-        _libraryData == null ||
-        _libraryData!.isEmpty) {
+    if (store.error != null && store.listNames.isEmpty) {
+      return Scaffold(
+        backgroundColor: Colors.white,
+        body: Center(child: Text(store.error!)),
+      );
+    }
+
+    if (store.listNames.isEmpty) {
       return const Scaffold(
         backgroundColor: Colors.white,
         body: _EmptyLibraryState(),
       );
     }
 
-    final library = _libraryData!;
-    final listNames = library.keys.toList()
-      ..sort((a, b) {
-        const order = [
-          'Watching',
-          'Planning',
-          'Completed',
-          'Dropped',
-          'Paused',
-          'Rewatching',
-        ];
-        int indexA = order.indexOf(a);
-        int indexB = order.indexOf(b);
-        if (indexA == -1) indexA = 999;
-        if (indexB == -1) indexB = 999;
-        return indexA.compareTo(indexB);
-      });
+    final listNames = store.listNames;
 
     int initialIndex = 0;
     if (widget.initialTabName != null) {
@@ -225,7 +151,7 @@ class _LibraryPageState extends State<LibraryPage> {
         ),
         body: TabBarView(
           children: listNames.map((name) {
-            final entries = library[name]!;
+            final entries = store.getListEntries(name);
             return _buildListContent(context, name, entries);
           }).toList(),
         ),

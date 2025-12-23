@@ -19,6 +19,17 @@ class AniListService {
 
   AniListService._internal() : _clientNotifier = AniListClient.initClient();
 
+  // Unified update stream for linking info across pages
+  final _updateController = StreamController<AnimeUpdate>.broadcast();
+  Stream<AnimeUpdate> get updates => _updateController.stream;
+
+  /// Notify all listeners that an anime has been updated.
+  void notifyUpdate(int mediaId, int progress, {String? status}) {
+    _updateController.add(
+      AnimeUpdate(mediaId: mediaId, progress: progress, status: status),
+    );
+  }
+
   // Debouncing state
   final Map<int, Timer> _debounceTimers = {};
   final Map<int, _PendingUpdate> _pendingUpdates = {};
@@ -307,6 +318,9 @@ class AniListService {
       for (var c in completers) {
         if (!c.isCompleted) c.complete();
       }
+
+      // Notify other pages about this change
+      notifyUpdate(animeId, updateData.progress, status: status);
     } catch (e) {
       // Failure! Error all waiting futures
       for (var c in completers) {
@@ -321,4 +335,13 @@ class _PendingUpdate {
   final int? totalEpisodes;
 
   _PendingUpdate({required this.progress, this.totalEpisodes});
+}
+
+/// Represents an update to an anime's progress or status.
+class AnimeUpdate {
+  final int mediaId;
+  final int progress;
+  final String? status;
+
+  AnimeUpdate({required this.mediaId, required this.progress, this.status});
 }

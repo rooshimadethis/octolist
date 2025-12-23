@@ -1,11 +1,14 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 import '../models/anime.dart';
 import '../models/user_profile.dart';
 import '../models/watching_entry.dart';
 import '../services/anilist_service.dart';
 import '../services/auth_service.dart';
+import '../services/anime_store.dart';
 import 'library_page.dart';
 import '../widgets/watching_card.dart';
 import '../widgets/anime_card_skeleton.dart';
@@ -38,7 +41,6 @@ class ExpressiveHomePage extends StatefulWidget {
 
 class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   int _selectedIndex = 0;
-  final Map<int, int> _progressOverrides = {};
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
   String? _libraryInitialTab;
@@ -46,7 +48,6 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
 
   late AniListService _aniListService;
   late Future<UserProfile?> _profileFuture;
-  late Future<List<WatchingEntry>> _watchingFuture;
   late Future<List<Anime>> _trendingFuture;
   late Future<List<Anime>> _searchFuture;
 
@@ -80,7 +81,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
       }
     });
     _profileFuture = _aniListService.getUserProfile();
-    _watchingFuture = _aniListService.getWatchingList();
+    // Use the store for watching data
+    context.read<AnimeStore>().fetchLibrary();
     _trendingFuture = _aniListService.getTrendingAnime();
     _searchFuture = _searchQuery.isEmpty
         ? Future.value([])
@@ -111,20 +113,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
     int currentProgress,
     int delta,
   ) async {
-    final newProgress = currentProgress + delta;
-    if (newProgress < 0) return;
-
-    // Optimistic update
-    setState(() {
-      _progressOverrides[entry.id] = newProgress;
-    });
-
     try {
-      await _aniListService.updateEpisodeProgress(
-        entry.anime.id,
-        newProgress,
-        entry.anime.episodes,
-      );
+      await context.read<AnimeStore>().updateProgress(entry.anime.id, delta);
 
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
@@ -137,11 +127,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
         );
       }
     } catch (e) {
-      // Revert on error
       if (mounted) {
-        setState(() {
-          _progressOverrides.remove(entry.id);
-        });
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to update progress: $e'),
@@ -312,11 +298,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                   ),
                   const SizedBox(height: 32),
                   // Watching Section
-                  // Watching Section
-                  FutureBuilder<List<WatchingEntry>>(
-                    future: _watchingFuture,
-                    builder: (context, snapshot) {
-                      if (snapshot.connectionState == ConnectionState.waiting) {
+                  Consumer<AnimeStore>(
+                    builder: (context, store, _) {
+                      if (store.isLoading &&
+                          store.getListEntries('Watching').isEmpty) {
                         return Column(
                           children: [
                             SectionTitle(
@@ -353,7 +338,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         );
                       }
 
-                      final entries = snapshot.data ?? [];
+                      final entries = store.getListEntries('Watching');
                       if (entries.isEmpty) {
                         return const SizedBox.shrink();
                       }
@@ -386,20 +371,18 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   const SizedBox(width: 16),
                               itemBuilder: (context, index) {
                                 final entry = entries[index];
-                                final progress =
-                                    _progressOverrides[entry.id] ??
-                                    entry.progress;
+                                final currentProgress = entry.progress;
                                 return Stack(
                                   key: ValueKey('watching_${entry.id}'),
                                   children: [
                                     const AnimeCardSkeleton(isHorizontal: true),
                                     WatchingCard(
                                           entry: entry,
-                                          progress: progress,
+                                          progress: currentProgress,
                                           heroPrefix: 'home',
                                           onIncrement: () => _updateProgress(
                                             entry,
-                                            progress,
+                                            currentProgress,
                                             1,
                                           ),
                                         )

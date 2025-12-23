@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'services/auth_service.dart';
+import 'services/anime_store.dart';
 import 'screens/expressive_home_screen.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   // We need to initialize Hive for graphql_flutter's cache
@@ -26,7 +28,12 @@ void main() async {
   // Initialize AuthService
   await AuthService().init();
 
-  runApp(const ExpressiveApp());
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => AnimeStore(),
+      child: const ExpressiveApp(),
+    ),
+  );
 }
 
 /*

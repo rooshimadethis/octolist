@@ -15,4 +15,18 @@ class WatchingEntry {
     required this.userScore,
     required this.id,
   });
+
+  WatchingEntry copyWith({
+    Anime? anime,
+    int? progress,
+    int? userScore,
+    int? id,
+  }) {
+    return WatchingEntry(
+      anime: anime ?? this.anime,
+      progress: progress ?? this.progress,
+      userScore: userScore ?? this.userScore,
+      id: id ?? this.id,
+    );
+  }
 }
