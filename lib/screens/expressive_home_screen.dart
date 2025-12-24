@@ -349,19 +349,13 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                     ),
                   ),
                   const SizedBox(height: 32),
-                  // Watching Section
+                  // Watching Section (Always visible - shows skeletons when empty)
                   Consumer<AnimeStore>(
                     builder: (context, store, _) {
                       final entries = store.getListEntries('Watching');
-                      final isInitialLoading =
-                          store.isLoading && entries.isEmpty;
 
-                      // If not loading and no entries, show nothing
-                      if (!isInitialLoading && entries.isEmpty) {
-                        return const SizedBox.shrink();
-                      }
-
-                      // Show Header + List (either Skeletons or Real Cards)
+                      // Always show the section (optimistic UI)
+                      // Skeletons appear when entries are empty
                       return Column(
                         children: [
                           SectionTitle(
@@ -391,16 +385,16 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                           SizedBox(
                             height: 200,
                             child: ListView.separated(
-                              cacheExtent: isInitialLoading ? null : 2000,
+                              cacheExtent: entries.isEmpty ? null : 2000,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
                               ),
                               scrollDirection: Axis.horizontal,
-                              itemCount: isInitialLoading ? 3 : entries.length,
+                              itemCount: entries.isEmpty ? 3 : entries.length,
                               separatorBuilder: (_, __) =>
                                   const SizedBox(width: 16),
                               itemBuilder: (context, index) {
-                                if (isInitialLoading) {
+                                if (entries.isEmpty) {
                                   return const AnimeCardSkeleton(
                                         isHorizontal: true,
                                       )
