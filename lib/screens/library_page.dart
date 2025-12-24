@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import '../services/anime_store.dart';
 import '../models/watching_entry.dart';
 import 'anime_details_page.dart';
@@ -150,6 +151,7 @@ class _LibraryPageState extends State<LibraryPage> {
             isScrollable: true,
             indicatorColor: primaryText,
             indicatorWeight: 4,
+            dividerHeight: 0,
             labelColor: primaryText,
             unselectedLabelColor: primaryText.withValues(alpha: 0.5),
             labelStyle: GoogleFonts.teko(
@@ -253,8 +255,6 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
   @override
   bool get wantKeepAlive => true;
 
-  bool _hasAnimated = false;
-
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -270,17 +270,6 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
         final timeA = a.updatedAt ?? 0;
         final timeB = b.updatedAt ?? 0;
         return timeB.compareTo(timeA); // Newest first
-      });
-    }
-
-    // Trigger animation when data first appears
-    if (!_hasAnimated && entries.isNotEmpty && !store.isLoading) {
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        if (mounted) {
-          setState(() {
-            _hasAnimated = true;
-          });
-        }
       });
     }
 
@@ -315,38 +304,13 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
           final entry = entries[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: KeyedSubtree(
-              key: ValueKey('library_list_${entry.id}_$_hasAnimated'),
-              child: _hasAnimated
-                  ? WatchingCard(
-                          entry: entry,
-                          progress: entry.progress,
-                          heroPrefix: 'library',
-                          vibeScore: widget.vibeScore,
-                          onIncrement: () =>
-                              widget.onUpdate(entry, widget.listName, 1),
-                          width: double.infinity,
-                          height: 140,
-                        )
-                        .animate(delay: (index < 6 ? index * 100 : 0).ms)
-                        .fadeIn(duration: vibeDuration)
-                        .slideX(
-                          begin: 0.3,
-                          end: 0,
-                          curve: vibeCurve,
-                          duration: vibeDuration,
-                          delay: (index < 6 ? index * 50 : 0).ms,
-                        )
-                  : WatchingCard(
-                      entry: entry,
-                      progress: entry.progress,
-                      heroPrefix: 'library',
-                      vibeScore: widget.vibeScore,
-                      onIncrement: () =>
-                          widget.onUpdate(entry, widget.listName, 1),
-                      width: double.infinity,
-                      height: 140,
-                    ),
+            child: _AnimatedWatchingCard(
+              entry: entry,
+              listName: widget.listName,
+              vibeScore: widget.vibeScore,
+              vibeDuration: vibeDuration,
+              vibeCurve: vibeCurve,
+              onUpdate: widget.onUpdate,
             ),
           );
         },
@@ -366,21 +330,119 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
       itemCount: entries.length,
       itemBuilder: (context, index) {
         final entry = entries[index];
-        return KeyedSubtree(
-          key: ValueKey('library_grid_${entry.id}_$_hasAnimated'),
-          child: _hasAnimated
-              ? _LibraryCard(entry: entry, vibeScore: widget.vibeScore)
-                    .animate()
-                    .fadeIn(duration: vibeDuration)
-                    .scale(
-                      begin: const Offset(0.8, 0.8),
-                      end: const Offset(1.0, 1.0),
-                      duration: vibeDuration,
-                      curve: vibeCurve,
-                    )
-              : _LibraryCard(entry: entry, vibeScore: widget.vibeScore),
+        return _AnimatedLibraryCard(
+          entry: entry,
+          vibeScore: widget.vibeScore,
+          vibeDuration: vibeDuration,
+          vibeCurve: vibeCurve,
         );
       },
+    );
+  }
+}
+
+// Wrapper widget for WatchingCard that animates when scrolling into view
+class _AnimatedWatchingCard extends StatefulWidget {
+  final WatchingEntry entry;
+  final String listName;
+  final double vibeScore;
+  final Duration vibeDuration;
+  final Curve vibeCurve;
+  final Future<void> Function(WatchingEntry, String, int) onUpdate;
+
+  const _AnimatedWatchingCard({
+    required this.entry,
+    required this.listName,
+    required this.vibeScore,
+    required this.vibeDuration,
+    required this.vibeCurve,
+    required this.onUpdate,
+  });
+
+  @override
+  State<_AnimatedWatchingCard> createState() => _AnimatedWatchingCardState();
+}
+
+class _AnimatedWatchingCardState extends State<_AnimatedWatchingCard> {
+  bool _hasAnimated = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      key: Key('watching_card_visibility_${widget.entry.id}'),
+      onVisibilityChanged: (info) {
+        // Trigger animation as soon as card starts becoming visible
+        if (!_hasAnimated && info.visibleFraction > 0.01) {
+          setState(() {
+            _hasAnimated = true;
+          });
+        }
+      },
+      child:
+          WatchingCard(
+                entry: widget.entry,
+                progress: widget.entry.progress,
+                heroPrefix: 'library',
+                vibeScore: widget.vibeScore,
+                onIncrement: () =>
+                    widget.onUpdate(widget.entry, widget.listName, 1),
+                width: double.infinity,
+                height: 140,
+              )
+              .animate(target: _hasAnimated ? 1 : 0)
+              .fadeIn(begin: 0.75, duration: widget.vibeDuration * 0.8)
+              .scale(
+                begin: const Offset(0.9, 0.9),
+                end: const Offset(1.0, 1.0),
+                duration: widget.vibeDuration * 0.8,
+                curve: widget.vibeCurve,
+              ),
+    );
+  }
+}
+
+// Wrapper widget that animates when scrolling into view
+class _AnimatedLibraryCard extends StatefulWidget {
+  final WatchingEntry entry;
+  final double vibeScore;
+  final Duration vibeDuration;
+  final Curve vibeCurve;
+
+  const _AnimatedLibraryCard({
+    required this.entry,
+    required this.vibeScore,
+    required this.vibeDuration,
+    required this.vibeCurve,
+  });
+
+  @override
+  State<_AnimatedLibraryCard> createState() => _AnimatedLibraryCardState();
+}
+
+class _AnimatedLibraryCardState extends State<_AnimatedLibraryCard> {
+  bool _hasAnimated = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return VisibilityDetector(
+      key: Key('library_card_visibility_${widget.entry.id}'),
+      onVisibilityChanged: (info) {
+        // Trigger animation as soon as card starts becoming visible
+        if (!_hasAnimated && info.visibleFraction > 0.01) {
+          setState(() {
+            _hasAnimated = true;
+          });
+        }
+      },
+      child: _LibraryCard(entry: widget.entry, vibeScore: widget.vibeScore)
+          .animate(target: _hasAnimated ? 1 : 0)
+          .fadeIn(begin: 0.75, duration: widget.vibeDuration * 0.8)
+          .scale(
+            begin: const Offset(0.9, 0.9),
+            end: const Offset(1.0, 1.0),
+            duration: widget.vibeDuration * 0.8,
+            curve: widget.vibeCurve,
+          ),
     );
   }
 }
