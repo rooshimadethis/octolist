@@ -223,15 +223,20 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   const SizedBox(height: 20),
-                                  Text(
-                                    '${greeting.title} $name',
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .headlineMedium
-                                        ?.copyWith(
-                                          fontSize: 32,
-                                          fontStyle: FontStyle.italic,
-                                        ),
+                                  FittedBox(
+                                    fit: BoxFit.scaleDown,
+                                    alignment: Alignment.centerLeft,
+                                    child: Text(
+                                      '${greeting.title} $name',
+                                      maxLines: 1,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .headlineMedium
+                                          ?.copyWith(
+                                            fontSize: 32,
+                                            fontStyle: FontStyle.italic,
+                                          ),
+                                    ),
                                   ),
                                   const SizedBox(height: 4),
                                   if (isGuest)
@@ -283,6 +288,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                           color: vibe.scaffoldBg,
                                           fontWeight: FontWeight.bold,
                                           letterSpacing: 2.0,
+                                          fontSize: 15,
                                         ),
                                       ),
                                     ),
@@ -469,9 +475,12 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                           separatorBuilder: (_, __) =>
                               const SizedBox(width: 16),
                           itemBuilder: (context, index) {
-                            return MangaCard(
-                                  anime: animeList[index],
-                                  vibeScore: widget.vibeScore,
+                            return Padding(
+                                  padding: const EdgeInsets.only(bottom: 10),
+                                  child: MangaCard(
+                                    anime: animeList[index],
+                                    vibeScore: widget.vibeScore,
+                                  ),
                                 )
                                 .animate(
                                   delay: (index < 6 ? index * 100 : 0).ms,
