@@ -7,6 +7,7 @@ import '../screens/anime_details_page.dart';
 import 'expressive_image.dart';
 import '../theme/expressive_theme.dart';
 import 'grain_overlay.dart';
+import 'pressable_card.dart';
 
 class WatchingCard extends StatefulWidget {
   final WatchingEntry entry;
@@ -37,8 +38,6 @@ class WatchingCard extends StatefulWidget {
 class _WatchingCardState extends State<WatchingCard> {
   late ConfettiController _confettiController;
 
-  bool _isPressed = false;
-
   @override
   void initState() {
     super.initState();
@@ -65,31 +64,17 @@ class _WatchingCardState extends State<WatchingCard> {
     );
 
     return RepaintBoundary(
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapCancel: () => setState(() => _isPressed = false),
-        onTap: () async {
-          setState(() => _isPressed = true);
-          HapticFeedback.lightImpact();
-          await Future.delayed(const Duration(milliseconds: 100));
-          if (mounted) setState(() => _isPressed = false);
-          await Future.delayed(const Duration(milliseconds: 50));
+      child: PressableCard(
+        shadowOffset: vibe.shadowOffset,
+        onTap: () {
           if (!context.mounted) return;
-
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => AnimeDetailsPage(anime: widget.entry.anime),
             ),
           );
         },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeOutQuad,
-          transform: Matrix4.translationValues(
-            _isPressed ? vibe.shadowOffset.dx : 0,
-            _isPressed ? vibe.shadowOffset.dy : 0,
-            0,
-          ),
+        child: Container(
           width: widget.width ?? 280,
           height: widget.height,
           margin: const EdgeInsets.only(bottom: 12, right: 12),
@@ -101,7 +86,7 @@ class _WatchingCardState extends State<WatchingCard> {
               BoxShadow(
                 color: vibe.shadowColor,
                 blurRadius: 0,
-                offset: _isPressed ? Offset.zero : vibe.shadowOffset,
+                offset: vibe.shadowOffset,
               ),
             ],
           ),

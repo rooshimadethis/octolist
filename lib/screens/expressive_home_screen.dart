@@ -20,28 +20,25 @@ import '../widgets/expressive_image.dart';
 import '../theme/expressive_theme.dart';
 import '../utils/greeting_helper.dart';
 import '../utils/vibe_text_helper.dart';
+import '../utils/snackbar_helper.dart';
 
 class ExpressiveApp extends StatelessWidget {
   const ExpressiveApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    // Use Selector to only rebuild when vibeScore changes
     return Selector<AnimeStore, double>(
       selector: (_, store) => store.vibeScore,
       builder: (context, vibeScore, _) {
-        return TweenAnimationBuilder<double>(
-          tween: Tween<double>(end: vibeScore),
-          duration: const Duration(milliseconds: 1000),
-          curve: Curves.easeInOutCubic,
-          builder: (context, animatedVibe, child) {
-            return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ExpressiveTheme.themeData(vibeScore: animatedVibe),
-              home: ExpressiveHomePage(vibeScore: animatedVibe),
-              builder: (context, child) {
-                return child!;
-              },
-            );
+        // Build MaterialApp directly without TweenAnimationBuilder
+        // This prevents full app rebuilds and eliminates startup stuttering
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: ExpressiveTheme.themeData(vibeScore: vibeScore),
+          home: ExpressiveHomePage(vibeScore: vibeScore),
+          builder: (context, child) {
+            return child!;
           },
         );
       },
@@ -101,12 +98,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   void _loadData() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Refreshing home data...'),
-            duration: const Duration(seconds: 1),
-            backgroundColor: ExpressiveTheme.getPrimaryText(widget.vibeScore),
-          ),
+        SnackBarHelper.showInfo(
+          context,
+          message: 'Refreshing home data...',
+          duration: const Duration(seconds: 1),
         );
       }
     });
@@ -132,12 +127,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   void _onAuthChanged() {
     if (mounted) {
       if (AuthService().isLoggedIn.value) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Successfully logged in to AniList!'),
-            backgroundColor: Colors.green,
-            duration: Duration(seconds: 2),
-          ),
+        SnackBarHelper.showSuccess(
+          context,
+          message: 'Successfully logged in to AniList!',
         );
       }
       setState(() {
@@ -155,25 +147,18 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
       await context.read<AnimeStore>().updateProgress(entry.anime.id, delta);
 
       if (mounted) {
-        final currentVibe = VibeColors.fromScore(
-          context.read<AnimeStore>().vibeScore,
-        );
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('Progress updated!'),
-            backgroundColor: currentVibe.primaryText,
-            duration: const Duration(milliseconds: 500),
-          ),
+        SnackBarHelper.showSuccess(
+          context,
+          message: 'Progress updated!',
+          duration: const Duration(milliseconds: 500),
         );
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Failed to update progress: $e'),
-            backgroundColor: Colors.red,
-          ),
+        SnackBarHelper.showError(
+          context,
+          message: 'Failed to update progress: $e',
         );
       }
     }
@@ -190,12 +175,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
     });
 
     if (_searchQuery.isNotEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Searching for "$_searchQuery"...'),
-          duration: const Duration(milliseconds: 500),
-          backgroundColor: ExpressiveTheme.getPrimaryText(widget.vibeScore),
-        ),
+      SnackBarHelper.showInfo(
+        context,
+        message: 'Searching for "$_searchQuery"...',
+        duration: const Duration(milliseconds: 500),
       );
     }
   }
@@ -398,10 +381,11 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   const SizedBox(width: 16),
                               itemBuilder: (context, index) {
                                 if (entries.isEmpty) {
+                                  // Limit animation to first 3 skeleton cards
                                   return const AnimeCardSkeleton(
                                         isHorizontal: true,
                                       )
-                                      .animate(delay: (index * 100).ms)
+                                      .animate(delay: (index < 3 ? index * 100 : 0).ms)
                                       .fadeIn(duration: vibe.animationDuration);
                                 }
 
@@ -422,7 +406,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                             ),
                                           )
                                           .animate(
-                                            delay: (index < 6 ? index * 100 : 0)
+                                            // Limit staggered animation to first 3 items
+                                            delay: (index < 3 ? index * 100 : 0)
                                                 .ms,
                                           )
                                           .fadeIn(
@@ -476,7 +461,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 const SizedBox(width: 16),
                             itemBuilder: (context, index) =>
                                 const AnimeCardSkeleton()
-                                    .animate(delay: (index * 100).ms)
+                                    .animate(delay: (index < 3 ? index * 100 : 0).ms)
                                     .fadeIn(duration: vibe.animationDuration),
                           );
                         }
@@ -502,7 +487,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                         ),
                                       )
                                       .animate(
-                                        delay: (index < 6 ? index * 100 : 0).ms,
+                                        delay: (index < 3 ? index * 100 : 0).ms,
                                       )
                                       .fadeIn(duration: vibe.animationDuration)
                                       .scale(
@@ -626,7 +611,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             itemCount: 6,
                             itemBuilder: (context, index) =>
                                 const AnimeCardSkeleton()
-                                    .animate(delay: (index * 100).ms)
+                                    .animate(delay: (index < 3 ? index * 100 : 0).ms)
                                     .fadeIn(duration: vibe.animationDuration),
                           );
                         }
@@ -688,7 +673,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                       )
                                       .animate(
                                         delay:
-                                            (index < 10 ? index * 100 : 0).ms,
+                                            (index < 3 ? index * 100 : 0).ms,
                                       )
                                       .fadeIn(duration: vibe.animationDuration)
                                       .scale(

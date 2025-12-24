@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_displaymode/flutter_displaymode.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 
@@ -18,6 +19,9 @@ void main() async {
   // We need to initialize Hive for graphql_flutter's cache
   WidgetsFlutterBinding.ensureInitialized();
   await initHiveForFlutter();
+
+  // Pre-cache Google Fonts to prevent stuttering on first load
+  await _preCacheFonts();
 
   // Configure VisibilityDetector to check more frequently (default is 500ms)
   // Lower value = more frequent checks = smoother animations but slightly more CPU usage
@@ -51,6 +55,20 @@ void main() async {
       child: const ExpressiveApp(),
     ),
   );
+}
+
+/// Pre-cache all Google Fonts used in the app to prevent loading jank
+Future<void> _preCacheFonts() async {
+  try {
+    await GoogleFonts.pendingFonts([
+      GoogleFonts.teko(),
+      GoogleFonts.robotoMono(),
+      GoogleFonts.bangers(),
+      GoogleFonts.roboto(),
+    ]);
+  } catch (e) {
+    debugPrint("Error pre-caching fonts: $e");
+  }
 }
 
 /*

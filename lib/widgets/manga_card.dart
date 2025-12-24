@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import '../models/anime.dart';
 import '../theme/expressive_theme.dart';
 import '../screens/anime_details_page.dart';
 import 'expressive_image.dart';
 import 'outlined_star.dart';
-
-import '../widgets/grain_overlay.dart';
+import 'grain_overlay.dart';
+import 'pressable_card.dart';
 
 /// A reusable manga-style anime card with consistent styling
 /// Used across home, search, and library pages
@@ -29,8 +28,6 @@ class MangaCard extends StatefulWidget {
 }
 
 class _MangaCardState extends State<MangaCard> {
-  bool _isPressed = false;
-
   @override
   Widget build(BuildContext context) {
     final vibe = VibeColors.fromScore(
@@ -39,32 +36,18 @@ class _MangaCardState extends State<MangaCard> {
     );
 
     return RepaintBoundary(
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapCancel: () => setState(() => _isPressed = false),
-        onTap: () async {
-          setState(() => _isPressed = true);
-          HapticFeedback.lightImpact();
-          await Future.delayed(const Duration(milliseconds: 100));
-          if (mounted) setState(() => _isPressed = false);
-          await Future.delayed(const Duration(milliseconds: 50));
+      child: PressableCard(
+        shadowOffset: vibe.shadowOffset,
+        onTap: () {
           if (!context.mounted) return;
-
           Navigator.of(context).push(
             MaterialPageRoute(
               builder: (context) => AnimeDetailsPage(anime: widget.anime),
             ),
           );
         },
-        child: AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeOutQuad,
+        child: Container(
           width: widget.width,
-          transform: Matrix4.translationValues(
-            _isPressed ? vibe.shadowOffset.dx : 0,
-            _isPressed ? vibe.shadowOffset.dy : 0,
-            0,
-          ),
           decoration: BoxDecoration(
             color: vibe.scaffoldBg,
             border: Border.all(
@@ -75,7 +58,7 @@ class _MangaCardState extends State<MangaCard> {
             boxShadow: [
               BoxShadow(
                 color: vibe.shadowColor,
-                offset: _isPressed ? Offset.zero : vibe.shadowOffset,
+                offset: vibe.shadowOffset,
                 blurRadius: 0,
               ),
             ],
