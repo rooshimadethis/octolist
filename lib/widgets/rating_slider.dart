@@ -171,10 +171,22 @@ class _CustomSquareThumbShape extends SliderComponentShape {
     required Size sizeWithOverflow,
   }) {
     final Canvas canvas = context.canvas;
+    final double activeValue = activationAnimation.value;
 
-    // Draw 3D box shadow (solid offset, no blur)
+    // The shadow should be centered on the track.
+    // The thumb starts 'raised' (shifted up and left) and moves to cover the shadow when pressed.
+    final Offset baseShadowOffset = const Offset(4, 4);
+
+    // Thumb position moves from (center - offset) to (center)
+    final Offset animatedCenter = Offset.lerp(
+      center - baseShadowOffset,
+      center,
+      activeValue,
+    )!;
+
+    // Draw 3D box shadow (solid, no blur) - centered on the track
     final shadowRect = Rect.fromCenter(
-      center: center + const Offset(4, 4),
+      center: center,
       width: thumbSize,
       height: thumbSize,
     );
@@ -185,7 +197,7 @@ class _CustomSquareThumbShape extends SliderComponentShape {
 
     // Draw white background square
     final bgRect = Rect.fromCenter(
-      center: center,
+      center: animatedCenter,
       width: thumbSize,
       height: thumbSize,
     );
@@ -201,10 +213,10 @@ class _CustomSquareThumbShape extends SliderComponentShape {
       ..strokeWidth = 2; // Match episode progress bar border
     canvas.drawRect(bgRect, borderPaint);
 
-    // Draw inner square (ensure it's perfectly centered using rounded center)
+    // Draw inner square (perfectly centered on the current thumb center)
     final roundedCenter = Offset(
-      center.dx.roundToDouble(),
-      center.dy.roundToDouble(),
+      animatedCenter.dx.roundToDouble(),
+      animatedCenter.dy.roundToDouble(),
     );
     final innerRect = Rect.fromCenter(
       center: roundedCenter,

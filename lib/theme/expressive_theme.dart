@@ -12,6 +12,7 @@ class VibeColors {
   final Duration animationDuration;
   final ColorFilter? imageFilter;
   final double grainOpacity;
+  final List<Color> confettiColors;
 
   const VibeColors({
     required this.vibeScore,
@@ -23,6 +24,7 @@ class VibeColors {
     required this.animationDuration,
     required this.imageFilter,
     required this.grainOpacity,
+    required this.confettiColors,
   });
 
   // Cache for VibeColors instances
@@ -60,6 +62,7 @@ class VibeColors {
       animationDuration: ExpressiveTheme.vibeDuration(score),
       imageFilter: ExpressiveTheme.getImageFilter(score),
       grainOpacity: ExpressiveTheme.getGrainOpacity(score),
+      confettiColors: ExpressiveTheme.getConfettiColors(score),
     );
 
     // Cache the result (limit cache size to prevent memory issues)
@@ -501,5 +504,40 @@ class ExpressiveTheme {
   /// Calculates the grain overlay opacity for a given vibe score
   static double getGrainOpacity(double score) {
     return score < 0.2 ? 0.0 : (score - 0.2) * 0.5;
+  }
+
+  /// Gets the confetti colors based on vibe score.
+  /// Transitions from multi-color to blood red.
+  static List<Color> getConfettiColors(double score) {
+    if (score >= 0.8) {
+      return [bloodRed, const Color(0xFF600000), Colors.black];
+    }
+
+    final baseColors = [
+      Colors.red,
+      Colors.blue,
+      Colors.cyan,
+      Colors.green,
+      Colors.deepOrangeAccent,
+      Colors.yellow,
+      Colors.amber,
+      Colors.purple,
+      Colors.orange,
+    ];
+
+    // As score goes from 0 to 0.8, replace a larger percentage of colors with bloodRed
+    // Use ceil to ensure the first transition happens immediately as vibe increases
+    final replaceCount = ((score / 1.2) * baseColors.length).ceil().clamp(
+      0,
+      baseColors.length,
+    );
+    final result = List<Color>.from(baseColors);
+
+    for (int i = 0; i < replaceCount; i++) {
+      // Replace from the end (orange, purple, etc.) to make the transition more noticeably "bloody"
+      result[result.length - 1 - i] = bloodRed;
+    }
+
+    return result;
   }
 }

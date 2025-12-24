@@ -61,7 +61,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
       }
     });
     _confettiController = ConfettiController(
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 5), // Slowed down from 3s
     );
   }
 
@@ -735,104 +735,55 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               Row(
                                                 children: [
                                                   Expanded(
-                                                    child: ElevatedButton(
-                                                      onPressed:
-                                                          currentEpisode <= 0
-                                                          ? null
-                                                          : () {
-                                                              HapticFeedback.mediumImpact();
-                                                              _updateEpisodeProgress(
-                                                                anime,
-                                                                -1,
-                                                                vibeScore,
-                                                              );
-                                                            },
-                                                      style: ElevatedButton.styleFrom(
-                                                        backgroundColor:
-                                                            scaffoldBg,
-                                                        foregroundColor:
-                                                            primaryText,
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              vertical: 12,
-                                                            ),
-                                                        elevation: 0,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .zero,
-                                                              side: BorderSide(
-                                                                color:
-                                                                    primaryText,
-                                                                width: 2,
+                                                    child: _PressableTrackerButton(
+                                                      label: '-',
+                                                      onTap: () {
+                                                        _updateEpisodeProgress(
+                                                          anime,
+                                                          -1,
+                                                          vibeScore,
+                                                        );
+                                                      },
+                                                      backgroundColor:
+                                                          scaffoldBg,
+                                                      foregroundColor:
+                                                          primaryText,
+                                                      borderColor: primaryText,
+                                                      shadowColor:
+                                                          dynamicShadowColor
+                                                              .withValues(
+                                                                alpha: 0.5,
                                                               ),
-                                                            ),
-                                                        disabledBackgroundColor:
-                                                            Colors.grey
-                                                                .withValues(
-                                                                  alpha: 0.3,
-                                                                ),
-                                                      ),
-                                                      child: Text(
-                                                        '-',
-                                                        style: GoogleFonts.teko(
-                                                          fontSize: 24,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
+                                                      isDisabled:
+                                                          currentEpisode <= 0,
                                                     ),
                                                   ),
                                                   const SizedBox(width: 12),
                                                   Expanded(
-                                                    child: ElevatedButton(
-                                                      onPressed:
-                                                          currentEpisode >=
-                                                              anime.episodes!
-                                                          ? null
-                                                          : () {
-                                                              HapticFeedback.mediumImpact();
-                                                              _updateEpisodeProgress(
-                                                                anime,
-                                                                1,
-                                                                vibeScore,
-                                                              );
-                                                            },
-                                                      style: ElevatedButton.styleFrom(
-                                                        backgroundColor:
+                                                    child: _PressableTrackerButton(
+                                                      label: '+',
+                                                      onTap: () {
+                                                        _updateEpisodeProgress(
+                                                          anime,
+                                                          1,
+                                                          vibeScore,
+                                                        );
+                                                      },
+                                                      backgroundColor:
+                                                          dynamicShadowColor,
+                                                      foregroundColor:
+                                                          ExpressiveTheme.getContrastText(
                                                             dynamicShadowColor,
-                                                        foregroundColor:
-                                                            ExpressiveTheme.getContrastText(
-                                                              dynamicShadowColor,
-                                                            ),
-                                                        padding:
-                                                            const EdgeInsets.symmetric(
-                                                              vertical: 12,
-                                                            ),
-                                                        elevation: 0,
-                                                        shape:
-                                                            RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .zero,
-                                                              side: BorderSide(
-                                                                color:
-                                                                    primaryText,
-                                                                width: 2,
+                                                          ),
+                                                      borderColor: primaryText,
+                                                      shadowColor:
+                                                          dynamicShadowColor
+                                                              .withValues(
+                                                                alpha: 0.5,
                                                               ),
-                                                            ),
-                                                        disabledBackgroundColor:
-                                                            Colors.grey,
-                                                      ),
-                                                      child: Text(
-                                                        '+',
-                                                        style: GoogleFonts.teko(
-                                                          fontSize: 24,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
+                                                      isDisabled:
+                                                          currentEpisode >=
+                                                          anime.episodes!,
                                                     ),
                                                   ),
                                                 ],
@@ -1181,30 +1132,87 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
               Align(
                 alignment: Alignment.topCenter,
                 child: ConfettiWidget(
+                  key: ValueKey(
+                    'confetti_details_${VibeColors.fromScore(vibeScore).confettiColors.map((c) => c.toARGB32()).join('_')}',
+                  ),
                   confettiController: _confettiController,
                   blastDirection: 3.14 / 2, // downward
                   blastDirectionality: BlastDirectionality.explosive,
                   emissionFrequency: 0.03,
                   numberOfParticles: 30,
-                  gravity: 0.3,
+                  gravity: 0.1, // Slowed down from 0.3
                   shouldLoop: false,
                   maxBlastForce: 20,
                   minBlastForce: 10,
-                  colors: const [
-                    Colors.red,
-                    Colors.blue,
-                    Colors.green,
-                    Colors.yellow,
-                    Colors.pink,
-                    Colors.purple,
-                    Colors.orange,
-                  ],
+                  colors: VibeColors.fromScore(vibeScore).confettiColors,
                 ),
               ),
             ],
           ),
         );
       },
+    );
+  }
+}
+
+class _PressableTrackerButton extends StatelessWidget {
+  final String label;
+  final VoidCallback? onTap;
+  final Color backgroundColor;
+  final Color foregroundColor;
+  final Color borderColor;
+  final Color shadowColor;
+  final bool isDisabled;
+
+  const _PressableTrackerButton({
+    required this.label,
+    this.onTap,
+    required this.backgroundColor,
+    required this.foregroundColor,
+    required this.borderColor,
+    required this.shadowColor,
+    this.isDisabled = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    const shadowOffset = Offset(4, 4);
+
+    return PressableCard(
+      shadowOffset: shadowOffset,
+      onTap: isDisabled ? null : onTap,
+      builder: (context, isPressed) => AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOutQuad,
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: isDisabled
+              ? Colors.grey.withValues(alpha: 0.3)
+              : backgroundColor,
+          border: Border.all(
+            color: isDisabled ? Colors.grey : borderColor,
+            width: 2,
+          ),
+          boxShadow: [
+            if (!isDisabled)
+              BoxShadow(
+                color: shadowColor,
+                offset: isPressed ? Offset.zero : shadowOffset,
+                blurRadius: 0,
+              ),
+          ],
+        ),
+        child: Center(
+          child: Text(
+            label,
+            style: GoogleFonts.teko(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: isDisabled ? Colors.grey : foregroundColor,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

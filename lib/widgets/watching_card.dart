@@ -42,7 +42,7 @@ class _WatchingCardState extends State<WatchingCard> {
   void initState() {
     super.initState();
     _confettiController = ConfettiController(
-      duration: const Duration(seconds: 1),
+      duration: const Duration(seconds: 2), // Slowed down from 1s
     );
   }
 
@@ -244,22 +244,18 @@ class _WatchingCardState extends State<WatchingCard> {
                               alignment: Alignment.center,
                               children: [
                                 ConfettiWidget(
+                                  key: ValueKey(
+                                    'confetti_watching_${vibe.confettiColors.map((c) => c.toARGB32()).join('_')}',
+                                  ),
                                   confettiController: _confettiController,
                                   blastDirectionality:
                                       BlastDirectionality.explosive,
                                   shouldLoop: false,
-                                  gravity: 0.2,
+                                  gravity: 0.1,
                                   numberOfParticles: 10,
                                   maxBlastForce: 5,
                                   minBlastForce: 2,
-                                  colors: const [
-                                    Colors.red,
-                                    Colors.blue,
-                                    Colors.green,
-                                    Colors.yellow,
-                                    Colors.purple,
-                                    Colors.orange,
-                                  ],
+                                  colors: vibe.confettiColors,
                                 ),
                                 Material(
                                   color: Colors.transparent,
