@@ -202,6 +202,7 @@ class _WatchingCardState extends State<WatchingCard> {
                           if (hasNext) ...[
                             const SizedBox(width: 8),
                             // Minus Button
+                            // Minus Button
                             if (widget.progress > 0 &&
                                 widget.onDecrement != null)
                               Material(
@@ -238,7 +239,9 @@ class _WatchingCardState extends State<WatchingCard> {
                                   ),
                                 ),
                               ),
+
                             const SizedBox(width: 8),
+
                             // Plus Button
                             Stack(
                               alignment: Alignment.center,

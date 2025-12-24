@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../theme/expressive_theme.dart';
 
 /// A custom rating slider that displays a 10-point scale with a popup showing
 /// the current value and haptic feedback when the value changes.
@@ -175,7 +176,7 @@ class _CustomSquareThumbShape extends SliderComponentShape {
 
     // The shadow should be centered on the track.
     // The thumb starts 'raised' (shifted up and left) and moves to cover the shadow when pressed.
-    final Offset baseShadowOffset = const Offset(4, 4);
+    final Offset baseShadowOffset = ExpressiveTheme.shadowOffsetMedium;
 
     // Thumb position moves from (center - offset) to (center)
     final Offset animatedCenter = Offset.lerp(
@@ -210,7 +211,8 @@ class _CustomSquareThumbShape extends SliderComponentShape {
     final borderPaint = Paint()
       ..color = primaryColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 2; // Match episode progress bar border
+      ..strokeWidth =
+          ExpressiveTheme.borderWidthThin; // Match episode progress bar border
     canvas.drawRect(bgRect, borderPaint);
 
     // Draw inner square (perfectly centered on the current thumb center)

@@ -13,6 +13,7 @@ import '../widgets/outlined_star.dart';
 import '../widgets/metadata_chip.dart';
 import '../widgets/rating_slider.dart';
 import '../widgets/pressable_card.dart';
+import '../widgets/expressive_button.dart';
 import '../utils/color_parser.dart';
 import '../theme/expressive_theme.dart';
 import '../widgets/grain_overlay.dart';
@@ -316,10 +317,24 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                         pinned: true,
                         stretch: true,
                         backgroundColor: primaryText,
-                        leading: _PressableBackButton(
-                          vibeScore: vibeScore,
-                          parsedColor: anime.parsedColor,
-                          onPressed: () => Navigator.pop(context),
+                        leading: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: ExpressiveButton.icon(
+                            isSquare: true,
+                            size: 40,
+                            padding: EdgeInsets.zero,
+                            onTap: () => Navigator.pop(context),
+                            icon: Icons.arrow_back_rounded,
+                            foregroundColor: primaryText,
+                            backgroundColor: Theme.of(
+                              context,
+                            ).scaffoldBackgroundColor,
+                            borderColor: primaryText,
+                            shadowColor: ExpressiveTheme.getShadowColor(
+                              vibeScore,
+                              anime.parsedColor,
+                            ),
+                          ),
                         ),
                         flexibleSpace: FlexibleSpaceBar(
                           stretchModes: const [
@@ -735,8 +750,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               Row(
                                                 children: [
                                                   Expanded(
-                                                    child: _PressableTrackerButton(
-                                                      label: '-',
+                                                    child: ExpressiveButton(
                                                       onTap: () {
                                                         _updateEpisodeProgress(
                                                           anime,
@@ -744,24 +758,36 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                           vibeScore,
                                                         );
                                                       },
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            vertical: 12,
+                                                          ),
                                                       backgroundColor:
                                                           scaffoldBg,
-                                                      foregroundColor:
-                                                          primaryText,
                                                       borderColor: primaryText,
                                                       shadowColor:
                                                           dynamicShadowColor
                                                               .withValues(
                                                                 alpha: 0.5,
                                                               ),
+                                                      shadowOffset:
+                                                          const Offset(4, 4),
                                                       isDisabled:
                                                           currentEpisode <= 0,
+                                                      child: Text(
+                                                        '-',
+                                                        style: GoogleFonts.teko(
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryText,
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                   const SizedBox(width: 12),
                                                   Expanded(
-                                                    child: _PressableTrackerButton(
-                                                      label: '+',
+                                                    child: ExpressiveButton(
                                                       onTap: () {
                                                         _updateEpisodeProgress(
                                                           anime,
@@ -769,21 +795,34 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                           vibeScore,
                                                         );
                                                       },
+                                                      padding:
+                                                          const EdgeInsets.symmetric(
+                                                            vertical: 12,
+                                                          ),
                                                       backgroundColor:
                                                           dynamicShadowColor,
-                                                      foregroundColor:
-                                                          ExpressiveTheme.getContrastText(
-                                                            dynamicShadowColor,
-                                                          ),
                                                       borderColor: primaryText,
                                                       shadowColor:
                                                           dynamicShadowColor
                                                               .withValues(
                                                                 alpha: 0.5,
                                                               ),
+                                                      shadowOffset:
+                                                          const Offset(4, 4),
                                                       isDisabled:
                                                           currentEpisode >=
                                                           anime.episodes!,
+                                                      child: Text(
+                                                        '+',
+                                                        style: GoogleFonts.teko(
+                                                          fontSize: 24,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: ExpressiveTheme.getContrastText(
+                                                            dynamicShadowColor,
+                                                          ),
+                                                        ),
+                                                      ),
                                                     ),
                                                   ),
                                                 ],
@@ -1155,68 +1194,6 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   }
 }
 
-class _PressableTrackerButton extends StatelessWidget {
-  final String label;
-  final VoidCallback? onTap;
-  final Color backgroundColor;
-  final Color foregroundColor;
-  final Color borderColor;
-  final Color shadowColor;
-  final bool isDisabled;
-
-  const _PressableTrackerButton({
-    required this.label,
-    this.onTap,
-    required this.backgroundColor,
-    required this.foregroundColor,
-    required this.borderColor,
-    required this.shadowColor,
-    this.isDisabled = false,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    const shadowOffset = Offset(4, 4);
-
-    return PressableCard(
-      shadowOffset: shadowOffset,
-      onTap: isDisabled ? null : onTap,
-      builder: (context, isPressed) => AnimatedContainer(
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeOutQuad,
-        padding: const EdgeInsets.symmetric(vertical: 12),
-        decoration: BoxDecoration(
-          color: isDisabled
-              ? Colors.grey.withValues(alpha: 0.3)
-              : backgroundColor,
-          border: Border.all(
-            color: isDisabled ? Colors.grey : borderColor,
-            width: 2,
-          ),
-          boxShadow: [
-            if (!isDisabled)
-              BoxShadow(
-                color: shadowColor,
-                offset: isPressed ? Offset.zero : shadowOffset,
-                blurRadius: 0,
-              ),
-          ],
-        ),
-        child: Center(
-          child: Text(
-            label,
-            style: GoogleFonts.teko(
-              fontSize: 24,
-              fontWeight: FontWeight.bold,
-              color: isDisabled ? Colors.grey : foregroundColor,
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
 class _PressableVerticalCard extends StatefulWidget {
   final String title;
   final String imageUrl;
@@ -1296,62 +1273,6 @@ class _PressableVerticalCardState extends State<_PressableVerticalCard> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _PressableBackButton extends StatefulWidget {
-  final double vibeScore;
-  final Color parsedColor;
-  final VoidCallback onPressed;
-
-  const _PressableBackButton({
-    required this.vibeScore,
-    required this.parsedColor,
-    required this.onPressed,
-  });
-
-  @override
-  State<_PressableBackButton> createState() => _PressableBackButtonState();
-}
-
-class _PressableBackButtonState extends State<_PressableBackButton> {
-  @override
-  Widget build(BuildContext context) {
-    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
-    final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
-    final shadowColor = ExpressiveTheme.getShadowColor(
-      widget.vibeScore,
-      widget.parsedColor,
-    );
-    final shadowOffset = const Offset(2, 2);
-
-    return Center(
-      child: PressableCard(
-        shadowOffset: shadowOffset,
-        onTap: widget.onPressed,
-        builder: (context, isPressed) => AnimatedContainer(
-          duration: const Duration(milliseconds: 100),
-          curve: Curves.easeOutQuad,
-          margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: scaffoldBg,
-            border: Border.all(color: primaryText, width: 2),
-            boxShadow: [
-              BoxShadow(
-                color: shadowColor,
-                offset: isPressed ? Offset.zero : shadowOffset,
-                blurRadius: 0,
-              ),
-            ],
-          ),
-          child: SizedBox(
-            width: 40,
-            height: 40,
-            child: Icon(Icons.arrow_back_rounded, color: primaryText),
-          ),
-        ),
       ),
     );
   }
