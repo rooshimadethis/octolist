@@ -28,8 +28,8 @@ class SectionTitle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Expanded(
-            flex: 1,
+          Flexible(
+            fit: FlexFit.loose,
             child: Container(
               padding: const EdgeInsets.only(
                 left: ExpressiveTheme.spacingM,
@@ -44,15 +44,11 @@ class SectionTitle extends StatelessWidget {
                   width: ExpressiveTheme.borderWidthThin,
                 ),
               ),
-              child: FittedBox(
-                fit: BoxFit.scaleDown,
-                alignment: Alignment.centerLeft,
-                child: Text(
-                  title.toUpperCase(),
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: ExpressiveTheme.titleLarge(color: inverseText),
-                ),
+              child: Text(
+                title.toUpperCase(),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: ExpressiveTheme.titleLarge(color: inverseText),
               ),
             ),
           ),

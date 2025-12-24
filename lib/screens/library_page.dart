@@ -293,13 +293,11 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
 
     final vibeDuration = ExpressiveTheme.vibeDuration(widget.vibeScore);
     final vibeCurve = ExpressiveTheme.vibeCurve(widget.vibeScore);
-    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
 
     if (widget.listName == 'Watching' || widget.listName == 'Current') {
       return ListView.builder(
         key: PageStorageKey<String>('library_list_${widget.listName}'),
-        cacheExtent:
-            1000, // Keep more items in memory to prevent re-animation on scroll
+        cacheExtent: 1000,
         padding: const EdgeInsets.all(24),
         itemCount: entries.length,
         itemBuilder: (context, index) {
@@ -324,6 +322,7 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
                       end: 0,
                       curve: vibeCurve,
                       duration: vibeDuration,
+                      delay: (index < 6 ? index * 50 : 0).ms,
                     ),
           );
         },
@@ -332,7 +331,7 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
 
     return GridView.builder(
       key: PageStorageKey<String>('library_grid_${widget.listName}'),
-      cacheExtent: 1000, // Keep more items in memory
+      cacheExtent: 1000,
       padding: const EdgeInsets.all(24),
       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
         crossAxisCount: 2,
@@ -343,7 +342,7 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
       itemCount: entries.length,
       itemBuilder: (context, index) {
         final entry = entries[index];
-        return _buildLibraryCard(context, entry, primaryText)
+        return _LibraryCard(entry: entry, vibeScore: widget.vibeScore)
             .animate()
             .fadeIn(duration: vibeDuration)
             .scale(
@@ -355,33 +354,67 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
       },
     );
   }
+}
 
-  Widget _buildLibraryCard(
-    BuildContext context,
-    WatchingEntry entry,
-    Color primaryText,
-  ) {
-    final anime = entry.anime;
+class _LibraryCard extends StatefulWidget {
+  final WatchingEntry entry;
+  final double vibeScore;
+
+  const _LibraryCard({required this.entry, required this.vibeScore});
+
+  @override
+  State<_LibraryCard> createState() => _LibraryCardState();
+}
+
+class _LibraryCardState extends State<_LibraryCard> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final anime = widget.entry.anime;
+    // Calculate color once or use theme helper
+    // Accessing theme inside build to ensure reactivity
     final shadowColor = ExpressiveTheme.getShadowColor(
       widget.vibeScore,
       anime.parsedColor,
     );
     final shadowOffset = ExpressiveTheme.getShadowOffset(widget.vibeScore);
+    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
 
     return GestureDetector(
-      onTap: () {
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapCancel: () => setState(() => _isPressed = false),
+      onTap: () async {
+        setState(() => _isPressed = true);
         HapticFeedback.lightImpact();
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (mounted) setState(() => _isPressed = false);
+        await Future.delayed(const Duration(milliseconds: 50));
+        if (!context.mounted) return;
+
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => AnimeDetailsPage(anime: anime),
           ),
         );
       },
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOutQuad,
+        transform: Matrix4.translationValues(
+          _isPressed ? shadowOffset.dx : 0,
+          _isPressed ? shadowOffset.dy : 0,
+          0,
+        ),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           border: Border.all(width: 3, color: primaryText),
-          boxShadow: [BoxShadow(color: shadowColor, offset: shadowOffset)],
+          boxShadow: [
+            BoxShadow(
+              color: shadowColor,
+              offset: _isPressed ? Offset.zero : shadowOffset,
+            ),
+          ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -416,7 +449,7 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
                       );
                     },
                   ),
-                  if (entry.progress > 0)
+                  if (widget.entry.progress > 0)
                     Positioned(
                       bottom: 8,
                       right: 8,
@@ -433,7 +466,7 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
                           ),
                         ),
                         child: Text(
-                          'EP ${entry.progress}',
+                          'EP ${widget.entry.progress}',
                           style: GoogleFonts.robotoMono(
                             color: Theme.of(context).scaffoldBackgroundColor,
                             fontSize: 10,
@@ -442,7 +475,7 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
                         ),
                       ),
                     ),
-                  if (entry.userScore > 0)
+                  if (widget.entry.userScore > 0)
                     Positioned(
                       top: 8,
                       right: 8,
@@ -467,7 +500,7 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
                             OutlinedStar(size: 12, color: primaryText),
                             const SizedBox(width: 4),
                             Text(
-                              '${entry.userScore}',
+                              '${widget.entry.userScore}',
                               style: GoogleFonts.robotoMono(
                                 color: primaryText,
                                 fontSize: 12,

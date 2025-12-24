@@ -1134,52 +1134,73 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                       itemBuilder: (context, index) {
                                         final rec =
                                             anime.recommendations[index];
-                                        return Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
-                                          children: [
-                                            Container(
-                                              width: 100,
-                                              height: 140,
-                                              decoration: BoxDecoration(
-                                                color: scaffoldBg,
-                                                borderRadius: BorderRadius.zero,
-                                                border: Border.all(
-                                                  color: primaryText,
-                                                  width: 3,
-                                                ),
-                                                boxShadow: [
-                                                  BoxShadow(
-                                                    color:
-                                                        ExpressiveTheme.getShadowColor(
-                                                          vibeScore,
-                                                        ),
-                                                    offset: const Offset(4, 4),
+                                        return GestureDetector(
+                                          onTap: () {
+                                            HapticFeedback.lightImpact();
+                                            Navigator.push(
+                                              context,
+                                              MaterialPageRoute(
+                                                builder: (context) =>
+                                                    AnimeDetailsPage(
+                                                      anime: rec,
+                                                    ),
+                                              ),
+                                            );
+                                          },
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Container(
+                                                width: 100,
+                                                height: 140,
+                                                decoration: BoxDecoration(
+                                                  color: scaffoldBg,
+                                                  borderRadius:
+                                                      BorderRadius.zero,
+                                                  border: Border.all(
+                                                    color: primaryText,
+                                                    width: 3,
                                                   ),
-                                                ],
-                                              ),
-                                              child: ExpressiveImage(
-                                                imageUrl: rec.coverImage ?? '',
-                                                fit: BoxFit.cover,
-                                                skeletonColor: rec.parsedColor,
-                                              ),
-                                            ),
-                                            const SizedBox(height: 8),
-                                            SizedBox(
-                                              width: 100,
-                                              child: Text(
-                                                rec.title.toUpperCase(),
-                                                maxLines: 2,
-                                                overflow: TextOverflow.ellipsis,
-                                                style: GoogleFonts.teko(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: primaryText,
-                                                  height: 1.1,
+                                                  boxShadow: [
+                                                    BoxShadow(
+                                                      color:
+                                                          ExpressiveTheme.getShadowColor(
+                                                            vibeScore,
+                                                          ),
+                                                      offset: const Offset(
+                                                        4,
+                                                        4,
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                child: ExpressiveImage(
+                                                  imageUrl:
+                                                      rec.coverImage ?? '',
+                                                  fit: BoxFit.cover,
+                                                  skeletonColor:
+                                                      rec.parsedColor,
                                                 ),
                                               ),
-                                            ),
-                                          ],
+                                              const SizedBox(height: 8),
+                                              SizedBox(
+                                                width: 100,
+                                                child: Text(
+                                                  rec.title.toUpperCase(),
+                                                  maxLines: 2,
+                                                  overflow:
+                                                      TextOverflow.ellipsis,
+                                                  style: GoogleFonts.teko(
+                                                    fontSize: 16,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: primaryText,
+                                                    height: 1.1,
+                                                  ),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
                                         );
                                       },
                                     ),
