@@ -31,9 +31,11 @@ class SectionTitle extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              padding: const EdgeInsets.symmetric(
-                horizontal: ExpressiveTheme.spacingM,
-                vertical: ExpressiveTheme.spacingXS,
+              padding: const EdgeInsets.only(
+                left: ExpressiveTheme.spacingM,
+                right: ExpressiveTheme.spacingM,
+                top: 6, // Visual adjustment for Teko font baseline
+                bottom: 2,
               ),
               decoration: BoxDecoration(
                 color: primaryText,

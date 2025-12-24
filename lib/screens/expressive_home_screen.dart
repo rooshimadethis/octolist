@@ -20,7 +20,6 @@ import '../widgets/expressive_image.dart';
 import '../theme/expressive_theme.dart';
 import '../utils/greeting_helper.dart';
 import '../utils/vibe_text_helper.dart';
-import '../widgets/vibe_slider.dart';
 
 class ExpressiveApp extends StatelessWidget {
   const ExpressiveApp({super.key});
@@ -40,18 +39,7 @@ class ExpressiveApp extends StatelessWidget {
               theme: ExpressiveTheme.themeData(vibeScore: animatedVibe),
               home: ExpressiveHomePage(vibeScore: animatedVibe),
               builder: (context, child) {
-                return Overlay(
-                  initialEntries: [
-                    OverlayEntry(
-                      builder: (context) => Stack(
-                        children: [
-                          if (child != null) child,
-                          const VibeSlider(),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
+                return child!;
               },
             );
           },

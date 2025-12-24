@@ -4,6 +4,7 @@ import 'package:phosphor_flutter/phosphor_flutter.dart';
 import '../models/user_profile.dart';
 import '../theme/expressive_theme.dart';
 import 'expressive_image.dart';
+import 'vibe_slider.dart';
 
 /// Shows a manga-style user profile dialog with stats and status counts
 class UserProfileDialog extends StatelessWidget {
@@ -64,7 +65,8 @@ class UserProfileDialog extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: ExpressiveTheme.spacingXL),
-              Expanded(
+              Flexible(
+                fit: FlexFit.tight,
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -154,6 +156,8 @@ class UserProfileDialog extends StatelessWidget {
             }).toList(),
           ),
           const SizedBox(height: ExpressiveTheme.spacingXXL),
+          const SizedBox(width: double.infinity, child: VibeSlider()),
+          const SizedBox(height: ExpressiveTheme.spacingL),
           SizedBox(
             width: double.infinity,
             child: ElevatedButton(
