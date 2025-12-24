@@ -15,6 +15,7 @@ import '../widgets/rating_slider.dart';
 import '../utils/color_parser.dart';
 import '../theme/expressive_theme.dart';
 import '../widgets/grain_overlay.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class AnimeDetailsPage extends StatefulWidget {
   final Anime anime;
@@ -81,6 +82,10 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
 
     final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
     final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
+    final vibeColor = ExpressiveTheme.getShadowColor(
+      vibeScore,
+      anime.parsedColor,
+    );
 
     showDialog(
       context: context,
@@ -95,7 +100,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
             border: Border.all(color: primaryText, width: 3),
             boxShadow: [
               BoxShadow(
-                color: ExpressiveTheme.getShadowColor(vibeScore),
+                color: vibeColor,
                 offset: ExpressiveTheme.getShadowOffset(vibeScore),
               ),
             ],
@@ -149,9 +154,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                     },
                     child: Container(
                       padding: const EdgeInsets.all(16),
-                      color: isCurrentList
-                          ? primaryText.withValues(alpha: 0.1)
-                          : scaffoldBg,
+                      color: isCurrentList ? vibeColor : scaffoldBg,
                       child: Row(
                         children: [
                           Expanded(
@@ -160,12 +163,17 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                               style: GoogleFonts.teko(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: primaryText,
+                                color: isCurrentList
+                                    ? ExpressiveTheme.getContrastText(vibeColor)
+                                    : primaryText,
                               ),
                             ),
                           ),
                           if (isCurrentList)
-                            Icon(Icons.check, color: primaryText),
+                            Icon(
+                              Icons.check,
+                              color: ExpressiveTheme.getContrastText(vibeColor),
+                            ),
                         ],
                       ),
                     ),
@@ -644,96 +652,6 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                             ),
                                       ),
                                       const SizedBox(height: 24),
-                                      // Rating Slider (only shown when anime is in a list)
-                                      if (currentListName != null) ...[
-                                        Container(
-                                          padding: const EdgeInsets.all(16),
-                                          decoration: BoxDecoration(
-                                            color: scaffoldBg,
-                                            border: Border.all(
-                                              color: primaryText,
-                                              width: 3,
-                                            ),
-                                            boxShadow: [
-                                              BoxShadow(
-                                                color: dynamicShadowColor
-                                                    .withValues(alpha: 0.5),
-                                                offset: shadowOffset,
-                                                blurRadius: 0,
-                                              ),
-                                            ],
-                                          ),
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Text(
-                                                'YOUR RATING',
-                                                style: GoogleFonts.teko(
-                                                  fontSize: 20,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: primaryText,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              RatingSlider(
-                                                initialValue:
-                                                    (entry?.userScore ?? 0)
-                                                        .toDouble(),
-                                                primaryColor: primaryText,
-                                                backgroundColor: scaffoldBg,
-                                                onChanged: (value) {
-                                                  // Update happens on drag
-                                                },
-                                                onChangeEnd: (value) {
-                                                  // Save to backend when user finishes dragging
-                                                  context
-                                                      .read<AnimeStore>()
-                                                      .updateScore(
-                                                        anime.id,
-                                                        value,
-                                                      );
-                                                },
-                                              ),
-                                              const SizedBox(height: 8),
-                                              Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Text(
-                                                    '0',
-                                                    style:
-                                                        GoogleFonts.robotoMono(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: primaryText
-                                                              .withValues(
-                                                                alpha: 0.6,
-                                                              ),
-                                                        ),
-                                                  ),
-                                                  Text(
-                                                    '10',
-                                                    style:
-                                                        GoogleFonts.robotoMono(
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                          color: primaryText
-                                                              .withValues(
-                                                                alpha: 0.6,
-                                                              ),
-                                                        ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        const SizedBox(height: 24),
-                                      ],
                                       // Episode Tracker
                                       if (anime.episodes != null) ...[
                                         Container(
@@ -921,6 +839,82 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                             ],
                                           ),
                                         ),
+                                        const SizedBox(height: 16),
+                                      ],
+                                      // Rating Slider (only shown when anime is in a list)
+                                      if (currentListName != null &&
+                                          currentListName != 'Planning') ...[
+                                        Container(
+                                          padding: const EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            color: scaffoldBg,
+                                            border: Border.all(
+                                              color: primaryText,
+                                              width: 3,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: dynamicShadowColor
+                                                    .withValues(alpha: 0.5),
+                                                offset: shadowOffset,
+                                                blurRadius: 0,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    'YOUR RATING',
+                                                    style: GoogleFonts.teko(
+                                                      fontSize: 20,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: primaryText,
+                                                    ),
+                                                  ),
+                                                  Text(
+                                                    '${entry?.userScore ?? 0} / 10',
+                                                    style:
+                                                        GoogleFonts.robotoMono(
+                                                          fontSize: 18,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryText,
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                              const SizedBox(height: 4),
+                                              RatingSlider(
+                                                initialValue:
+                                                    (entry?.userScore ?? 0)
+                                                        .toDouble(),
+                                                primaryColor: primaryText,
+                                                activeColor: dynamicShadowColor,
+                                                backgroundColor: scaffoldBg,
+                                                onChanged: (value) {
+                                                  // Update happens on drag
+                                                },
+                                                onChangeEnd: (value) {
+                                                  // Save to backend when user finishes dragging
+                                                  context
+                                                      .read<AnimeStore>()
+                                                      .updateScore(
+                                                        anime.id,
+                                                        value,
+                                                      );
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        ),
                                         const SizedBox(height: 24),
                                       ],
                                       // Synopsis
@@ -944,13 +938,10 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                             ),
                                           ),
                                         ),
-                                        child: Text(
-                                          anime.description?.replaceAll(
-                                                '<br>',
-                                                '\n',
-                                              ) ??
+                                        child: HtmlWidget(
+                                          anime.description ??
                                               "No description available.",
-                                          style: Theme.of(context)
+                                          textStyle: Theme.of(context)
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(

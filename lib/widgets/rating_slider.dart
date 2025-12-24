@@ -7,6 +7,7 @@ import 'package:google_fonts/google_fonts.dart';
 class RatingSlider extends StatefulWidget {
   final double initialValue;
   final Color primaryColor;
+  final Color? activeColor;
   final Color backgroundColor;
   final ValueChanged<double> onChanged;
   final ValueChanged<double>? onChangeEnd;
@@ -15,6 +16,7 @@ class RatingSlider extends StatefulWidget {
     super.key,
     required this.initialValue,
     required this.primaryColor,
+    this.activeColor,
     required this.backgroundColor,
     required this.onChanged,
     this.onChangeEnd,
@@ -45,7 +47,7 @@ class _RatingSliderState extends State<RatingSlider> {
     // Trigger haptic feedback when crossing integer boundaries
     final newIntValue = value.round();
     if (_lastIntValue != newIntValue) {
-      HapticFeedback.selectionClick();
+      HapticFeedback.lightImpact();
       _lastIntValue = newIntValue;
     }
 
@@ -68,89 +70,89 @@ class _RatingSliderState extends State<RatingSlider> {
       children: [
         // Slider with popup
         SizedBox(
-          height: 60, // Extra height to accommodate popup
-          child: Stack(
-            clipBehavior: Clip.none,
-            alignment: Alignment.bottomCenter,
-            children: [
-              // The slider itself
-              Positioned(
-                bottom: 0,
-                left: 0,
-                right: 0,
-                child: SliderTheme(
-                  data: SliderThemeData(
-                    trackHeight: 8,
-                    thumbShape: _CustomThumbShape(
-                      enabledThumbRadius: 14,
-                      primaryColor: widget.primaryColor,
-                      backgroundColor: widget.backgroundColor,
+          height: 40, // More compact height
+          child: LayoutBuilder(
+            builder: (context, constraints) {
+              return Stack(
+                clipBehavior: Clip.none,
+                alignment: Alignment.bottomCenter,
+                children: [
+                  // The slider itself
+                  Positioned(
+                    bottom: 0,
+                    left: 0,
+                    right: 0,
+                    child: SliderTheme(
+                      data: SliderThemeData(
+                        trackHeight: 12, // Match episode progress bar
+                        trackShape: _FullWidthTrackShape(),
+                        thumbShape: _CustomSquareThumbShape(
+                          thumbSize: 30, // Larger thumb for better presence
+                          primaryColor: widget.primaryColor,
+                          backgroundColor: widget.backgroundColor,
+                        ),
+                        overlayShape: const RoundSliderOverlayShape(
+                          overlayRadius: 0,
+                        ),
+                        tickMarkShape: SliderTickMarkShape.noTickMark,
+                        activeTrackColor:
+                            widget.activeColor ?? widget.primaryColor,
+                        inactiveTrackColor:
+                            (widget.activeColor ?? widget.primaryColor)
+                                .withValues(alpha: 0.2),
+                        thumbColor: widget.primaryColor,
+                        valueIndicatorShape:
+                            const PaddleSliderValueIndicatorShape(),
+                      ),
+                      child: Slider(
+                        value: _currentValue,
+                        min: 0,
+                        max: 10,
+                        divisions: 10,
+                        onChanged: _handleValueChange,
+                        onChangeEnd: _handleChangeEnd,
+                      ),
                     ),
-                    overlayShape: const RoundSliderOverlayShape(
-                      overlayRadius: 0,
+                  ),
+                  // Popup value indicator
+                  if (_isDragging)
+                    Positioned(
+                      bottom: 32, // Adjusted for larger thumb
+                      left: (_currentValue / 10) * constraints.maxWidth,
+                      child: FractionalTranslation(
+                        translation: const Offset(-0.5, 0),
+                        child: _PopupIndicator(
+                          value: displayValue,
+                          primaryColor: widget.primaryColor,
+                          backgroundColor: widget.backgroundColor,
+                        ),
+                      ),
                     ),
-                    activeTrackColor: widget.primaryColor,
-                    inactiveTrackColor:
-                        widget.primaryColor.withValues(alpha: 0.2),
-                    thumbColor: widget.primaryColor,
-                    valueIndicatorShape:
-                        const PaddleSliderValueIndicatorShape(),
-                  ),
-                  child: Slider(
-                    value: _currentValue,
-                    min: 0,
-                    max: 10,
-                    divisions: 10,
-                    onChanged: _handleValueChange,
-                    onChangeEnd: _handleChangeEnd,
-                  ),
-                ),
-              ),
-              // Popup value indicator
-              if (_isDragging)
-                Positioned(
-                  bottom: 30,
-                  left: _calculatePopupPosition(),
-                  child: _PopupIndicator(
-                    value: displayValue,
-                    primaryColor: widget.primaryColor,
-                    backgroundColor: widget.backgroundColor,
-                  ),
-                ),
-            ],
+                ],
+              );
+            },
           ),
         ),
       ],
     );
   }
-
-  /// Calculate the horizontal position of the popup based on slider value
-  double _calculatePopupPosition() {
-    // Get the slider track width (approximate)
-    final screenWidth = MediaQuery.of(context).size.width - 48; // Account for padding
-    final trackWidth = screenWidth - 48; // Account for slider padding
-    final thumbPosition = (_currentValue / 10) * trackWidth;
-
-    // Center the popup above the thumb (28px is half the popup width)
-    return thumbPosition + 24 - 28;
-  }
 }
 
-/// Custom thumb shape with border
-class _CustomThumbShape extends SliderComponentShape {
-  final double enabledThumbRadius;
+/// Custom square thumb shape with border
+class _CustomSquareThumbShape extends SliderComponentShape {
+  final double thumbSize;
   final Color primaryColor;
   final Color backgroundColor;
 
-  const _CustomThumbShape({
-    required this.enabledThumbRadius,
+  const _CustomSquareThumbShape({
+    required this.thumbSize,
     required this.primaryColor,
     required this.backgroundColor,
   });
 
   @override
   Size getPreferredSize(bool isEnabled, bool isDiscrete) {
-    return Size.fromRadius(enabledThumbRadius);
+    return Size.square(thumbSize);
   }
 
   @override
@@ -170,34 +172,49 @@ class _CustomThumbShape extends SliderComponentShape {
   }) {
     final Canvas canvas = context.canvas;
 
-    // Draw shadow
-    final shadowPaint = Paint()
-      ..color = Colors.black.withValues(alpha: 0.3)
-      ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
-    canvas.drawCircle(
-      center + const Offset(2, 2),
-      enabledThumbRadius,
-      shadowPaint,
+    // Draw 3D box shadow (solid offset, no blur)
+    final shadowRect = Rect.fromCenter(
+      center: center + const Offset(4, 4),
+      width: thumbSize,
+      height: thumbSize,
     );
+    final shadowPaint = Paint()
+      ..color = primaryColor
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(shadowRect, shadowPaint);
 
-    // Draw white background
+    // Draw white background square
+    final bgRect = Rect.fromCenter(
+      center: center,
+      width: thumbSize,
+      height: thumbSize,
+    );
     final bgPaint = Paint()
       ..color = backgroundColor
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(center, enabledThumbRadius, bgPaint);
+    canvas.drawRect(bgRect, bgPaint);
 
     // Draw border
     final borderPaint = Paint()
       ..color = primaryColor
       ..style = PaintingStyle.stroke
-      ..strokeWidth = 3;
-    canvas.drawCircle(center, enabledThumbRadius, borderPaint);
+      ..strokeWidth = 2; // Match episode progress bar border
+    canvas.drawRect(bgRect, borderPaint);
 
-    // Draw inner circle
+    // Draw inner square (ensure it's perfectly centered using rounded center)
+    final roundedCenter = Offset(
+      center.dx.roundToDouble(),
+      center.dy.roundToDouble(),
+    );
+    final innerRect = Rect.fromCenter(
+      center: roundedCenter,
+      width: thumbSize - 12, // Maintain proportional inner square
+      height: thumbSize - 12,
+    );
     final innerPaint = Paint()
       ..color = primaryColor
       ..style = PaintingStyle.fill;
-    canvas.drawCircle(center, enabledThumbRadius - 5, innerPaint);
+    canvas.drawRect(innerRect, innerPaint);
   }
 }
 
@@ -222,9 +239,9 @@ class _PopupIndicator extends StatelessWidget {
         border: Border.all(color: primaryColor, width: 2),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withValues(alpha: 0.3),
-            offset: const Offset(2, 2),
-            blurRadius: 4,
+            color: primaryColor.withValues(alpha: 0.3),
+            offset: const Offset(4, 4),
+            blurRadius: 0,
           ),
         ],
       ),
@@ -238,5 +255,80 @@ class _PopupIndicator extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class _FullWidthTrackShape extends RectangularSliderTrackShape {
+  @override
+  Rect getPreferredRect({
+    required RenderBox parentBox,
+    Offset offset = Offset.zero,
+    required SliderThemeData sliderTheme,
+    bool isEnabled = false,
+    bool isDiscrete = false,
+  }) {
+    final double trackHeight = sliderTheme.trackHeight!;
+    final double trackLeft = offset.dx;
+    final double trackTop =
+        offset.dy + (parentBox.size.height - trackHeight) / 2;
+    final double trackWidth = parentBox.size.width;
+    return Rect.fromLTWH(trackLeft, trackTop, trackWidth, trackHeight);
+  }
+
+  @override
+  void paint(
+    PaintingContext context,
+    Offset offset, {
+    required RenderBox parentBox,
+    required SliderThemeData sliderTheme,
+    required Animation<double> enableAnimation,
+    required TextDirection textDirection,
+    required Offset thumbCenter,
+    Offset? secondaryOffset,
+    bool isDiscrete = false,
+    bool isEnabled = false,
+    double additionalActiveTrackHeight = 0,
+  }) {
+    if (sliderTheme.trackHeight == null || sliderTheme.trackHeight! <= 0) {
+      return;
+    }
+
+    final Rect trackRect = getPreferredRect(
+      parentBox: parentBox,
+      offset: offset,
+      sliderTheme: sliderTheme,
+      isEnabled: isEnabled,
+      isDiscrete: isDiscrete,
+    );
+
+    final Canvas canvas = context.canvas;
+
+    // 1. Draw Background (Scaffold Background look)
+    final Paint bgPaint = Paint()
+      ..color = Colors
+          .transparent // The container below already has scaffoldBg
+      ..style = PaintingStyle.fill;
+    canvas.drawRect(trackRect, bgPaint);
+
+    // 2. Draw Active Fill (from left to thumb)
+    final Paint activePaint = Paint()
+      ..color = sliderTheme.activeTrackColor!
+      ..style = PaintingStyle.fill;
+
+    final Rect activeRect = Rect.fromLTRB(
+      trackRect.left,
+      trackRect.top,
+      thumbCenter.dx,
+      trackRect.bottom,
+    );
+    canvas.drawRect(activeRect, activePaint);
+
+    // 3. Draw Border (Outline) - Match episode progress bar (width: 2)
+    final Paint borderPaint = Paint()
+      ..color =
+          sliderTheme.thumbColor! // Use primaryColor passed via thumbColor
+      ..style = PaintingStyle.stroke
+      ..strokeWidth = 2;
+    canvas.drawRect(trackRect, borderPaint);
   }
 }
