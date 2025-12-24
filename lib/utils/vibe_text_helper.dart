@@ -1,8 +1,15 @@
 import 'dart:math';
 
-/// Helper class to determine section headers based on vibe score.
-class SectionHeaderHelper {
-  SectionHeaderHelper._();
+/// Helper class to determine text strings based on vibe score.
+class VibeTextHelper {
+  VibeTextHelper._();
+
+  /// Returns a random search hint text based on vibe score.
+  static String getSearchHint({double vibeScore = 0.0}) {
+    final vibeLevel = _getVibeLevel(vibeScore);
+    final options = _searchHints[vibeLevel] ?? ['Find anime...'];
+    return options[Random().nextInt(options.length)];
+  }
 
   /// Returns a random header text for "Continue Watching" based on vibe score.
   static String getContinueWatchingHeader({double vibeScore = 0.0}) {
@@ -26,6 +33,13 @@ class SectionHeaderHelper {
     return VibeLevel.abyssal;
   }
 
+  static const Map<VibeLevel, List<String>> _searchHints = {
+    VibeLevel.radiant: ['Search for your next favorite memory!'],
+    VibeLevel.neutral: ['Find a series or movie.'],
+    VibeLevel.grim: ['What truth are you seeking?'],
+    VibeLevel.abyssal: ['Type the name. Invoke the nightmare.'],
+  };
+
   static const Map<VibeLevel, List<String>> _continueWatchingHeaders = {
     VibeLevel.radiant: [
       'Where the magic left off! ✨',
@@ -35,7 +49,7 @@ class SectionHeaderHelper {
     VibeLevel.grim: ['The descent continues...', 'Finish what you started.'],
     VibeLevel.abyssal: [
       'Return to the madness.',
-      'There is no turning back now.',
+      'No turning back now.',
       'Feed the obsession.',
     ],
   };

@@ -19,7 +19,7 @@ import '../widgets/user_profile_dialog.dart';
 import '../widgets/expressive_image.dart';
 import '../theme/expressive_theme.dart';
 import '../utils/greeting_helper.dart';
-import '../utils/section_header_helper.dart';
+import '../utils/vibe_text_helper.dart';
 import '../widgets/vibe_slider.dart';
 
 class ExpressiveApp extends StatelessWidget {
@@ -342,7 +342,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                           children: [
                             SectionTitle(
                                   title:
-                                      SectionHeaderHelper.getContinueWatchingHeader(
+                                      VibeTextHelper.getContinueWatchingHeader(
                                         vibeScore: widget.vibeScore,
                                       ),
                                   vibeScore: widget.vibeScore,
@@ -395,10 +395,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                       return Column(
                         children: [
                           SectionTitle(
-                                title:
-                                    SectionHeaderHelper.getContinueWatchingHeader(
-                                      vibeScore: widget.vibeScore,
-                                    ),
+                                title: VibeTextHelper.getContinueWatchingHeader(
+                                  vibeScore: widget.vibeScore,
+                                ),
                                 vibeScore: widget.vibeScore,
                                 onPressed: () {
                                   setState(() {
@@ -466,7 +465,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                   // Trending Section
                   // Trending Section
                   SectionTitle(
-                        title: SectionHeaderHelper.getTrendingNowHeader(
+                        title: VibeTextHelper.getTrendingNowHeader(
                           vibeScore: widget.vibeScore,
                         ),
                         vibeScore: widget.vibeScore,
@@ -559,12 +558,17 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                       HapticFeedback.lightImpact();
                       _performSearch();
                     },
-                    style: GoogleFonts.robotoMono(fontWeight: FontWeight.bold),
+                    style: GoogleFonts.robotoMono(
+                      fontWeight: FontWeight.bold,
+                      color: vibe.primaryText,
+                    ),
                     decoration: InputDecoration(
-                      hintText: 'FIND ANIME...',
+                      hintText: VibeTextHelper.getSearchHint(
+                        vibeScore: widget.vibeScore,
+                      ),
                       hintStyle: GoogleFonts.teko(
                         fontSize: 20,
-                        color: Colors.grey,
+                        color: vibe.primaryText.withValues(alpha: 0.5),
                       ),
                       prefixIcon: Icon(
                         Icons.search_rounded,
