@@ -13,6 +13,7 @@ class ExpressiveTheme {
   static const Color primaryBlack = Colors.black;
   static const Color surfaceWhite = Colors.white;
   static final Color mangaRed = Colors.red[900]!;
+  static const Color bloodRed = Color(0xFF8B0000);
   static final Color indicatorGrey = Colors.grey[300]!;
 
   // ============================================================================
@@ -284,11 +285,7 @@ class ExpressiveTheme {
 
     final Color primaryText = Color.lerp(primaryBlack, surfaceWhite, textT)!;
 
-    final Color primaryColor = Color.lerp(
-      primaryBlack,
-      const Color(0xFF8B0000),
-      vibeScore,
-    )!;
+    final Color primaryColor = Color.lerp(primaryBlack, bloodRed, vibeScore)!;
 
     return ThemeData(
       useMaterial3: true,
@@ -321,6 +318,10 @@ class ExpressiveTheme {
   }
 
   static Color getShadowColor(double score, [Color baseColor = primaryBlack]) {
+    if (baseColor == primaryBlack) {
+      return Color.lerp(primaryBlack, bloodRed, score)!;
+    }
+
     final hsl = HSLColor.fromColor(baseColor);
 
     // Vibe 0: Vibrant Pastel version (more visible)
