@@ -336,62 +336,16 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                   // Watching Section
                   Consumer<AnimeStore>(
                     builder: (context, store, _) {
-                      if (store.isLoading &&
-                          store.getListEntries('Watching').isEmpty) {
-                        return Column(
-                          children: [
-                            SectionTitle(
-                                  title:
-                                      VibeTextHelper.getContinueWatchingHeader(
-                                        vibeScore: widget.vibeScore,
-                                      ),
-                                  vibeScore: widget.vibeScore,
-                                  onPressed: () {
-                                    setState(() {
-                                      _libraryInitialTab = 'Watching';
-                                      _selectedIndex = 2;
-                                    });
-                                  },
-                                )
-                                .animate()
-                                .fadeIn(
-                                  delay: 100.ms,
-                                  duration: vibe.animationDuration,
-                                )
-                                .slideX(
-                                  begin: -0.2,
-                                  end: 0,
-                                  curve: vibe.animationCurve,
-                                  duration: vibe.animationDuration,
-                                ),
-                            const SizedBox(height: 16),
-                            SizedBox(
-                              height: 180,
-                              child: ListView.separated(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 24,
-                                ),
-                                scrollDirection: Axis.horizontal,
-                                itemCount: 3,
-                                separatorBuilder: (_, __) =>
-                                    const SizedBox(width: 16),
-                                itemBuilder: (context, index) =>
-                                    const AnimeCardSkeleton(isHorizontal: true)
-                                        .animate(delay: (index * 100).ms)
-                                        .fadeIn(
-                                          duration: vibe.animationDuration,
-                                        ),
-                              ),
-                            ),
-                          ],
-                        );
-                      }
-
                       final entries = store.getListEntries('Watching');
-                      if (entries.isEmpty) {
+                      final isInitialLoading =
+                          store.isLoading && entries.isEmpty;
+
+                      // If not loading and no entries, show nothing
+                      if (!isInitialLoading && entries.isEmpty) {
                         return const SizedBox.shrink();
                       }
 
+                      // Show Header + List (either Skeletons or Real Cards)
                       return Column(
                         children: [
                           SectionTitle(
@@ -419,28 +373,35 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               ),
                           const SizedBox(height: 16),
                           SizedBox(
-                            height: 180,
+                            height: 200,
                             child: ListView.separated(
-                              cacheExtent:
-                                  2000, // Pre-cache more items horizontally
+                              cacheExtent: isInitialLoading ? null : 2000,
                               padding: const EdgeInsets.symmetric(
                                 horizontal: 24,
                               ),
                               scrollDirection: Axis.horizontal,
-                              itemCount: entries.length,
+                              itemCount: isInitialLoading ? 3 : entries.length,
                               separatorBuilder: (_, __) =>
                                   const SizedBox(width: 16),
                               itemBuilder: (context, index) {
+                                if (isInitialLoading) {
+                                  return const AnimeCardSkeleton(
+                                        isHorizontal: true,
+                                      )
+                                      .animate(delay: (index * 100).ms)
+                                      .fadeIn(duration: vibe.animationDuration);
+                                }
+
+                                // Render Real Card
                                 final entry = entries[index];
-                                final currentProgress = entry.progress;
                                 return WatchingCard(
                                       entry: entry,
-                                      progress: currentProgress,
+                                      progress: entry.progress,
                                       heroPrefix: 'home',
                                       vibeScore: widget.vibeScore,
                                       onIncrement: () => _updateProgress(
                                         entry,
-                                        currentProgress,
+                                        entry.progress,
                                         1,
                                       ),
                                     )
@@ -481,7 +442,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                       ),
                   const SizedBox(height: 16),
                   SizedBox(
-                    height: 280,
+                    height: 310,
                     child: FutureBuilder<List<Anime>>(
                       future: _trendingFuture,
                       builder: (context, snapshot) {

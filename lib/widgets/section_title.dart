@@ -28,21 +28,30 @@ class SectionTitle extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Container(
-            padding: const EdgeInsets.symmetric(
-              horizontal: ExpressiveTheme.spacingM,
-              vertical: ExpressiveTheme.spacingXS,
-            ),
-            decoration: BoxDecoration(
-              color: primaryText,
-              border: Border.all(
-                color: primaryText,
-                width: ExpressiveTheme.borderWidthThin,
+          Expanded(
+            flex: 1,
+            child: Container(
+              padding: const EdgeInsets.symmetric(
+                horizontal: ExpressiveTheme.spacingM,
+                vertical: ExpressiveTheme.spacingXS,
               ),
-            ),
-            child: Text(
-              title.toUpperCase(),
-              style: ExpressiveTheme.titleLarge(color: inverseText),
+              decoration: BoxDecoration(
+                color: primaryText,
+                border: Border.all(
+                  color: primaryText,
+                  width: ExpressiveTheme.borderWidthThin,
+                ),
+              ),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  title.toUpperCase(),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: ExpressiveTheme.titleLarge(color: inverseText),
+                ),
+              ),
             ),
           ),
           if (onPressed != null)
