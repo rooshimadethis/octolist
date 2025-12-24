@@ -267,8 +267,9 @@ class AniListService implements IAnimeService {
   Future<void> saveMediaListEntry(
     int animeId,
     String listName,
-    int progress,
-  ) async {
+    int progress, {
+    double? score,
+  }) async {
     // Note: This needs mapping listName to MediaListStatus if using status,
     // or using string keys if custom lists.
     // For simplicity, we map standard names to statuses.
@@ -283,9 +284,16 @@ class AniListService implements IAnimeService {
       status = 'PAUSED';
     }
 
+    final variables = {
+      'mediaId': animeId,
+      'status': status,
+      'progress': progress,
+      if (score != null) 'score': score,
+    };
+
     final MutationOptions options = MutationOptions(
       document: gql(AnimeQueries.saveMediaListEntry),
-      variables: {'mediaId': animeId, 'status': status, 'progress': progress},
+      variables: variables,
     );
 
     final QueryResult result = await _client.mutate(options);

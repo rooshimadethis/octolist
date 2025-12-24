@@ -212,10 +212,11 @@ class MockDataService implements IAnimeService {
   Future<void> saveMediaListEntry(
     int animeId,
     String listName,
-    int progress,
-  ) async {
+    int progress, {
+    double? score,
+  }) async {
     debugPrint(
-      'Mock mutation: Saving anime $animeId to list "$listName" with progress $progress',
+      'Mock mutation: Saving anime $animeId to list "$listName" with progress $progress, score: $score',
     );
   }
 

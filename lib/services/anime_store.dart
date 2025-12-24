@@ -205,6 +205,43 @@ class AnimeStore extends ChangeNotifier {
     await fetchLibrary(); // Easiest way to sync complex list moves for now
   }
 
+  /// Updates the user score for an anime.
+  Future<void> updateScore(int mediaId, double score) async {
+    final entry = _allEntries[mediaId];
+    if (entry == null) return;
+
+    // Find current list status
+    String? currentStatus;
+    for (var listName in listNames) {
+      if (_listMemberships[listName]?.contains(mediaId) ?? false) {
+        currentStatus = listName;
+        break;
+      }
+    }
+
+    if (currentStatus == null) return;
+
+    // Optimistic update
+    final oldEntry = entry;
+    final updatedEntry = entry.copyWith(userScore: score.toInt());
+    _allEntries[mediaId] = updatedEntry;
+    notifyListeners();
+
+    try {
+      await _service.saveMediaListEntry(
+        mediaId,
+        currentStatus,
+        entry.progress,
+        score: score,
+      );
+    } catch (e) {
+      // Revert on failure
+      _allEntries[mediaId] = oldEntry;
+      notifyListeners();
+      rethrow;
+    }
+  }
+
   void _moveToStatus(int mediaId, String targetStatus) {
     // Basic local move logic
     _listMemberships.forEach((status, ids) {

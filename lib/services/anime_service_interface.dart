@@ -14,7 +14,7 @@ abstract class IAnimeService {
   Future<List<Anime>> searchAnime(String query);
   Future<List<String>> getAvailableListNames();
   Future<WatchingEntry?> getMediaListEntry(int animeId);
-  Future<void> saveMediaListEntry(int animeId, String listName, int progress);
+  Future<void> saveMediaListEntry(int animeId, String listName, int progress, {double? score});
   Future<void> updateEpisodeProgress(
     int animeId,
     int progress,

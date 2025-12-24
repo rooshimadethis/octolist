@@ -11,6 +11,7 @@ import '../services/anime_store.dart';
 import '../widgets/expressive_image.dart';
 import '../widgets/outlined_star.dart';
 import '../widgets/metadata_chip.dart';
+import '../widgets/rating_slider.dart';
 import '../utils/color_parser.dart';
 import '../theme/expressive_theme.dart';
 import '../widgets/grain_overlay.dart';
@@ -643,6 +644,96 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                             ),
                                       ),
                                       const SizedBox(height: 24),
+                                      // Rating Slider (only shown when anime is in a list)
+                                      if (currentListName != null) ...[
+                                        Container(
+                                          padding: const EdgeInsets.all(16),
+                                          decoration: BoxDecoration(
+                                            color: scaffoldBg,
+                                            border: Border.all(
+                                              color: primaryText,
+                                              width: 3,
+                                            ),
+                                            boxShadow: [
+                                              BoxShadow(
+                                                color: dynamicShadowColor
+                                                    .withValues(alpha: 0.5),
+                                                offset: shadowOffset,
+                                                blurRadius: 0,
+                                              ),
+                                            ],
+                                          ),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Text(
+                                                'YOUR RATING',
+                                                style: GoogleFonts.teko(
+                                                  fontSize: 20,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: primaryText,
+                                                ),
+                                              ),
+                                              const SizedBox(height: 8),
+                                              RatingSlider(
+                                                initialValue:
+                                                    (entry?.userScore ?? 0)
+                                                        .toDouble(),
+                                                primaryColor: primaryText,
+                                                backgroundColor: scaffoldBg,
+                                                onChanged: (value) {
+                                                  // Update happens on drag
+                                                },
+                                                onChangeEnd: (value) {
+                                                  // Save to backend when user finishes dragging
+                                                  context
+                                                      .read<AnimeStore>()
+                                                      .updateScore(
+                                                        anime.id,
+                                                        value,
+                                                      );
+                                                },
+                                              ),
+                                              const SizedBox(height: 8),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Text(
+                                                    '0',
+                                                    style:
+                                                        GoogleFonts.robotoMono(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryText
+                                                              .withValues(
+                                                                alpha: 0.6,
+                                                              ),
+                                                        ),
+                                                  ),
+                                                  Text(
+                                                    '10',
+                                                    style:
+                                                        GoogleFonts.robotoMono(
+                                                          fontSize: 12,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryText
+                                                              .withValues(
+                                                                alpha: 0.6,
+                                                              ),
+                                                        ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                        const SizedBox(height: 24),
+                                      ],
                                       // Episode Tracker
                                       if (anime.episodes != null) ...[
                                         Container(
