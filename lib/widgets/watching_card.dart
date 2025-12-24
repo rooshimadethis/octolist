@@ -74,7 +74,9 @@ class _WatchingCardState extends State<WatchingCard> {
             ),
           );
         },
-        child: Container(
+        builder: (context, isPressed) => AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeOutQuad,
           width: widget.width ?? 280,
           height: widget.height,
           margin: const EdgeInsets.only(bottom: 12, right: 12),
@@ -86,7 +88,7 @@ class _WatchingCardState extends State<WatchingCard> {
               BoxShadow(
                 color: vibe.shadowColor,
                 blurRadius: 0,
-                offset: vibe.shadowOffset,
+                offset: isPressed ? Offset.zero : vibe.shadowOffset,
               ),
             ],
           ),

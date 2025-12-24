@@ -46,7 +46,9 @@ class _MangaCardState extends State<MangaCard> {
             ),
           );
         },
-        child: Container(
+        builder: (context, isPressed) => AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeOutQuad,
           width: widget.width,
           decoration: BoxDecoration(
             color: vibe.scaffoldBg,
@@ -58,7 +60,7 @@ class _MangaCardState extends State<MangaCard> {
             boxShadow: [
               BoxShadow(
                 color: vibe.shadowColor,
-                offset: vibe.shadowOffset,
+                offset: isPressed ? Offset.zero : vibe.shadowOffset,
                 blurRadius: 0,
               ),
             ],

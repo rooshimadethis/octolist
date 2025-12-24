@@ -12,6 +12,7 @@ import '../widgets/expressive_image.dart';
 import '../widgets/outlined_star.dart';
 import '../widgets/metadata_chip.dart';
 import '../widgets/rating_slider.dart';
+import '../widgets/pressable_card.dart';
 import '../utils/color_parser.dart';
 import '../theme/expressive_theme.dart';
 import '../widgets/grain_overlay.dart';
@@ -100,7 +101,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
             border: Border.all(color: primaryText, width: 3),
             boxShadow: [
               BoxShadow(
-                color: vibeColor,
+                color: primaryText,
                 offset: ExpressiveTheme.getShadowOffset(vibeScore),
               ),
             ],
@@ -1230,8 +1231,6 @@ class _PressableVerticalCard extends StatefulWidget {
 }
 
 class _PressableVerticalCardState extends State<_PressableVerticalCard> {
-  bool _isPressed = false;
-
   @override
   Widget build(BuildContext context) {
     final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
@@ -1239,74 +1238,56 @@ class _PressableVerticalCardState extends State<_PressableVerticalCard> {
     final shadowColor = ExpressiveTheme.getShadowColor(widget.vibeScore);
     final shadowOffset = const Offset(4, 4);
 
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapCancel: () => setState(() => _isPressed = false),
-      onTap: () async {
-        setState(() => _isPressed = true);
-        HapticFeedback.lightImpact();
-        await Future.delayed(const Duration(milliseconds: 100));
-        if (mounted) setState(() => _isPressed = false);
-        await Future.delayed(const Duration(milliseconds: 50));
-        if (mounted) {
-          widget.onTap();
-        }
-      },
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 100),
-        curve: Curves.easeOutQuad,
-        transform: Matrix4.translationValues(
-          _isPressed ? shadowOffset.dx : 0,
-          _isPressed ? shadowOffset.dy : 0,
-          0,
-        ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 100),
-                  width: 100,
-                  height: 140,
-                  decoration: BoxDecoration(
-                    color: scaffoldBg,
-                    borderRadius: BorderRadius.zero,
-                    border: Border.all(color: primaryText, width: 3),
-                    boxShadow: [
-                      BoxShadow(
-                        color: shadowColor,
-                        offset: _isPressed ? Offset.zero : shadowOffset,
-                      ),
-                    ],
-                  ),
-                  child: ExpressiveImage(
-                    imageUrl: widget.imageUrl,
-                    fit: BoxFit.cover,
-                    skeletonColor: widget.parsedColor,
-                  ),
+    return PressableCard(
+      shadowOffset: shadowOffset,
+      onTap: widget.onTap,
+      builder: (context, isPressed) => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Stack(
+            children: [
+              AnimatedContainer(
+                duration: const Duration(milliseconds: 100),
+                curve: Curves.easeOutQuad,
+                width: 100,
+                height: 140,
+                decoration: BoxDecoration(
+                  color: scaffoldBg,
+                  borderRadius: BorderRadius.zero,
+                  border: Border.all(color: primaryText, width: 3),
+                  boxShadow: [
+                    BoxShadow(
+                      color: shadowColor,
+                      offset: isPressed ? Offset.zero : shadowOffset,
+                    ),
+                  ],
                 ),
-                if (widget.overlay != null)
-                  Positioned(top: 0, left: 0, child: widget.overlay!),
-              ],
-            ),
-            const SizedBox(height: 8),
-            SizedBox(
-              width: 100, // Matching the image width
-              child: Text(
-                widget.title.toUpperCase(),
-                maxLines: 3,
-                overflow: TextOverflow.ellipsis,
-                style: GoogleFonts.teko(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: primaryText,
-                  height: 1.1,
+                child: ExpressiveImage(
+                  imageUrl: widget.imageUrl,
+                  fit: BoxFit.cover,
+                  skeletonColor: widget.parsedColor,
                 ),
               ),
+              if (widget.overlay != null)
+                Positioned(top: 0, left: 0, child: widget.overlay!),
+            ],
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            width: 100, // Matching the image width
+            child: Text(
+              widget.title.toUpperCase(),
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
+              style: GoogleFonts.teko(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+                color: primaryText,
+                height: 1.1,
+              ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
@@ -1328,8 +1309,6 @@ class _PressableBackButton extends StatefulWidget {
 }
 
 class _PressableBackButtonState extends State<_PressableBackButton> {
-  bool _isPressed = false;
-
   @override
   Widget build(BuildContext context) {
     final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
@@ -1341,35 +1320,20 @@ class _PressableBackButtonState extends State<_PressableBackButton> {
     final shadowOffset = const Offset(2, 2);
 
     return Center(
-      child: GestureDetector(
-        onTapDown: (_) => setState(() => _isPressed = true),
-        onTapCancel: () => setState(() => _isPressed = false),
-        onTap: () async {
-          setState(() => _isPressed = true);
-          HapticFeedback.lightImpact();
-          await Future.delayed(const Duration(milliseconds: 100));
-          if (mounted) setState(() => _isPressed = false);
-          await Future.delayed(const Duration(milliseconds: 50));
-          if (context.mounted) {
-            widget.onPressed();
-          }
-        },
-        child: AnimatedContainer(
+      child: PressableCard(
+        shadowOffset: shadowOffset,
+        onTap: widget.onPressed,
+        builder: (context, isPressed) => AnimatedContainer(
           duration: const Duration(milliseconds: 100),
           curve: Curves.easeOutQuad,
           margin: const EdgeInsets.all(8),
-          transform: Matrix4.translationValues(
-            _isPressed ? shadowOffset.dx : 0,
-            _isPressed ? shadowOffset.dy : 0,
-            0,
-          ),
           decoration: BoxDecoration(
             color: scaffoldBg,
             border: Border.all(color: primaryText, width: 2),
             boxShadow: [
               BoxShadow(
                 color: shadowColor,
-                offset: _isPressed ? Offset.zero : shadowOffset,
+                offset: isPressed ? Offset.zero : shadowOffset,
                 blurRadius: 0,
               ),
             ],

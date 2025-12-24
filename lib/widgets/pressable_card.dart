@@ -14,7 +14,11 @@ import 'package:flutter/services.dart';
 /// ```
 class PressableCard extends StatefulWidget {
   /// The widget to wrap with press behavior
-  final Widget child;
+  final Widget? child;
+
+  /// A builder that provides the current press state.
+  /// Use this if the child needs to react to being pressed (e.g. for collapsing shadows).
+  final Widget Function(BuildContext context, bool isPressed)? builder;
 
   /// Callback when the card is tapped
   final VoidCallback? onTap;
@@ -35,13 +39,17 @@ class PressableCard extends StatefulWidget {
 
   const PressableCard({
     super.key,
-    required this.child,
+    this.child,
+    this.builder,
     this.onTap,
     this.shadowOffset = const Offset(8, 8),
     this.animationDuration = const Duration(milliseconds: 100),
     this.animationCurve = Curves.easeOutQuad,
     this.tapDelay,
-  });
+  }) : assert(
+         child != null || builder != null,
+         'Either child or builder must be provided',
+       );
 
   @override
   State<PressableCard> createState() => _PressableCardState();
@@ -92,6 +100,7 @@ class _PressableCardState extends State<PressableCard> {
       onTapDown: _handleTapDown,
       onTapCancel: _handleTapCancel,
       onTap: _handleTap,
+      behavior: HitTestBehavior.opaque,
       child: AnimatedContainer(
         duration: widget.animationDuration,
         curve: widget.animationCurve,
@@ -100,7 +109,9 @@ class _PressableCardState extends State<PressableCard> {
           _isPressed ? widget.shadowOffset.dy : 0,
           0,
         ),
-        child: widget.child,
+        child: widget.builder != null
+            ? widget.builder!(context, _isPressed)
+            : widget.child,
       ),
     );
   }

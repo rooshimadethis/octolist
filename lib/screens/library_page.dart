@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +12,7 @@ import '../widgets/anime_card_skeleton.dart';
 import '../widgets/outlined_star.dart';
 import '../theme/expressive_theme.dart';
 import '../widgets/grain_overlay.dart';
+import '../widgets/pressable_card.dart';
 
 enum LibrarySortMode { name, lastUpdated }
 
@@ -496,8 +496,6 @@ class _LibraryCard extends StatefulWidget {
 }
 
 class _LibraryCardState extends State<_LibraryCard> {
-  bool _isPressed = false;
-
   // Cache expensive theme calculations
   late final Color _shadowColor;
   late final Offset _shadowOffset;
@@ -522,38 +520,26 @@ class _LibraryCardState extends State<_LibraryCard> {
     final shadowOffset = _shadowOffset;
     final primaryText = _primaryText;
 
-    return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapCancel: () => setState(() => _isPressed = false),
-      onTap: () async {
-        setState(() => _isPressed = true);
-        HapticFeedback.lightImpact();
-        await Future.delayed(const Duration(milliseconds: 100));
-        if (mounted) setState(() => _isPressed = false);
-        await Future.delayed(const Duration(milliseconds: 50));
+    return PressableCard(
+      shadowOffset: shadowOffset,
+      onTap: () {
         if (!context.mounted) return;
-
         Navigator.of(context).push(
           MaterialPageRoute(
             builder: (context) => AnimeDetailsPage(anime: anime),
           ),
         );
       },
-      child: AnimatedContainer(
+      builder: (context, isPressed) => AnimatedContainer(
         duration: const Duration(milliseconds: 100),
         curve: Curves.easeOutQuad,
-        transform: Matrix4.translationValues(
-          _isPressed ? shadowOffset.dx : 0,
-          _isPressed ? shadowOffset.dy : 0,
-          0,
-        ),
         decoration: BoxDecoration(
           color: Theme.of(context).scaffoldBackgroundColor,
           border: Border.all(width: 3, color: primaryText),
           boxShadow: [
             BoxShadow(
               color: shadowColor,
-              offset: _isPressed ? Offset.zero : shadowOffset,
+              offset: isPressed ? Offset.zero : shadowOffset,
             ),
           ],
         ),
