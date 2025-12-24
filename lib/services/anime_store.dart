@@ -48,7 +48,19 @@ class AnimeStore extends ChangeNotifier {
   /// Get all entries for a specific list.
   List<WatchingEntry> getListEntries(String listName) {
     final ids = _listMemberships[listName] ?? [];
-    return ids.map((id) => _allEntries[id]).whereType<WatchingEntry>().toList();
+    final entries = ids
+        .map((id) => _allEntries[id])
+        .whereType<WatchingEntry>()
+        .toList();
+
+    // Sort by updatedAt in descending order (most recent first)
+    entries.sort((a, b) {
+      final aTime = a.updatedAt ?? 0;
+      final bTime = b.updatedAt ?? 0;
+      return bTime.compareTo(aTime); // Descending order
+    });
+
+    return entries;
   }
 
   /// Get the names of all lists in the user's library.
