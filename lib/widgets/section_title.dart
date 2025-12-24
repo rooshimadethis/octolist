@@ -44,11 +44,13 @@ class SectionTitle extends StatelessWidget {
                   width: ExpressiveTheme.borderWidthThin,
                 ),
               ),
-              child: Text(
-                title.toUpperCase(),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-                style: ExpressiveTheme.titleLarge(color: inverseText),
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                child: Text(
+                  title.toUpperCase(),
+                  maxLines: 1,
+                  style: ExpressiveTheme.titleLarge(color: inverseText),
+                ),
               ),
             ),
           ),

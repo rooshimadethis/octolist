@@ -183,9 +183,9 @@ class AnimeStore extends ChangeNotifier {
     'Horror': 1.0,
     'Thriller': 1.0,
     // Mild Dark
-    'Drama': 0.6,
+    'Drama': 0.5,
     'Mystery': 0.6,
-    'Supernatural': 0.6,
+    'Supernatural': 0.5,
     'Seinen': 0.6,
     // High Intensity Light
     'Comedy': -1.0,
@@ -221,9 +221,17 @@ class AnimeStore extends ChangeNotifier {
     _vibeScore = (_vibeScore + adjustment).clamp(0.0, 1.0);
 
     if (oldVibe != _vibeScore) {
+      final genreLog = anime.genres
+          .map((g) {
+            final score = _genreIntensity[g] ?? 0.0;
+            return '$g: $score';
+          })
+          .join(', ');
+
       debugPrint(
-        '🔮 Vibe: ${oldVibe.toStringAsFixed(2)} → ${_vibeScore.toStringAsFixed(2)} '
-        '(Intensity: ${normalizedIntensity.toStringAsFixed(2)}, Δ: ${adjustment.toStringAsFixed(2)})',
+        '🔮 Vibe: ${oldVibe.toStringAsFixed(2)} → ${_vibeScore.toStringAsFixed(2)}\n'
+        '   Intensity: ${normalizedIntensity.toStringAsFixed(2)}, Δ: ${adjustment.toStringAsFixed(2)}\n'
+        '   Genres: [$genreLog]',
       );
       _saveVibe();
       // Note: notifyListeners() is already called by the parent updateProgress method

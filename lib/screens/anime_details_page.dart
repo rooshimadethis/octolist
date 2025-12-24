@@ -30,11 +30,20 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   late ConfettiController _confettiController;
   bool _isUpdating = false;
 
+  // Store initial animation values so they don't change during rebuilds
+  late final Duration _entranceDuration;
+  late final Curve _entranceCurve;
+
   @override
   void initState() {
     super.initState();
     _animeService = context.read<AnimeStore>().service;
     _fullDetailsFuture = _animeService.getAnimeDetails(widget.anime.id);
+
+    // Capture initial vibe for stable entrance animations
+    final initialVibe = context.read<AnimeStore>().vibeScore;
+    _entranceDuration = ExpressiveTheme.vibeDuration(initialVibe);
+    _entranceCurve = ExpressiveTheme.vibeCurve(initialVibe);
 
     // Defer the snackbar
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -273,8 +282,6 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
         final vibeScore = store.vibeScore;
         final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
         final shadowOffset = ExpressiveTheme.getShadowOffset(vibeScore);
-        final vibeDuration = ExpressiveTheme.vibeDuration(vibeScore);
-        final vibeCurve = ExpressiveTheme.vibeCurve(vibeScore);
         final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
 
         return Scaffold(
@@ -480,13 +487,15 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                     )
                                                     .animate()
                                                     .fadeIn(
-                                                      duration: vibeDuration,
+                                                      duration:
+                                                          _entranceDuration,
                                                     )
                                                     .slideY(
                                                       begin: 0.2,
                                                       end: 0,
-                                                      duration: vibeDuration,
-                                                      curve: vibeCurve,
+                                                      duration:
+                                                          _entranceDuration,
+                                                      curve: _entranceCurve,
                                                     ),
                                           ),
                                           if (anime.averageScore != null)
@@ -538,8 +547,8 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               ),
                                             ).animate().scale(
                                               delay: 200.ms,
-                                              duration: vibeDuration,
-                                              curve: vibeCurve,
+                                              duration: _entranceDuration,
+                                              curve: _entranceCurve,
                                             ),
                                         ],
                                       ),
@@ -589,7 +598,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                         ],
                                       ).animate().fadeIn(
                                         delay: 300.ms,
-                                        duration: vibeDuration,
+                                        duration: _entranceDuration,
                                       ),
                                       const SizedBox(height: 24),
                                       // Action Button
@@ -997,7 +1006,11 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                       itemBuilder: (context, index) {
                                         final relation = anime.relations[index];
                                         final relAnime = relation.anime;
-                                        return GestureDetector(
+                                        return _PressableVerticalCard(
+                                          title: relAnime.title,
+                                          imageUrl: relAnime.coverImage ?? '',
+                                          parsedColor: relAnime.parsedColor,
+                                          vibeScore: vibeScore,
                                           onTap: () {
                                             Navigator.push(
                                               context,
@@ -1009,95 +1022,25 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               ),
                                             );
                                           },
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Stack(
-                                                children: [
-                                                  Container(
-                                                    width: 100,
-                                                    height: 140,
-                                                    decoration: BoxDecoration(
-                                                      color: scaffoldBg,
-                                                      borderRadius:
-                                                          BorderRadius.zero,
-                                                      border: Border.all(
-                                                        color: primaryText,
-                                                        width: 3,
-                                                      ),
-                                                      boxShadow: [
-                                                        BoxShadow(
-                                                          color:
-                                                              ExpressiveTheme.getShadowColor(
-                                                                vibeScore,
-                                                              ),
-                                                          offset: const Offset(
-                                                            4,
-                                                            4,
-                                                          ),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                    child: ExpressiveImage(
-                                                      imageUrl:
-                                                          relAnime.coverImage ??
-                                                          '',
-                                                      fit: BoxFit.cover,
-                                                      skeletonColor:
-                                                          relAnime.parsedColor,
-                                                    ),
-                                                  ),
-                                                  Positioned(
-                                                    top: 0,
-                                                    left: 0,
-                                                    child: Container(
-                                                      padding:
-                                                          const EdgeInsets.symmetric(
-                                                            horizontal: 6,
-                                                            vertical: 3,
-                                                          ),
-                                                      decoration: BoxDecoration(
-                                                        color: primaryText,
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .zero, // Sharp
-                                                      ),
-                                                      child: Text(
-                                                        relation.relationType
-                                                            .replaceAll(
-                                                              '_',
-                                                              ' ',
-                                                            )
-                                                            .toUpperCase(),
-                                                        style: GoogleFonts.teko(
-                                                          color: scaffoldBg,
-                                                          fontSize: 12,
-                                                          fontWeight:
-                                                              FontWeight.bold,
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
+                                          overlay: Container(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 6,
+                                              vertical: 3,
+                                            ),
+                                            decoration: BoxDecoration(
+                                              color: primaryText,
+                                              borderRadius: BorderRadius.zero,
+                                            ),
+                                            child: Text(
+                                              relation.relationType
+                                                  .replaceAll('_', ' ')
+                                                  .toUpperCase(),
+                                              style: GoogleFonts.teko(
+                                                color: scaffoldBg,
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.bold,
                                               ),
-                                              const SizedBox(height: 8),
-                                              SizedBox(
-                                                width: 100,
-                                                child: Text(
-                                                  relAnime.title.toUpperCase(),
-                                                  maxLines: 3,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.teko(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: primaryText,
-                                                    height: 1.1,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         );
                                       },
@@ -1134,9 +1077,12 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                       itemBuilder: (context, index) {
                                         final rec =
                                             anime.recommendations[index];
-                                        return GestureDetector(
+                                        return _PressableVerticalCard(
+                                          title: rec.title,
+                                          imageUrl: rec.coverImage ?? '',
+                                          parsedColor: rec.parsedColor,
+                                          vibeScore: vibeScore,
                                           onTap: () {
-                                            HapticFeedback.lightImpact();
                                             Navigator.push(
                                               context,
                                               MaterialPageRoute(
@@ -1147,60 +1093,6 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               ),
                                             );
                                           },
-                                          child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            children: [
-                                              Container(
-                                                width: 100,
-                                                height: 140,
-                                                decoration: BoxDecoration(
-                                                  color: scaffoldBg,
-                                                  borderRadius:
-                                                      BorderRadius.zero,
-                                                  border: Border.all(
-                                                    color: primaryText,
-                                                    width: 3,
-                                                  ),
-                                                  boxShadow: [
-                                                    BoxShadow(
-                                                      color:
-                                                          ExpressiveTheme.getShadowColor(
-                                                            vibeScore,
-                                                          ),
-                                                      offset: const Offset(
-                                                        4,
-                                                        4,
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
-                                                child: ExpressiveImage(
-                                                  imageUrl:
-                                                      rec.coverImage ?? '',
-                                                  fit: BoxFit.cover,
-                                                  skeletonColor:
-                                                      rec.parsedColor,
-                                                ),
-                                              ),
-                                              const SizedBox(height: 8),
-                                              SizedBox(
-                                                width: 100,
-                                                child: Text(
-                                                  rec.title.toUpperCase(),
-                                                  maxLines: 2,
-                                                  overflow:
-                                                      TextOverflow.ellipsis,
-                                                  style: GoogleFonts.teko(
-                                                    fontSize: 16,
-                                                    fontWeight: FontWeight.bold,
-                                                    color: primaryText,
-                                                    height: 1.1,
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
                                         );
                                       },
                                     ),
@@ -1244,6 +1136,110 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
           ),
         );
       },
+    );
+  }
+}
+
+class _PressableVerticalCard extends StatefulWidget {
+  final String title;
+  final String imageUrl;
+  final Color parsedColor;
+  final double vibeScore;
+  final VoidCallback onTap;
+  final Widget? overlay;
+
+  const _PressableVerticalCard({
+    required this.title,
+    required this.imageUrl,
+    required this.parsedColor,
+    required this.vibeScore,
+    required this.onTap,
+    this.overlay,
+  });
+
+  @override
+  State<_PressableVerticalCard> createState() => _PressableVerticalCardState();
+}
+
+class _PressableVerticalCardState extends State<_PressableVerticalCard> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
+    final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
+    final shadowColor = ExpressiveTheme.getShadowColor(widget.vibeScore);
+    final shadowOffset = const Offset(4, 4);
+
+    return GestureDetector(
+      onTapDown: (_) => setState(() => _isPressed = true),
+      onTapCancel: () => setState(() => _isPressed = false),
+      onTap: () async {
+        setState(() => _isPressed = true);
+        HapticFeedback.lightImpact();
+        await Future.delayed(const Duration(milliseconds: 100));
+        if (mounted) setState(() => _isPressed = false);
+        await Future.delayed(const Duration(milliseconds: 50));
+        if (mounted) {
+          widget.onTap();
+        }
+      },
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 100),
+        curve: Curves.easeOutQuad,
+        transform: Matrix4.translationValues(
+          _isPressed ? shadowOffset.dx : 0,
+          _isPressed ? shadowOffset.dy : 0,
+          0,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                AnimatedContainer(
+                  duration: const Duration(milliseconds: 100),
+                  width: 100,
+                  height: 140,
+                  decoration: BoxDecoration(
+                    color: scaffoldBg,
+                    borderRadius: BorderRadius.zero,
+                    border: Border.all(color: primaryText, width: 3),
+                    boxShadow: [
+                      BoxShadow(
+                        color: shadowColor,
+                        offset: _isPressed ? Offset.zero : shadowOffset,
+                      ),
+                    ],
+                  ),
+                  child: ExpressiveImage(
+                    imageUrl: widget.imageUrl,
+                    fit: BoxFit.cover,
+                    skeletonColor: widget.parsedColor,
+                  ),
+                ),
+                if (widget.overlay != null)
+                  Positioned(top: 0, left: 0, child: widget.overlay!),
+              ],
+            ),
+            const SizedBox(height: 8),
+            SizedBox(
+              width: 100, // Matching the image width
+              child: Text(
+                widget.title.toUpperCase(),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
+                style: GoogleFonts.teko(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: primaryText,
+                  height: 1.1,
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 }
