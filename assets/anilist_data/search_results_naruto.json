@@ -3,184 +3,272 @@
     "Page": {
       "media": [
         {
-          "id": 20,
+          "id": 1,
           "title": {
-            "userPreferred": "NARUTO",
-            "english": "Naruto"
+            "english": "Cowboy Bebop",
+            "romaji": "Cowboy Bebop",
+            "native": "\u30ab\u30a6\u30dc\u30fc\u30a4\u30d3\u30d0\u30c3\u30d7"
           },
           "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-dE6UHbFFg1A5.jpg",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20-dE6UHbFFg1A5.jpg",
-            "color": "#e47850"
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1-GCsPm7waJ4kS.png",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1-GCsPm7waJ4kS.png",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx1-GCsPm7waJ4kS.png",
+            "color": "#f16b50"
           },
-          "type": "ANIME",
-          "format": "TV",
-          "status": "FINISHED",
-          "averageScore": 80,
-          "episodes": 220,
-          "isAdult": false
+          "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/1-OquNCNB6srGe.jpg",
+          "averageScore": 86,
+          "episodes": 26,
+          "genres": [
+            "Action",
+            "Adventure",
+            "Drama",
+            "Sci-Fi"
+          ],
+          "description": "Enter a world in the distant future, where Bounty Hunters roam the solar system. Spike and Jet, bounty hunting partners, set out on journeys in an ever struggling effort to win bounty rewards to survive.<br><br>\nWhile traveling, they meet up with other very interesting people. Could Faye, the beautiful and ridiculously poor gambler, Edward, the computer genius, and Ein, the engineered dog be a good addition to the group?",
+          "season": "SPRING",
+          "seasonYear": 1998,
+          "status": "FINISHED"
         },
         {
-          "id": 1735,
+          "id": 5,
           "title": {
-            "userPreferred": "NARUTO: Shippuuden",
-            "english": "Naruto: Shippuden"
+            "english": "Cowboy Bebop: The Movie - Knockin' on Heaven's Door",
+            "romaji": "Cowboy Bebop: Tengoku no Tobira",
+            "native": "\u30ab\u30a6\u30dc\u30fc\u30a4\u30d3\u30d0\u30c3\u30d7\u5929\u56fd\u306e\u6249"
           },
           "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1735-kGfVm0YqCPcu.png",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1735-kGfVm0YqCPcu.png",
-            "color": "#e4865d"
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx5-NozHwXWdNLCz.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx5-NozHwXWdNLCz.jpg",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx5-NozHwXWdNLCz.jpg",
+            "color": "#f13500"
           },
-          "type": "ANIME",
-          "format": "TV",
-          "status": "FINISHED",
+          "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/5-VOcSZFepDDhm.jpg",
           "averageScore": 82,
-          "episodes": 500,
-          "isAdult": false
-        },
-        {
-          "id": 97938,
-          "title": {
-            "userPreferred": "BORUTO: NARUTO NEXT GENERATIONS",
-            "english": "Boruto: Naruto Next Generations"
-          },
-          "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97938-BnF6M5yTaNB1.jpg",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97938-BnF6M5yTaNB1.jpg",
-            "color": "#00c9ff"
-          },
-          "type": "ANIME",
-          "format": "TV",
-          "status": "FINISHED",
-          "averageScore": 56,
-          "episodes": 293,
-          "isAdult": false
-        },
-        {
-          "id": 16870,
-          "title": {
-            "userPreferred": "THE LAST: NARUTO THE MOVIE",
-            "english": "The Last: Naruto the Movie"
-          },
-          "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16870-BD4K9rzlhCP4.jpg",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx16870-BD4K9rzlhCP4.jpg",
-            "color": "#e45d6b"
-          },
-          "type": "ANIME",
-          "format": "MOVIE",
-          "status": "FINISHED",
-          "averageScore": 76,
           "episodes": 1,
-          "isAdult": false
+          "genres": [
+            "Action",
+            "Drama",
+            "Mystery",
+            "Sci-Fi"
+          ],
+          "description": "As the Cowboy Bebop crew travels the stars, they learn of the largest bounty yet, a huge 300 million Woolongs. Apparently, someone is wielding a hugely powerful chemical weapon, and of course the authorities are at a loss to stop it. The war to take down the most dangerous criminal yet forces the crew to face a true madman, with bare hope to succeed.\n<br><br>\n(Source: Anime News Network)",
+          "season": "SUMMER",
+          "seasonYear": 2001,
+          "status": "FINISHED"
         },
         {
-          "id": 21220,
+          "id": 6,
           "title": {
-            "userPreferred": "BORUTO: NARUTO THE MOVIE",
-            "english": "Boruto: Naruto the Movie"
+            "english": "Trigun",
+            "romaji": "TRIGUN",
+            "native": "TRIGUN"
           },
           "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21220-3cWAUtR1Ih5h.jpg",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21220-3cWAUtR1Ih5h.jpg",
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx6-wd4saT1JzStH.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx6-wd4saT1JzStH.jpg",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx6-wd4saT1JzStH.jpg",
+            "color": "#356bae"
+          },
+          "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/6-4pIR2RY8AHZ0.jpg",
+          "averageScore": 80,
+          "episodes": 26,
+          "genres": [
+            "Action",
+            "Adventure",
+            "Comedy",
+            "Drama",
+            "Sci-Fi"
+          ],
+          "description": "Vash the Stampede is a wanted man with a habit of turning entire towns into rubble. The price on his head is a fortune, and his path of destruction reaches across the arid wastelands of a desert planet. Unfortunately, most encounters with the spiky-haired gunslinger don't end well for the bounty hunters who catch up with him; someone almost always gets hurt - and it's never Vash.<br>\n<br>\nOddly enough, for such an infamous fugitive, there's no proof that he's ever taken a life. In fact, he's a pacifist with a doughnut obsession who's more doofus than desperado. There's a whole lot more to him than his reputation lets on - Vash the Stampede definitely ain't your typical outlaw.<br>\n<br>\n(Source: Funimation)",
+          "season": "SPRING",
+          "seasonYear": 1998,
+          "status": "FINISHED"
+        },
+        {
+          "id": 7,
+          "title": {
+            "english": "Witch Hunter ROBIN",
+            "romaji": "Witch Hunter ROBIN",
+            "native": "Witch Hunter ROBIN"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx7-6uh1fPvbgS9t.png",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx7-6uh1fPvbgS9t.png",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx7-6uh1fPvbgS9t.png",
+            "color": "#e4935d"
+          },
+          "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/7-hjjlCe3yO7lO.jpg",
+          "averageScore": 68,
+          "episodes": 26,
+          "genres": [
+            "Action",
+            "Drama",
+            "Mystery",
+            "Supernatural"
+          ],
+          "description": "Robin Sena is a powerful craft user drafted into the STNJ - a group of specialized hunters that fight deadly beings known as Witches. Though her fire power is great, she\u2019s got a lot to learn about her powers and working with her cool and aloof partner, Amon. But the truth about the Witches and herself will leave Robin on an entirely new path that she never expected!<br>\n<br>\n(Source: Funimation)",
+          "season": "SUMMER",
+          "seasonYear": 2002,
+          "status": "FINISHED"
+        },
+        {
+          "id": 8,
+          "title": {
+            "english": "Beet the Vandel Buster",
+            "romaji": "Bouken Ou Beet",
+            "native": "\u5192\u967a\u738b\u30d3\u30a3\u30c8"
+          },
+          "coverImage": {
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b8-ReS3TwSgrDDi.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b8-ReS3TwSgrDDi.jpg",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/b8-ReS3TwSgrDDi.jpg",
             "color": "#e46b50"
           },
-          "type": "ANIME",
-          "format": "MOVIE",
-          "status": "FINISHED",
-          "averageScore": 70,
-          "episodes": 1,
-          "isAdult": false
+          "bannerImage": null,
+          "averageScore": 66,
+          "episodes": 52,
+          "genres": [
+            "Adventure",
+            "Fantasy",
+            "Supernatural"
+          ],
+          "description": "It is the dark century and the people are suffering under the rule of the devil, Vandel, who is able to manipulate monsters. The Vandel Busters are a group of people who hunt these devils, and among them, the Zenon Squad is known to be the strongest busters on the continent. A young boy, Beet, dreams of joining the Zenon Squad. However, one day, as a result of Beet's fault, the Zenon squad was defeated by the devil, Beltose. The five dying busters sacrificed their life power into their five weapons, Saiga. After giving their weapons to Beet, they passed away. Years have passed since then and the young Vandel Buster, Beet, begins his adventure to carry out the Zenon Squad's will to put an end to the dark century. ",
+          "season": "FALL",
+          "seasonYear": 2004,
+          "status": "FINISHED"
         },
         {
-          "id": 13667,
+          "id": 15,
           "title": {
-            "userPreferred": "ROAD TO NINJA: NARUTO THE MOVIE",
-            "english": "Road to Ninja: Naruto the Movie"
+            "english": "Eyeshield 21",
+            "romaji": "Eyeshield 21",
+            "native": "\u30a2\u30a4\u30b7\u30fc\u30eb\u30c921"
           },
           "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx13667-gAKuIXI2avRq.jpg",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx13667-gAKuIXI2avRq.jpg",
-            "color": "#e48650"
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx15-A4F2t0TgWoi4.png",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx15-A4F2t0TgWoi4.png",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx15-A4F2t0TgWoi4.png",
+            "color": "#d6bb1a"
           },
-          "type": "ANIME",
-          "format": "MOVIE",
-          "status": "FINISHED",
-          "averageScore": 74,
-          "episodes": 1,
-          "isAdult": false
+          "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/n15-1eTutXlxYzYl.jpg",
+          "averageScore": 76,
+          "episodes": 145,
+          "genres": [
+            "Action",
+            "Comedy",
+            "Sports"
+          ],
+          "description": "Welcome To the Gridiron of the Damned!   Huge hulking bodies throw themselves at each other, while a tiny lithe body runs between them for the goal!  No, it&rsquo;s not a game of football, it&rsquo;s Sena Kobayakawa trying to evade the monstrous Ha-Ha brothers down the halls of Deimon High School!  But wait!  Sena&rsquo;s incredible skills at not getting caught have been spotted by the devilish (possibly actually demonic) captain of the school&rsquo;s embryonic American style football team, and when Sena asks to be the teams manager, he gets  thrust onto the field as a running back instead!  But there are two BIG catches: first, to keep the identity of their new &ldquo;star&rdquo; player an absolute secret, Yoichi makes Sena wear an opaque visor on his helmet and gives him the alias of &ldquo;Eyeshield 21.&rdquo;  And the second catch?  Well, in order to hit his fastest &ldquo;speed of light&rdquo; running mode, Sena usually has to be absolutely terrified. Not that THAT will be a problem with the monstrous players that he&rsquo;ll soon find himself running from!  The insanity hits the streets when the feet meet the cleats in EYESHIELD 21! <br><br>\n(Source: Sentai Filmworks)",
+          "season": "SPRING",
+          "seasonYear": 2005,
+          "status": "FINISHED"
         },
         {
-          "id": 2472,
+          "id": 16,
           "title": {
-            "userPreferred": "NARUTO: Shippuuden Movie",
-            "english": "Naruto Shippuden the Movie"
+            "english": "Honey and Clover",
+            "romaji": "Hachimitsu to Clover",
+            "native": "\u30cf\u30c1\u30df\u30c4\u3068\u30af\u30ed\u30fc\u30d0\u30fc"
           },
           "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2472-mYApVxceStn5.png",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2472-mYApVxceStn5.png",
-            "color": "#f1e450"
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx16-S9k8qahNXoYP.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx16-S9k8qahNXoYP.jpg",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx16-S9k8qahNXoYP.jpg",
+            "color": "#aee486"
           },
-          "type": "ANIME",
-          "format": "MOVIE",
-          "status": "FINISHED",
-          "averageScore": 69,
-          "episodes": 1,
-          "isAdult": false
+          "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/16-jmEaCBBN5WRS.jpg",
+          "averageScore": 76,
+          "episodes": 24,
+          "genres": [
+            "Comedy",
+            "Drama",
+            "Romance",
+            "Slice of Life"
+          ],
+          "description": "Takemoto Yuuta, Mayama Takumi, and Morita Shinobu are college students who share the small apartment. Even though they live in poverty, the three of them are able to obtain pleasure through small things in life. The story follows these characters' life stories as poor college students, as well as their love lives when a short but talented 18 year old girl called Hanamoto Hagumi appears.\n<br><br>\n(Source: Anime News Network)",
+          "season": "SPRING",
+          "seasonYear": 2005,
+          "status": "FINISHED"
         },
         {
-          "id": 10589,
+          "id": 17,
           "title": {
-            "userPreferred": "NARUTO: Blood Prison",
-            "english": "Naruto Shippuden the Movie: Blood Prison"
+            "english": null,
+            "romaji": "Hungry Heart: Wild Striker",
+            "native": "\u30cf\u30f3\u30b0\u30ea\u30fc\u30cf\u30fc\u30c8 Wild Striker"
           },
           "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx10589-VhXWWMm24Dso.jpg",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx10589-VhXWWMm24Dso.jpg",
-            "color": "#e45d6b"
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx17-6kqIbdUk3dgi.png",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx17-6kqIbdUk3dgi.png",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx17-6kqIbdUk3dgi.png",
+            "color": "#43aee4"
           },
-          "type": "ANIME",
-          "format": "MOVIE",
-          "status": "FINISHED",
+          "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/17-2drlTPxc3WTh.png",
           "averageScore": 71,
-          "episodes": 1,
-          "isAdult": false
+          "episodes": 52,
+          "genres": [
+            "Comedy",
+            "Slice of Life",
+            "Sports"
+          ],
+          "description": "Kyosuke Kano has lived under the shadow of his successful brother Seisuke all his life who is a professional soccer player. Tired of being compared and downgraded at, he abandoned playing soccer until a boy from his new highschool discovered him and asked him to join their team. Kyosuke joins it and befriends two other first year players named Rodrigo and Sakai with the dream of becomming professional soccer players themselves.\n<br><br>\n(Source: Anime News Network)",
+          "season": "FALL",
+          "seasonYear": 2002,
+          "status": "FINISHED"
         },
         {
-          "id": 8246,
+          "id": 18,
           "title": {
-            "userPreferred": "NARUTO: Shippuuden - The Lost Tower",
-            "english": "Naruto Shippuden the Movie: The Lost Tower"
+            "english": "Initial D 4th Stage",
+            "romaji": "Initial D FOURTH STAGE",
+            "native": "\u982d\u6587\u5b57\u3008\u30a4\u30cb\u30b7\u30e3\u30eb\u3009D FOURTH STAGE"
           },
           "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx8246-KAi3bLLdJ4OI.jpg",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx8246-KAi3bLLdJ4OI.jpg",
-            "color": "#d6936b"
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b18-r7IirVmwP89u.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/b18-r7IirVmwP89u.jpg",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/b18-r7IirVmwP89u.jpg",
+            "color": "#e46b50"
           },
-          "type": "ANIME",
-          "format": "MOVIE",
-          "status": "FINISHED",
-          "averageScore": 70,
-          "episodes": 1,
-          "isAdult": false
+          "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/18-aiibhi4BrZeR.jpg",
+          "averageScore": 80,
+          "episodes": 24,
+          "genres": [
+            "Action",
+            "Drama",
+            "Sports"
+          ],
+          "description": "Takumi Fujiwara and brothers Keisuke and Ryousuke Takahashi have formed \"Project D,\" a racing team aimed at bringing their driving skills to their full potential outside their prefecture. Using the internet, Project D issues challenges to other racing teams and posts results of their races. Managed by Ryousuke, the team has Takumi engaging in downhill battles with his AE86, while Keisuke challenges opponents uphill. Among their rivals are the Seven-Star Leaf (SSR) and Todo-juku.",
+          "season": "SPRING",
+          "seasonYear": 2004,
+          "status": "FINISHED"
         },
         {
-          "id": 4437,
+          "id": 19,
           "title": {
-            "userPreferred": "NARUTO: Shippuuden - Kizuna",
-            "english": "Naruto Shippuden the Movie: Bonds"
+            "english": "Monster",
+            "romaji": "MONSTER",
+            "native": "MONSTER"
           },
           "coverImage": {
-            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx4437-8LQbBZo4N6yi.jpg",
-            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx4437-8LQbBZo4N6yi.jpg",
-            "color": "#f1935d"
+            "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx19-gtMC64182sm4.jpg",
+            "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx19-gtMC64182sm4.jpg",
+            "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx19-gtMC64182sm4.jpg",
+            "color": null
           },
-          "type": "ANIME",
-          "format": "MOVIE",
-          "status": "FINISHED",
-          "averageScore": 69,
-          "episodes": 1,
-          "isAdult": false
+          "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/19-kJhwsB0Z97tL.jpg",
+          "averageScore": 88,
+          "episodes": 74,
+          "genres": [
+            "Drama",
+            "Horror",
+            "Mystery",
+            "Psychological",
+            "Thriller"
+          ],
+          "description": "Dr. Kenzo Tenma is a renowned Japanese brain surgeon working at a leading hospital in Germany. One night, Dr. Tenma risks his reputation and career to save the life of a critically wounded young boy over that of the town mayor who had been planning to support the hospital financially. A string of mysterious murders begin to occur soon after the operation, and Dr. Tenma emerges as the primary suspect despite no incriminating evidence. \n<br><br>\nA doctor is taught to believe that all life is equal; however, when another series of murders occur in the surgeon's vicinity, Dr. Tenma's beliefs are shaken as his actions that night are shown to have much broader consequences than he could have imagined. Leaving behind his life as a surgeon he embarks on a journey across the country to unravel the mystery of the boy he saved.",
+          "season": "SPRING",
+          "seasonYear": 2004,
+          "status": "FINISHED"
         }
       ]
     }

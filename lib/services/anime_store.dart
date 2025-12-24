@@ -1,5 +1,7 @@
 import 'package:flutter/foundation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../models/watching_entry.dart';
+import '../models/anime.dart';
 import 'anime_service_interface.dart';
 import 'anilist_service.dart';
 
@@ -22,6 +24,22 @@ class AnimeStore extends ChangeNotifier {
 
   String? _error;
   String? get error => _error;
+
+  double _vibeScore = 0.0;
+  double get vibeScore => _vibeScore;
+  set vibeScore(double value) {
+    if (_vibeScore == value) return;
+    _vibeScore = value.clamp(0.0, 1.0);
+    _saveVibe();
+    notifyListeners();
+  }
+
+  /// Load vibe score from persistent storage
+  Future<void> initVibe() async {
+    final prefs = await SharedPreferences.getInstance();
+    _vibeScore = prefs.getDouble('vibe_score') ?? 0.0;
+    notifyListeners();
+  }
 
   /// Get an entry by its media ID.
   WatchingEntry? getEntry(int mediaId) => _allEntries[mediaId];
@@ -100,6 +118,9 @@ class AnimeStore extends ChangeNotifier {
     final updatedEntry = entry.copyWith(progress: newProgress);
     _allEntries[mediaId] = updatedEntry;
 
+    // Adjust Vibe
+    _adjustVibe(entry.anime, delta);
+
     // Check if status needs to change (e.g. Completed)
     if (newProgress >= (entry.anime.episodes ?? 999)) {
       _moveToStatus(mediaId, 'Completed');
@@ -152,5 +173,69 @@ class AnimeStore extends ChangeNotifier {
 
   bool _isStatus(int mediaId, String status) {
     return _listMemberships[status]?.contains(mediaId) ?? false;
+  }
+
+  /// Genre intensity lookup table for vibe calculation
+  /// Positive values = dark/serious, Negative values = light/cheerful
+  static const Map<String, double> _genreIntensity = {
+    // High Intensity Dark
+    'Psychological': 1.0,
+    'Horror': 1.0,
+    'Thriller': 1.0,
+    // Mild Dark
+    'Drama': 0.6,
+    'Mystery': 0.6,
+    'Supernatural': 0.6,
+    'Seinen': 0.6,
+    // High Intensity Light
+    'Comedy': -1.0,
+    'Slice of Life': -1.0,
+    // Mild Light
+    'Romance': -0.6,
+    'Music': -0.6,
+    'Sports': -0.6,
+    'Shoujo': -0.6,
+  };
+
+  void _adjustVibe(Anime anime, int delta) {
+    if (delta == 0) return;
+
+    // We want a full season (approx 12 episodes) of a "pure" show to shift the vibe 100%
+    // So the max shift per episode should be around 1/12 = 0.0833
+    const double maxShiftPerEpisode = 1.0 / 12.0;
+
+    // Calculate total intensity from all genres using lookup table
+    double intensity = 0.0;
+    for (final genre in anime.genres) {
+      intensity += _genreIntensity[genre] ?? 0.0;
+    }
+
+    // Normalize intensity to [-1.0, 1.0]
+    // A show with multiple intense genres hits the cap, ensuring consistent "vibey-ness"
+    final normalizedIntensity = intensity.clamp(-1.0, 1.0);
+
+    // Final adjustment is intensity * maxShiftPerEpisode * delta
+    final adjustment = normalizedIntensity * maxShiftPerEpisode * delta;
+
+    final oldVibe = _vibeScore;
+    _vibeScore = (_vibeScore + adjustment).clamp(0.0, 1.0);
+
+    if (oldVibe != _vibeScore) {
+      debugPrint(
+        '🔮 Vibe: ${oldVibe.toStringAsFixed(2)} → ${_vibeScore.toStringAsFixed(2)} '
+        '(Intensity: ${normalizedIntensity.toStringAsFixed(2)}, Δ: ${adjustment.toStringAsFixed(2)})',
+      );
+      _saveVibe();
+      // Note: notifyListeners() is already called by the parent updateProgress method
+    }
+  }
+
+  Future<void> _saveVibe() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setDouble('vibe_score', _vibeScore);
+    } catch (e) {
+      debugPrint('Error saving vibe score: $e');
+    }
   }
 }

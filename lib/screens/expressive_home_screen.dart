@@ -19,22 +19,50 @@ import '../widgets/user_profile_dialog.dart';
 import '../widgets/expressive_image.dart';
 import '../theme/expressive_theme.dart';
 import '../utils/greeting_helper.dart';
+import '../widgets/vibe_slider.dart';
 
 class ExpressiveApp extends StatelessWidget {
   const ExpressiveApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      theme: ExpressiveTheme.themeData,
-      home: const ExpressiveHomePage(),
+    return Selector<AnimeStore, double>(
+      selector: (_, store) => store.vibeScore,
+      builder: (context, vibeScore, _) {
+        return TweenAnimationBuilder<double>(
+          tween: Tween<double>(end: vibeScore),
+          duration: const Duration(milliseconds: 1000),
+          curve: Curves.easeInOutCubic,
+          builder: (context, animatedVibe, child) {
+            return MaterialApp(
+              debugShowCheckedModeBanner: false,
+              theme: ExpressiveTheme.themeData(vibeScore: animatedVibe),
+              home: ExpressiveHomePage(vibeScore: animatedVibe),
+              builder: (context, child) {
+                return Overlay(
+                  initialEntries: [
+                    OverlayEntry(
+                      builder: (context) => Stack(
+                        children: [
+                          if (child != null) child,
+                          const VibeSlider(),
+                        ],
+                      ),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 }
 
 class ExpressiveHomePage extends StatefulWidget {
-  const ExpressiveHomePage({super.key});
+  final double vibeScore;
+  const ExpressiveHomePage({super.key, this.vibeScore = 0.0});
 
   @override
   State<ExpressiveHomePage> createState() => _ExpressiveHomePageState();
@@ -45,7 +73,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   String _searchQuery = '';
   final TextEditingController _searchController = TextEditingController();
   String? _libraryInitialTab;
-  Key _libraryKey = const PageStorageKey('library_page');
+  final Key _libraryKey = const PageStorageKey('library_page');
 
   late IAnimeService _animeService;
   late Future<UserProfile?> _profileFuture;
@@ -73,10 +101,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Refreshing home data...'),
-            duration: Duration(seconds: 1),
-            backgroundColor: Colors.black,
+          SnackBar(
+            content: const Text('Refreshing home data...'),
+            duration: const Duration(seconds: 1),
+            backgroundColor: ExpressiveTheme.getPrimaryText(widget.vibeScore),
           ),
         );
       }
@@ -116,12 +144,13 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
       await context.read<AnimeStore>().updateProgress(entry.anime.id, delta);
 
       if (mounted) {
+        final vibeScore = context.read<AnimeStore>().vibeScore;
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Progress updated!'),
-            backgroundColor: Colors.black,
-            duration: Duration(milliseconds: 500),
+          SnackBar(
+            content: const Text('Progress updated!'),
+            backgroundColor: ExpressiveTheme.getPrimaryText(vibeScore),
+            duration: const Duration(milliseconds: 500),
           ),
         );
       }
@@ -145,11 +174,12 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
     });
 
     if (_searchQuery.isNotEmpty) {
+      final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Searching for "$_searchQuery"...'),
           duration: const Duration(milliseconds: 500),
-          backgroundColor: Colors.black,
+          backgroundColor: primaryText,
         ),
       );
     }
@@ -157,8 +187,11 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final vibeCurve = ExpressiveTheme.vibeCurve(widget.vibeScore);
+    final vibeDuration = ExpressiveTheme.vibeDuration(widget.vibeScore);
+    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
+
     return Scaffold(
-      backgroundColor: Colors.white,
       body: IndexedStack(
         index: _selectedIndex,
         children: [
@@ -178,7 +211,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         final avatarUrl = user?.avatarLarge;
                         final isGuest = user == null;
 
-                        final greeting = GreetingHelper.getGreeting();
+                        final greeting = GreetingHelper.getGreeting(
+                          vibeScore: widget.vibeScore,
+                        );
 
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,12 +224,11 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 children: [
                                   const SizedBox(height: 20),
                                   Text(
-                                    '$greeting, $name',
+                                    '${greeting.title} $name',
                                     style: Theme.of(context)
                                         .textTheme
                                         .headlineMedium
                                         ?.copyWith(
-                                          color: Colors.black,
                                           fontSize: 32,
                                           fontStyle: FontStyle.italic,
                                         ),
@@ -224,8 +258,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: Colors.black,
-                                        foregroundColor: Colors.white,
+                                        backgroundColor: primaryText,
+                                        foregroundColor: Theme.of(
+                                          context,
+                                        ).scaffoldBackgroundColor,
                                         shape: const RoundedRectangleBorder(),
                                       ),
                                       child: Text(
@@ -236,17 +272,19 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                         ),
                                       ),
                                     )
-                                  else
+                                  else if (greeting.subtitle.isNotEmpty)
                                     Container(
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 8,
                                         vertical: 2,
                                       ),
-                                      color: Colors.black,
+                                      color: primaryText,
                                       child: Text(
-                                        'Let\'s find some anime.',
+                                        greeting.subtitle,
                                         style: GoogleFonts.teko(
-                                          color: Colors.white,
+                                          color: Theme.of(
+                                            context,
+                                          ).scaffoldBackgroundColor,
                                           fontWeight: FontWeight.bold,
                                           letterSpacing: 2.0,
                                         ),
@@ -270,14 +308,16 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle, // Circular avatar
                                     border: Border.all(
-                                      color: Colors.black,
+                                      color: primaryText,
                                       width: 3,
                                     ),
-                                    boxShadow: const [
+                                    boxShadow: [
                                       BoxShadow(
-                                        color: Colors.black,
+                                        color: ExpressiveTheme.getShadowColor(
+                                          widget.vibeScore,
+                                        ),
                                         blurRadius: 0,
-                                        offset: Offset(4, 4),
+                                        offset: const Offset(4, 4),
                                       ),
                                     ],
                                   ),
@@ -306,6 +346,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                           children: [
                             SectionTitle(
                                   title: 'Continue Watching',
+                                  vibeScore: widget.vibeScore,
                                   onPressed: () {
                                     setState(() {
                                       _libraryInitialTab = 'Watching';
@@ -314,8 +355,13 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   },
                                 )
                                 .animate()
-                                .fadeIn(delay: 100.ms)
-                                .slideX(begin: -0.2, end: 0),
+                                .fadeIn(delay: 100.ms, duration: vibeDuration)
+                                .slideX(
+                                  begin: -0.2,
+                                  end: 0,
+                                  curve: vibeCurve,
+                                  duration: vibeDuration,
+                                ),
                             const SizedBox(height: 16),
                             SizedBox(
                               height: 180,
@@ -328,9 +374,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 separatorBuilder: (_, __) =>
                                     const SizedBox(width: 16),
                                 itemBuilder: (context, index) =>
-                                    const AnimeCardSkeleton(
-                                      isHorizontal: true,
-                                    ).animate(delay: (index * 100).ms).fadeIn(),
+                                    const AnimeCardSkeleton(isHorizontal: true)
+                                        .animate(delay: (index * 100).ms)
+                                        .fadeIn(duration: vibeDuration),
                               ),
                             ),
                           ],
@@ -346,6 +392,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         children: [
                           SectionTitle(
                                 title: 'Continue Watching',
+                                vibeScore: widget.vibeScore,
                                 onPressed: () {
                                   setState(() {
                                     _libraryInitialTab = 'Watching';
@@ -354,8 +401,13 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 },
                               )
                               .animate()
-                              .fadeIn(delay: 100.ms)
-                              .slideX(begin: -0.2, end: 0),
+                              .fadeIn(delay: 100.ms, duration: vibeDuration)
+                              .slideX(
+                                begin: -0.2,
+                                end: 0,
+                                curve: vibeCurve,
+                                duration: vibeDuration,
+                              ),
                           const SizedBox(height: 16),
                           SizedBox(
                             height: 180,
@@ -372,28 +424,27 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               itemBuilder: (context, index) {
                                 final entry = entries[index];
                                 final currentProgress = entry.progress;
-                                return Stack(
-                                  key: ValueKey('watching_${entry.id}'),
-                                  children: [
-                                    const AnimeCardSkeleton(isHorizontal: true),
-                                    WatchingCard(
-                                          entry: entry,
-                                          progress: currentProgress,
-                                          heroPrefix: 'home',
-                                          onIncrement: () => _updateProgress(
-                                            entry,
-                                            currentProgress,
-                                            1,
-                                          ),
-                                        )
-                                        .animate(
-                                          delay:
-                                              (index < 6 ? index * 100 : 0).ms,
-                                        )
-                                        .fadeIn()
-                                        .slideX(begin: 0.1, end: 0),
-                                  ],
-                                );
+                                return WatchingCard(
+                                      entry: entry,
+                                      progress: currentProgress,
+                                      heroPrefix: 'home',
+                                      vibeScore: widget.vibeScore,
+                                      onIncrement: () => _updateProgress(
+                                        entry,
+                                        currentProgress,
+                                        1,
+                                      ),
+                                    )
+                                    .animate(
+                                      delay: (index < 6 ? index * 100 : 0).ms,
+                                    )
+                                    .fadeIn(duration: vibeDuration)
+                                    .slideX(
+                                      begin: 0.1,
+                                      end: 0,
+                                      curve: vibeCurve,
+                                      duration: vibeDuration,
+                                    );
                               },
                             ),
                           ),
@@ -405,9 +456,18 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                   // Trending Section
                   // Trending Section
                   SectionTitle(
-                    title: 'Trending Now',
-                    // Button removed as per request
-                  ).animate().fadeIn(delay: 200.ms).slideX(begin: -0.2, end: 0),
+                        title: 'Trending Now',
+                        vibeScore: widget.vibeScore,
+                        // Button removed as per request
+                      )
+                      .animate()
+                      .fadeIn(delay: 200.ms, duration: vibeDuration)
+                      .slideX(
+                        begin: -0.2,
+                        end: 0,
+                        curve: vibeCurve,
+                        duration: vibeDuration,
+                      ),
                   const SizedBox(height: 16),
                   SizedBox(
                     height: 280,
@@ -425,7 +485,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             itemBuilder: (context, index) =>
                                 const AnimeCardSkeleton()
                                     .animate(delay: (index * 100).ms)
-                                    .fadeIn(),
+                                    .fadeIn(duration: vibeDuration),
                           );
                         }
                         final animeList = snapshot.data ?? [];
@@ -437,21 +497,20 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                           separatorBuilder: (_, __) =>
                               const SizedBox(width: 16),
                           itemBuilder: (context, index) {
-                            return Stack(
-                              key: ValueKey('trending_${animeList[index].id}'),
-                              children: [
-                                const AnimeCardSkeleton(),
-                                MangaCard(anime: animeList[index])
-                                    .animate(
-                                      delay: (index < 6 ? index * 100 : 0).ms,
-                                    )
-                                    .fadeIn()
-                                    .scale(
-                                      begin: const Offset(0.9, 0.9),
-                                      end: const Offset(1.0, 1.0),
-                                    ),
-                              ],
-                            );
+                            return MangaCard(
+                                  anime: animeList[index],
+                                  vibeScore: widget.vibeScore,
+                                )
+                                .animate(
+                                  delay: (index < 6 ? index * 100 : 0).ms,
+                                )
+                                .fadeIn(duration: vibeDuration)
+                                .scale(
+                                  begin: const Offset(0.9, 0.9),
+                                  end: const Offset(1.0, 1.0),
+                                  curve: vibeCurve,
+                                  duration: vibeDuration,
+                                );
                           },
                         );
                       },
@@ -474,6 +533,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
+                      color: primaryText,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -494,25 +554,19 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         fontSize: 20,
                         color: Colors.grey,
                       ),
-                      prefixIcon: const Icon(
+                      prefixIcon: Icon(
                         Icons.search_rounded,
-                        color: Colors.black,
+                        color: primaryText,
                       ),
                       filled: true,
-                      fillColor: Colors.white,
+                      fillColor: Theme.of(context).scaffoldBackgroundColor,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.zero,
-                        borderSide: const BorderSide(
-                          color: Colors.black,
-                          width: 3,
-                        ),
+                        borderSide: BorderSide(color: primaryText, width: 3),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.zero,
-                        borderSide: const BorderSide(
-                          color: Colors.black,
-                          width: 4,
-                        ),
+                        borderSide: BorderSide(color: primaryText, width: 4),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
                         vertical: 16,
@@ -527,8 +581,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                       _performSearch();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.black,
-                      foregroundColor: Colors.white,
+                      backgroundColor: primaryText,
+                      foregroundColor: Theme.of(
+                        context,
+                      ).scaffoldBackgroundColor,
                       minimumSize: const Size(double.infinity, 56),
                       elevation: 0,
                       shape: const RoundedRectangleBorder(),
@@ -561,7 +617,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             itemBuilder: (context, index) =>
                                 const AnimeCardSkeleton()
                                     .animate(delay: (index * 100).ms)
-                                    .fadeIn(),
+                                    .fadeIn(duration: vibeDuration),
                           );
                         }
 
@@ -596,7 +652,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               style: GoogleFonts.teko(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.grey,
+                                color: primaryText.withValues(alpha: 0.5),
                               ),
                             ),
                           );
@@ -613,21 +669,20 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               ),
                           itemCount: animeList.length,
                           itemBuilder: (context, index) {
-                            return Stack(
-                              key: ValueKey('search_${animeList[index].id}'),
-                              children: [
-                                const AnimeCardSkeleton(),
-                                MangaCard(anime: animeList[index])
-                                    .animate(
-                                      delay: (index < 10 ? index * 100 : 0).ms,
-                                    )
-                                    .fadeIn()
-                                    .scale(
-                                      begin: const Offset(0.9, 0.9),
-                                      end: const Offset(1, 1),
-                                    ),
-                              ],
-                            );
+                            return MangaCard(
+                                  anime: animeList[index],
+                                  vibeScore: widget.vibeScore,
+                                )
+                                .animate(
+                                  delay: (index < 10 ? index * 100 : 0).ms,
+                                )
+                                .fadeIn(duration: vibeDuration)
+                                .scale(
+                                  begin: const Offset(0.9, 0.9),
+                                  end: const Offset(1, 1),
+                                  curve: vibeCurve,
+                                  duration: vibeDuration,
+                                );
                           },
                         );
                       },
@@ -642,10 +697,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: Theme.of(context).scaffoldBackgroundColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.1),
+              color: primaryText.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -5),
             ),
@@ -658,11 +713,11 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                color: Colors.black,
+                color: primaryText,
               ),
             ),
             iconTheme: WidgetStateProperty.all(
-              IconThemeData(color: Colors.black),
+              IconThemeData(color: primaryText),
             ),
           ),
           child: NavigationBar(
@@ -678,9 +733,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
               });
             },
             elevation: 0,
-            backgroundColor: Colors.white,
-            indicatorColor:
-                Colors.grey[300], // Softer indicator for manga style
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            indicatorColor: primaryText.withValues(alpha: 0.2),
             destinations: const [
               NavigationDestination(
                 icon: Icon(Icons.home_outlined),

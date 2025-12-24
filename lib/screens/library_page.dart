@@ -10,7 +10,8 @@ import '../widgets/watching_card.dart';
 import '../widgets/expressive_image.dart';
 import '../widgets/anime_card_skeleton.dart';
 import '../widgets/outlined_star.dart';
-import '../utils/color_parser.dart';
+import '../theme/expressive_theme.dart';
+import '../widgets/grain_overlay.dart';
 
 enum LibrarySortMode { name, lastUpdated }
 
@@ -49,11 +50,13 @@ class _LibraryPageState extends State<LibraryPage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
+        final vibeScore = context.read<AnimeStore>().vibeScore;
+        final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Updated!'),
-            duration: Duration(milliseconds: 300),
-            backgroundColor: Colors.black,
+          SnackBar(
+            content: const Text('Updated!'),
+            duration: const Duration(milliseconds: 300),
+            backgroundColor: primaryText,
           ),
         );
       }
@@ -69,12 +72,15 @@ class _LibraryPageState extends State<LibraryPage> {
   @override
   Widget build(BuildContext context) {
     final store = context.watch<AnimeStore>();
+    final vibeScore = store.vibeScore;
+    final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
+    final vibeDuration = ExpressiveTheme.vibeDuration(vibeScore);
 
     if (store.isLoading && store.listNames.isEmpty) {
       return Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           title: Container(
             width: 200,
@@ -93,22 +99,24 @@ class _LibraryPageState extends State<LibraryPage> {
           itemCount: 6,
           itemBuilder: (context, index) => const AnimeCardSkeleton()
               .animate(delay: (index * 100).ms)
-              .fadeIn(),
+              .fadeIn(duration: vibeDuration),
         ),
       );
     }
 
     if (store.error != null && store.listNames.isEmpty) {
       return Scaffold(
-        backgroundColor: Colors.white,
-        body: Center(child: Text(store.error!)),
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: Center(
+          child: Text(store.error!, style: TextStyle(color: primaryText)),
+        ),
       );
     }
 
     if (store.listNames.isEmpty) {
-      return const Scaffold(
-        backgroundColor: Colors.white,
-        body: _EmptyLibraryState(),
+      return Scaffold(
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+        body: _EmptyLibraryState(vibeScore: vibeScore),
       );
     }
 
@@ -126,9 +134,9 @@ class _LibraryPageState extends State<LibraryPage> {
       length: listNames.length,
       initialIndex: initialIndex,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         appBar: AppBar(
-          backgroundColor: Colors.white,
+          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
           elevation: 0,
           title: Text(
             'YOUR LIBRARY',
@@ -136,14 +144,15 @@ class _LibraryPageState extends State<LibraryPage> {
               fontWeight: FontWeight.bold,
               fontStyle: FontStyle.italic,
               fontSize: 32,
+              color: primaryText,
             ),
           ),
           bottom: TabBar(
             isScrollable: true,
-            indicatorColor: Colors.black,
+            indicatorColor: primaryText,
             indicatorWeight: 4,
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey,
+            labelColor: primaryText,
+            unselectedLabelColor: primaryText.withValues(alpha: 0.5),
             labelStyle: GoogleFonts.teko(
               fontSize: 20,
               fontWeight: FontWeight.bold,
@@ -155,11 +164,11 @@ class _LibraryPageState extends State<LibraryPage> {
           ),
           actions: [
             PopupMenuButton<LibrarySortMode>(
-              icon: const Icon(Icons.sort, color: Colors.black, size: 28),
+              icon: Icon(Icons.sort, color: primaryText, size: 28),
               surfaceTintColor: Colors.transparent,
-              color: Colors.white,
-              shape: const RoundedRectangleBorder(
-                side: BorderSide(color: Colors.black, width: 3),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              shape: RoundedRectangleBorder(
+                side: BorderSide(color: primaryText, width: 3),
               ),
               onSelected: (mode) {
                 setState(() {
@@ -171,7 +180,7 @@ class _LibraryPageState extends State<LibraryPage> {
                   value: LibrarySortMode.name,
                   child: Row(
                     children: [
-                      const Icon(Icons.sort_by_alpha, color: Colors.black),
+                      Icon(Icons.sort_by_alpha, color: primaryText),
                       const SizedBox(width: 12),
                       Text(
                         'NAME',
@@ -179,6 +188,7 @@ class _LibraryPageState extends State<LibraryPage> {
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1.2,
+                          color: primaryText,
                         ),
                       ),
                     ],
@@ -188,7 +198,7 @@ class _LibraryPageState extends State<LibraryPage> {
                   value: LibrarySortMode.lastUpdated,
                   child: Row(
                     children: [
-                      const Icon(Icons.history, color: Colors.black),
+                      Icon(Icons.history, color: primaryText),
                       const SizedBox(width: 12),
                       Text(
                         'LAST UPDATED',
@@ -196,6 +206,7 @@ class _LibraryPageState extends State<LibraryPage> {
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
                           letterSpacing: 1.2,
+                          color: primaryText,
                         ),
                       ),
                     ],
@@ -212,6 +223,7 @@ class _LibraryPageState extends State<LibraryPage> {
               listName: name,
               onUpdate: _handleUpdate,
               sortMode: _sortMode,
+              vibeScore: vibeScore,
             );
           }).toList(),
         ),
@@ -224,11 +236,13 @@ class _LibraryTabContent extends StatefulWidget {
   final String listName;
   final Future<void> Function(WatchingEntry, String, int) onUpdate;
   final LibrarySortMode sortMode;
+  final double vibeScore;
 
   const _LibraryTabContent({
     required this.listName,
     required this.onUpdate,
     required this.sortMode,
+    required this.vibeScore,
   });
 
   @override
@@ -271,11 +285,15 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
           itemCount: 6,
           itemBuilder: (context, index) => const AnimeCardSkeleton()
               .animate(delay: (index * 100).ms)
-              .fadeIn(),
+              .fadeIn(duration: ExpressiveTheme.vibeDuration(widget.vibeScore)),
         );
       }
-      return const _EmptyLibraryState();
+      return _EmptyLibraryState(vibeScore: widget.vibeScore);
     }
+
+    final vibeDuration = ExpressiveTheme.vibeDuration(widget.vibeScore);
+    final vibeCurve = ExpressiveTheme.vibeCurve(widget.vibeScore);
+    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
 
     if (widget.listName == 'Watching' || widget.listName == 'Current') {
       return ListView.builder(
@@ -288,27 +306,25 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
           final entry = entries[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child: Stack(
-              children: [
-                const AnimeCardSkeleton(
-                  isHorizontal: true,
-                  width: double.infinity,
-                  height: 140,
-                ),
+            child:
                 WatchingCard(
                       entry: entry,
                       progress: entry.progress,
                       heroPrefix: 'library',
+                      vibeScore: widget.vibeScore,
                       onIncrement: () =>
                           widget.onUpdate(entry, widget.listName, 1),
                       width: double.infinity,
                       height: 140,
                     )
                     .animate(delay: (index < 6 ? index * 100 : 0).ms)
-                    .fadeIn()
-                    .slideX(begin: 0.1, end: 0),
-              ],
-            ),
+                    .fadeIn(duration: vibeDuration)
+                    .slideX(
+                      begin: 0.1,
+                      end: 0,
+                      curve: vibeCurve,
+                      duration: vibeDuration,
+                    ),
           );
         },
       );
@@ -327,22 +343,30 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
       itemCount: entries.length,
       itemBuilder: (context, index) {
         final entry = entries[index];
-        return Stack(
-          children: [
-            const AnimeCardSkeleton(),
-            _buildLibraryCard(context, entry).animate().fadeIn().scale(
+        return _buildLibraryCard(context, entry, primaryText)
+            .animate()
+            .fadeIn(duration: vibeDuration)
+            .scale(
               begin: const Offset(0.9, 0.9),
               end: const Offset(1.0, 1.0),
-            ),
-          ],
-        );
+              duration: vibeDuration,
+              curve: vibeCurve,
+            );
       },
     );
   }
 
-  Widget _buildLibraryCard(BuildContext context, WatchingEntry entry) {
+  Widget _buildLibraryCard(
+    BuildContext context,
+    WatchingEntry entry,
+    Color primaryText,
+  ) {
     final anime = entry.anime;
-    final shadowColor = ColorParser.parseAnimeColor(anime.color);
+    final shadowColor = ExpressiveTheme.getShadowColor(
+      widget.vibeScore,
+      anime.parsedColor,
+    );
+    final shadowOffset = ExpressiveTheme.getShadowOffset(widget.vibeScore);
 
     return GestureDetector(
       onTap: () {
@@ -355,11 +379,9 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
       },
       child: Container(
         decoration: BoxDecoration(
-          color: Colors.white,
-          border: Border.all(width: 3, color: Colors.black),
-          boxShadow: [
-            BoxShadow(color: shadowColor, offset: const Offset(6, 6)),
-          ],
+          color: Theme.of(context).scaffoldBackgroundColor,
+          border: Border.all(width: 3, color: primaryText),
+          boxShadow: [BoxShadow(color: shadowColor, offset: shadowOffset)],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -368,10 +390,31 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  ExpressiveImage(
-                    imageUrl: anime.coverImage,
-                    fit: BoxFit.cover,
-                    skeletonColor: anime.parsedColor,
+                  Builder(
+                    builder: (context) {
+                      final filter = ExpressiveTheme.getImageFilter(
+                        widget.vibeScore,
+                      );
+                      final image = ExpressiveImage(
+                        imageUrl: anime.coverImage,
+                        fit: BoxFit.cover,
+                        skeletonColor: anime.parsedColor,
+                      );
+
+                      if (filter == null) return image;
+
+                      return Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          ColorFiltered(colorFilter: filter, child: image),
+                          GrainOverlay(
+                            opacity: ExpressiveTheme.getGrainOpacity(
+                              widget.vibeScore,
+                            ),
+                          ),
+                        ],
+                      );
+                    },
                   ),
                   if (entry.progress > 0)
                     Positioned(
@@ -383,13 +426,16 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.black,
-                          border: Border.all(color: Colors.white, width: 2),
+                          color: primaryText,
+                          border: Border.all(
+                            color: Theme.of(context).scaffoldBackgroundColor,
+                            width: 2,
+                          ),
                         ),
                         child: Text(
                           'EP ${entry.progress}',
                           style: GoogleFonts.robotoMono(
-                            color: Colors.white,
+                            color: Theme.of(context).scaffoldBackgroundColor,
                             fontSize: 10,
                             fontWeight: FontWeight.bold,
                           ),
@@ -406,24 +452,24 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
                           vertical: 4,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white,
-                          border: Border.all(color: Colors.black, width: 2),
-                          boxShadow: const [
+                          color: Theme.of(context).scaffoldBackgroundColor,
+                          border: Border.all(color: primaryText, width: 2),
+                          boxShadow: [
                             BoxShadow(
-                              color: Colors.black,
-                              offset: Offset(3, 3),
+                              color: primaryText,
+                              offset: const Offset(3, 3),
                             ),
                           ],
                         ),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            const OutlinedStar(size: 12),
+                            OutlinedStar(size: 12, color: primaryText),
                             const SizedBox(width: 4),
                             Text(
                               '${entry.userScore}',
                               style: GoogleFonts.robotoMono(
-                                color: Colors.black,
+                                color: primaryText,
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
@@ -437,8 +483,8 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
             ),
             Container(
               padding: const EdgeInsets.all(8.0),
-              decoration: const BoxDecoration(
-                border: Border(top: BorderSide(width: 3, color: Colors.black)),
+              decoration: BoxDecoration(
+                border: Border(top: BorderSide(width: 3, color: primaryText)),
               ),
               child: Text(
                 anime.title.toUpperCase(),
@@ -448,6 +494,7 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
                   height: 0.9,
+                  color: primaryText,
                 ),
               ),
             ),
@@ -459,10 +506,12 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
 }
 
 class _EmptyLibraryState extends StatelessWidget {
-  const _EmptyLibraryState();
+  final double vibeScore;
+  const _EmptyLibraryState({required this.vibeScore});
 
   @override
   Widget build(BuildContext context) {
+    final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -470,17 +519,20 @@ class _EmptyLibraryState extends StatelessWidget {
           Container(
             padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              border: Border.all(color: Colors.black, width: 4),
-              color: Colors.white,
-              boxShadow: const [
-                BoxShadow(color: Colors.black, offset: Offset(8, 8)),
+              border: Border.all(color: primaryText, width: 4),
+              color: Theme.of(context).scaffoldBackgroundColor,
+              boxShadow: [
+                BoxShadow(color: primaryText, offset: const Offset(8, 8)),
               ],
             ),
             child: Column(
               children: [
-                Icon(Icons.auto_stories_outlined, size: 64, color: Colors.black)
+                Icon(Icons.auto_stories_outlined, size: 64, color: primaryText)
                     .animate(onPlay: (controller) => controller.repeat())
-                    .shimmer(duration: 2.seconds, color: Colors.grey[200]),
+                    .shimmer(
+                      duration: 2.seconds,
+                      color: primaryText.withValues(alpha: 0.2),
+                    ),
                 const SizedBox(height: 16),
                 Text(
                   'LIBRARY IS EMPTY',
@@ -488,6 +540,7 @@ class _EmptyLibraryState extends StatelessWidget {
                     fontSize: 32,
                     fontWeight: FontWeight.bold,
                     fontStyle: FontStyle.italic,
+                    color: primaryText,
                   ),
                 ),
                 const SizedBox(height: 8),
@@ -497,12 +550,16 @@ class _EmptyLibraryState extends StatelessWidget {
                   style: GoogleFonts.teko(
                     fontSize: 18,
                     fontWeight: FontWeight.w500,
-                    color: Colors.grey[600],
+                    color: primaryText.withValues(alpha: 0.6),
                   ),
                 ),
               ],
             ),
-          ).animate().scale(delay: 200.ms, curve: Curves.elasticOut),
+          ).animate().scale(
+            delay: 200.ms,
+            curve: ExpressiveTheme.vibeCurve(vibeScore),
+            duration: ExpressiveTheme.vibeDuration(vibeScore),
+          ),
         ],
       ),
     );

@@ -5,6 +5,8 @@ import 'package:google_fonts/google_fonts.dart';
 import '../models/watching_entry.dart';
 import '../screens/anime_details_page.dart';
 import 'expressive_image.dart';
+import '../theme/expressive_theme.dart';
+import 'grain_overlay.dart';
 
 class WatchingCard extends StatefulWidget {
   final WatchingEntry entry;
@@ -14,6 +16,7 @@ class WatchingCard extends StatefulWidget {
   final double? width;
   final double? height;
   final String? heroPrefix;
+  final double vibeScore;
 
   const WatchingCard({
     super.key,
@@ -24,6 +27,7 @@ class WatchingCard extends StatefulWidget {
     this.width,
     this.height,
     this.heroPrefix,
+    this.vibeScore = 0.0,
   });
 
   @override
@@ -53,14 +57,12 @@ class _WatchingCardState extends State<WatchingCard> {
     final progressFraction = (widget.progress / totalEpisodes).clamp(0.0, 1.0);
     final hasNext = widget.progress < totalEpisodes;
 
-    Color shadowColor = Colors.black;
-    if (widget.entry.anime.color != null) {
-      try {
-        shadowColor = Color(
-          int.parse(widget.entry.anime.color!.replaceAll('#', '0xFF')),
-        );
-      } catch (_) {}
-    }
+    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
+    final shadowOffset = ExpressiveTheme.getShadowOffset(widget.vibeScore);
+    final shadowColor = ExpressiveTheme.getShadowColor(
+      widget.vibeScore,
+      widget.entry.anime.parsedColor,
+    );
 
     return RepaintBoundary(
       child: GestureDetector(
@@ -77,14 +79,14 @@ class _WatchingCardState extends State<WatchingCard> {
           height: widget.height,
           margin: const EdgeInsets.only(bottom: 12, right: 12),
           decoration: BoxDecoration(
-            color: Colors.white,
-            border: Border.all(width: 3, color: Colors.black),
+            color: Theme.of(context).scaffoldBackgroundColor,
+            border: Border.all(width: 3, color: primaryText),
             borderRadius: BorderRadius.zero,
             boxShadow: [
               BoxShadow(
                 color: shadowColor,
                 blurRadius: 0,
-                offset: const Offset(8, 8),
+                offset: shadowOffset,
               ),
             ],
           ),
@@ -93,21 +95,42 @@ class _WatchingCardState extends State<WatchingCard> {
             children: [
               // Image Section
               Container(
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   border: Border(
-                    right: BorderSide(width: 3, color: Colors.black),
+                    right: BorderSide(width: 3, color: primaryText),
                   ),
                 ),
                 child: Hero(
                   tag: '${widget.heroPrefix ?? 'watching'}_${widget.entry.id}',
                   child: SizedBox(
                     width: 100,
-                    child: ExpressiveImage(
-                      imageUrl: widget.entry.anime.coverImage,
-                      fit: BoxFit.cover,
-                      width: 100,
-                      height: double.infinity,
-                      skeletonColor: widget.entry.anime.parsedColor,
+                    child: Builder(
+                      builder: (context) {
+                        final filter = ExpressiveTheme.getImageFilter(
+                          widget.vibeScore,
+                        );
+                        final image = ExpressiveImage(
+                          imageUrl: widget.entry.anime.coverImage,
+                          fit: BoxFit.cover,
+                          width: 100,
+                          height: double.infinity,
+                          skeletonColor: widget.entry.anime.parsedColor,
+                        );
+
+                        if (filter == null) return image;
+
+                        return Stack(
+                          fit: StackFit.expand,
+                          children: [
+                            ColorFiltered(colorFilter: filter, child: image),
+                            GrainOverlay(
+                              opacity: ExpressiveTheme.getGrainOpacity(
+                                widget.vibeScore,
+                              ),
+                            ),
+                          ],
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -128,6 +151,7 @@ class _WatchingCardState extends State<WatchingCard> {
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                           height: 0.9,
+                          color: primaryText,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -143,13 +167,15 @@ class _WatchingCardState extends State<WatchingCard> {
                                     horizontal: 6,
                                     vertical: 2,
                                   ),
-                                  color: Colors.black,
+                                  color: primaryText,
                                   child: Text(
                                     'EPISODE ${widget.progress}',
                                     style: GoogleFonts.robotoMono(
                                       fontSize: 10,
                                       fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                      color: Theme.of(
+                                        context,
+                                      ).scaffoldBackgroundColor,
                                     ),
                                   ),
                                 ),
@@ -158,14 +184,16 @@ class _WatchingCardState extends State<WatchingCard> {
                                   height: 12,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: Colors.black,
+                                      color: primaryText,
                                       width: 1,
                                     ),
                                     borderRadius: BorderRadius.zero,
                                   ),
                                   child: LinearProgressIndicator(
                                     value: progressFraction,
-                                    backgroundColor: Colors.white,
+                                    backgroundColor: Theme.of(
+                                      context,
+                                    ).scaffoldBackgroundColor,
                                     color: shadowColor,
                                     minHeight: 12,
                                   ),
@@ -189,22 +217,24 @@ class _WatchingCardState extends State<WatchingCard> {
                                   child: Container(
                                     padding: const EdgeInsets.all(6),
                                     decoration: BoxDecoration(
-                                      color: Colors.white,
+                                      color: Theme.of(
+                                        context,
+                                      ).scaffoldBackgroundColor,
                                       border: Border.all(
-                                        color: Colors.black,
+                                        color: primaryText,
                                         width: 2,
                                       ),
                                       shape: BoxShape.rectangle,
-                                      boxShadow: const [
+                                      boxShadow: [
                                         BoxShadow(
-                                          color: Colors.black,
-                                          offset: Offset(2, 2),
+                                          color: primaryText,
+                                          offset: const Offset(2, 2),
                                         ),
                                       ],
                                     ),
-                                    child: const Icon(
+                                    child: Icon(
                                       Icons.remove_sharp,
-                                      color: Colors.black,
+                                      color: primaryText,
                                       size: 18,
                                     ),
                                   ),
@@ -245,18 +275,18 @@ class _WatchingCardState extends State<WatchingCard> {
                                     child: Container(
                                       padding: const EdgeInsets.all(6),
                                       decoration: BoxDecoration(
-                                        color: Colors.black,
+                                        color: shadowColor,
                                         shape: BoxShape.rectangle,
-                                        boxShadow: const [
+                                        boxShadow: [
                                           BoxShadow(
-                                            color: Colors.black,
-                                            offset: Offset(2, 2),
+                                            color: primaryText,
+                                            offset: const Offset(2, 2),
                                           ),
                                         ],
                                       ),
-                                      child: const Icon(
+                                      child: Icon(
                                         Icons.add_sharp,
-                                        color: Colors.white,
+                                        color: primaryText,
                                         size: 18,
                                       ),
                                     ),

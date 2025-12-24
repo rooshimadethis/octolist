@@ -261,26 +261,134 @@ class ExpressiveTheme {
   // THEME DATA
   // ============================================================================
 
+  /// Helper to get a dynamic curve based on vibe
+  static Curve vibeCurve(double score) {
+    return score > 0.5 ? Curves.easeInOutCubic : Curves.elasticOut;
+  }
+
+  /// Helper to get a dynamic duration based on vibe
+  static Duration vibeDuration(double score) {
+    return Duration(milliseconds: (400 + (800 * score)).toInt());
+  }
+
   /// Creates the MaterialApp ThemeData for the Expressive Anime prototype
-  static ThemeData get themeData {
+  static ThemeData themeData({double vibeScore = 0.0}) {
+    final Color scaffoldBg = Color.lerp(
+      surfaceWhite,
+      const Color(0xFF0A0A0A),
+      vibeScore,
+    )!;
+
+    // Use a hard switch for text color at the 0.5 threshold to ensure maximum readability.
+    final double textT = vibeScore < 0.5 ? 0.0 : 1.0;
+
+    final Color primaryText = Color.lerp(primaryBlack, surfaceWhite, textT)!;
+
+    final Color primaryColor = Color.lerp(
+      primaryBlack,
+      const Color(0xFF8B0000),
+      vibeScore,
+    )!;
+
     return ThemeData(
       useMaterial3: true,
-      scaffoldBackgroundColor: surfaceWhite,
+      scaffoldBackgroundColor: scaffoldBg,
       colorScheme: ColorScheme.fromSeed(
-        seedColor: primaryBlack,
-        primary: primaryBlack,
-        secondary: mangaRed,
-        surface: surfaceWhite,
-        brightness: Brightness.light,
+        seedColor: primaryColor,
+        primary: primaryColor,
+        secondary: Color.lerp(mangaRed, const Color(0xFF4A0000), vibeScore)!,
+        surface: scaffoldBg,
+        onSurface: primaryText,
+        brightness: vibeScore > 0.5 ? Brightness.dark : Brightness.light,
       ),
       textTheme: GoogleFonts.bangersTextTheme().copyWith(
-        headlineMedium: headlineMedium(),
-        titleLarge: titleLarge(),
+        headlineMedium: headlineMedium(
+          color: primaryText,
+        ).copyWith(letterSpacing: 1.2 - (0.5 * vibeScore)),
+        titleLarge: titleLarge(color: primaryText),
         titleMedium: GoogleFonts.roboto(
           fontWeight: FontWeight.bold,
-          color: primaryBlack,
+          color: primaryText,
         ),
       ),
     );
+  }
+
+  /// Static access to dynamic tokens for manual styling
+  static Color getPrimaryText(double score) {
+    // Hard switch at 0.5 for accessibility and clarity.
+    return score < 0.5 ? primaryBlack : surfaceWhite;
+  }
+
+  static Color getShadowColor(double score, [Color baseColor = primaryBlack]) {
+    final hsl = HSLColor.fromColor(baseColor);
+
+    // Vibe 0: Vibrant Pastel version (more visible)
+    // Darkened slightly to replace the contrast lost from removing the black skeleton
+    final pastel = hsl
+        .withLightness((hsl.lightness * 0.4 + 0.2).clamp(0.2, 0.7))
+        .withSaturation((hsl.saturation * 1.2).clamp(0.6, 1.0))
+        .toColor();
+
+    // Vibe 1: Darker/Serious version
+    final serious = hsl
+        .withLightness((hsl.lightness * 0.3).clamp(0.0, 1.0))
+        .withSaturation((hsl.saturation * 1.2).clamp(0.0, 1.0))
+        .toColor();
+
+    return Color.lerp(pastel, serious, score)!;
+  }
+
+  static Offset getShadowOffset(double score) =>
+      Offset.lerp(shadowOffsetXLarge, const Offset(10, 10), score)!;
+
+  /// Creates a dynamic image filter based on vibe score
+  /// Returns null if the effect would be invisible (vibe near 0)
+  ///
+  /// The filter desaturates and darkens images as vibe increases:
+  /// - 50% saturation reduction
+  /// - 30% brightness reduction
+  static ColorFilter? getImageFilter(double score) {
+    if (score < 0.1) return null;
+
+    // Interpolation factor with easing for smoother transitions
+    final t = Curves.easeInOut.transform(score);
+
+    // Target values: 50% desaturated + 70% brightness
+    // These values are derived from Rec.709 grayscale coefficients
+    // scaled by 0.7 for brightness reduction
+    const kDesatR = 0.4244, kDesatG1 = 0.2503, kDesatB1 = 0.0253;
+    const kDesatG2 = 0.6003, kDesatG3 = 0.0253;
+    const kDesatB2 = 0.2503, kDesatB3 = 0.3753;
+    const kDesatR2 = 0.0744;
+
+    // Lerp from identity matrix to target desaturated matrix
+    return ColorFilter.matrix([
+      1.0 + (kDesatR - 1.0) * t,
+      kDesatG1 * t,
+      kDesatB1 * t,
+      0,
+      0,
+      kDesatR2 * t,
+      1.0 + (kDesatG2 - 1.0) * t,
+      kDesatG3 * t,
+      0,
+      0,
+      kDesatR2 * t,
+      kDesatB2 * t,
+      1.0 + (kDesatB3 - 1.0) * t,
+      0,
+      0,
+      0,
+      0,
+      0,
+      1,
+      0,
+    ]);
+  }
+
+  /// Calculates the grain overlay opacity for a given vibe score
+  static double getGrainOpacity(double score) {
+    return score < 0.2 ? 0.0 : (score - 0.2) * 0.5;
   }
 }

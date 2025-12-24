@@ -3,33 +3,373 @@
     "Media": {
       "id": 20,
       "title": {
-        "userPreferred": "NARUTO",
-        "english": "Naruto"
+        "english": "Naruto",
+        "romaji": "NARUTO",
+        "native": "NARUTO -\u30ca\u30eb\u30c8-"
       },
       "coverImage": {
         "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx20-dE6UHbFFg1A5.jpg",
         "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx20-dE6UHbFFg1A5.jpg",
+        "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx20-dE6UHbFFg1A5.jpg",
         "color": "#e47850"
       },
-      "type": "ANIME",
-      "format": "TV",
-      "status": "FINISHED",
+      "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/20-HHxhPj5JD13a.jpg",
       "averageScore": 80,
       "episodes": 220,
-      "isAdult": false,
-      "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/20-HHxhPj5JD13a.jpg",
+      "genres": [
+        "Action",
+        "Adventure",
+        "Comedy",
+        "Drama",
+        "Fantasy",
+        "Supernatural"
+      ],
       "description": "Naruto Uzumaki, a hyperactive and knuckle-headed ninja, lives in Konohagakure, the Hidden Leaf village. Moments prior to his birth, a huge demon known as the Kyuubi, the Nine-tailed Fox, attacked Konohagakure and wreaked havoc. In order to put an end to the Kyuubi's rampage, the leader of the village, the 4th Hokage, sacrificed his life and sealed the monstrous beast inside the newborn Naruto. <br><br>\nShunned because of the presence of the Kyuubi inside him, Naruto struggles to find his place in the village. He strives to become the Hokage of Konohagakure, and he meets many friends and foes along the way. <br><br>\n(Source: MAL Rewrite)",
-      "startDate": {
-        "year": 2002,
-        "month": 10,
-        "day": 3
-      },
       "season": "FALL",
       "seasonYear": 2002,
+      "status": "FINISHED",
+      "characters": {
+        "edges": [
+          {
+            "role": "MAIN",
+            "node": {
+              "id": 145,
+              "name": {
+                "full": "Sakura Haruno"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/b145-IorfpI8arxeX.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/b145-IorfpI8arxeX.png"
+              }
+            }
+          },
+          {
+            "role": "MAIN",
+            "node": {
+              "id": 17,
+              "name": {
+                "full": "Naruto Uzumaki"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/b17-phjcWCkRuIhu.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/b17-phjcWCkRuIhu.png"
+              }
+            }
+          },
+          {
+            "role": "MAIN",
+            "node": {
+              "id": 85,
+              "name": {
+                "full": "Kakashi Hatake"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/b85-mkVBh2yjxjmx.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/b85-mkVBh2yjxjmx.png"
+              }
+            }
+          },
+          {
+            "role": "MAIN",
+            "node": {
+              "id": 13,
+              "name": {
+                "full": "Sasuke Uchiha"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/b13-SISLEw1oAD7a.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/b13-SISLEw1oAD7a.png"
+              }
+            }
+          },
+          {
+            "role": "SUPPORTING",
+            "node": {
+              "id": 23215,
+              "name": {
+                "full": "Sagi"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/n23215-psvpC0r5tkkI.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/n23215-psvpC0r5tkkI.png"
+              }
+            }
+          },
+          {
+            "role": "SUPPORTING",
+            "node": {
+              "id": 17546,
+              "name": {
+                "full": "Sazanami"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/n17546-zdnPQ3ZdKJjz.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/n17546-zdnPQ3ZdKJjz.png"
+              }
+            }
+          },
+          {
+            "role": "SUPPORTING",
+            "node": {
+              "id": 7571,
+              "name": {
+                "full": "Hiruzen Sarutobi"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/n7571-fKldLuBWUtCO.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/n7571-fKldLuBWUtCO.png"
+              }
+            }
+          },
+          {
+            "role": "SUPPORTING",
+            "node": {
+              "id": 3710,
+              "name": {
+                "full": "Tenten"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/b3710-OmDNYKi0Xfjk.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/b3710-OmDNYKi0Xfjk.png"
+              }
+            }
+          },
+          {
+            "role": "SUPPORTING",
+            "node": {
+              "id": 8810,
+              "name": {
+                "full": "Menma"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/n8810-eKdwxvVuAgjG.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/n8810-eKdwxvVuAgjG.png"
+              }
+            }
+          },
+          {
+            "role": "SUPPORTING",
+            "node": {
+              "id": 3052,
+              "name": {
+                "full": "Tayuya"
+              },
+              "image": {
+                "large": "https://s4.anilist.co/file/anilistcdn/character/large/n3052-1V7iclO45tia.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/character/medium/n3052-1V7iclO45tia.png"
+              }
+            }
+          }
+        ]
+      },
       "studios": {
         "nodes": [
           {
+            "id": 1,
             "name": "Studio Pierrot"
+          }
+        ]
+      },
+      "recommendations": {
+        "nodes": [
+          {
+            "mediaRecommendation": {
+              "id": 21,
+              "title": {
+                "english": "ONE PIECE",
+                "romaji": "ONE PIECE",
+                "native": "ONE PIECE"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21-ELSYx3yMPcKM.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21-ELSYx3yMPcKM.jpg",
+                "color": "#e49335"
+              },
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21-wf37VakJmZqs.jpg",
+              "averageScore": 88,
+              "episodes": null,
+              "genres": [
+                "Action",
+                "Adventure",
+                "Comedy",
+                "Drama",
+                "Fantasy"
+              ],
+              "description": "Gold Roger was known as the Pirate King, the strongest and most infamous being to have sailed the Grand Line. The capture and death of Roger by the World Government brought a change throughout the world. His last words before his death revealed the location of the greatest treasure in the world, One Piece. It was this revelation that brought about the Grand Age of Pirates, men who dreamed of finding One Piece (which promises an unlimited amount of riches and fame), and quite possibly the most coveted of titles for the person who found it, the title of the Pirate King.<br><br>\nEnter Monkey D. Luffy, a 17-year-old boy that defies your standard definition of a pirate. Rather than the popular persona of a wicked, hardened, toothless pirate who ransacks villages for fun, Luffy\u2019s reason for being a pirate is one of pure wonder; the thought of an exciting adventure and meeting new and intriguing people, along with finding One Piece, are his reasons of becoming a pirate. Following in the footsteps of his childhood hero, Luffy and his crew travel across the Grand Line, experiencing crazy adventures, unveiling dark mysteries and battling strong enemies, all in order to reach One Piece.<br><br>\n<b>*This includes following special episodes:</b><br>\n- Chopperman to the Rescue! Protect the TV Station by the Shore! (Episode 336)<br>\n- The Strongest Tag-Team! Luffy and Toriko's Hard Struggle! (Episode 492)<br>\n- Team Formation! Save Chopper (Episode 542)<br>\n- History's Strongest Collaboration vs. Glutton of the Sea (Episode 590)<br>\n- 20th Anniversary! Special Romance Dawn (Episode 907)",
+              "season": "FALL",
+              "seasonYear": 1999,
+              "status": "RELEASING"
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 97940,
+              "title": {
+                "english": "Black Clover",
+                "romaji": "Black Clover",
+                "native": "\u30d6\u30e9\u30c3\u30af\u30af\u30ed\u30fc\u30d0\u30fc"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97940-fyh8o7gNbha0.png",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97940-fyh8o7gNbha0.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx97940-fyh8o7gNbha0.png",
+                "color": "#d6c96b"
+              },
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/97940-1URQdQ4U1a0b.jpg",
+              "averageScore": 79,
+              "episodes": 170,
+              "genres": [
+                "Action",
+                "Adventure",
+                "Comedy",
+                "Fantasy"
+              ],
+              "description": "In a world where magic is everything, Asta and Yuno are both found abandoned at a church on the same day. While Yuno is gifted with exceptional magical powers, Asta is the only one in this world without any. At the age of fifteen, both receive grimoires, magic books that amplify their holder\u2019s magic. Asta\u2019s is a rare Grimoire of Anti-Magic that negates and repels his opponent\u2019s spells. Being opposite but good rivals, Yuno and Asta are ready for the hardest of challenges to achieve their common dream: to be the Wizard King. Giving up is never an option!<br>\n<br>\n(Source: Crunchyroll)",
+              "season": "FALL",
+              "seasonYear": 2017,
+              "status": "FINISHED"
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 21459,
+              "title": {
+                "english": "My Hero Academia",
+                "romaji": "Boku no Hero Academia",
+                "native": "\u50d5\u306e\u30d2\u30fc\u30ed\u30fc\u30a2\u30ab\u30c7\u30df\u30a2"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21459-nYh85uj2Fuwr.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21459-nYh85uj2Fuwr.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx21459-nYh85uj2Fuwr.jpg",
+                "color": "#ffd600"
+              },
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/21459-yeVkolGKdGUV.jpg",
+              "averageScore": 76,
+              "episodes": 13,
+              "genres": [
+                "Action",
+                "Adventure",
+                "Comedy"
+              ],
+              "description": "What would the world be like if 80 percent of the population manifested extraordinary superpowers called \u201cQuirks\u201d at age four? Heroes and villains would be battling it out everywhere! Becoming a hero would mean learning to use your power, but where would you go to study? U.A. High's Hero Program of course! But what would you do if you were one of the 20 percent who were born Quirkless?<br><br>\n\nMiddle school student Izuku Midoriya wants to be a hero more than anything, but he hasn't got an ounce of power in him. With no chance of ever getting into the prestigious U.A. High School for budding heroes, his life is looking more and more like a dead end. Then an encounter with All Might, the greatest hero of them all gives him a chance to change his destiny\u2026<br><br>\n\n(Source: Viz Media)",
+              "season": "SPRING",
+              "seasonYear": 2016,
+              "status": "FINISHED"
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 269,
+              "title": {
+                "english": "Bleach",
+                "romaji": "BLEACH",
+                "native": "BLEACH"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx269-d2GmRkJbMopq.png",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx269-d2GmRkJbMopq.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx269-d2GmRkJbMopq.png",
+                "color": "#f1a150"
+              },
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/269-08ar2HJOUAuL.jpg",
+              "averageScore": 79,
+              "episodes": 366,
+              "genres": [
+                "Action",
+                "Adventure",
+                "Supernatural"
+              ],
+              "description": "Ichigo Kurosaki is a rather normal high school student apart from the fact he has the ability to see ghosts. This ability never impacted his life in a major way until the day he encounters the Shinigami Kuchiki Rukia, who saves him and his family's lives from a Hollow, a corrupt spirit that devours human souls. \n<br><br>\nWounded during the fight against the Hollow, Rukia chooses the only option available to defeat the monster and passes her Shinigami powers to Ichigo. Now forced to act as a substitute until Rukia recovers, Ichigo hunts down the Hollows that plague his town. \n\n\n",
+              "season": "FALL",
+              "seasonYear": 2004,
+              "status": "FINISHED"
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 113415,
+              "title": {
+                "english": "JUJUTSU KAISEN",
+                "romaji": "Jujutsu Kaisen",
+                "native": "\u546a\u8853\u5efb\u6226"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-LHBAeoZDIsnF.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx113415-LHBAeoZDIsnF.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx113415-LHBAeoZDIsnF.jpg",
+                "color": "#e45d5d"
+              },
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/113415-jQBSkxWAAk83.jpg",
+              "averageScore": 84,
+              "episodes": 24,
+              "genres": [
+                "Action",
+                "Drama",
+                "Supernatural"
+              ],
+              "description": "A boy fights... for \"the right death.\"<br>\n<br>\nHardship, regret, shame: the negative feelings that humans feel become Curses that lurk in our everyday lives. The Curses run rampant throughout the world, capable of leading people to terrible misfortune and even death. What's more, the Curses can only be exorcised by another Curse.<br>\n<br>\nItadori Yuji is a boy with tremendous physical strength, though he lives a completely ordinary high school life. One day, to save a friend who has been attacked by Curses, he eats the finger of the Double-Faced Specter, taking the Curse into his own soul. From then on, he shares one body with the Double-Faced Specter. Guided by the most powerful of sorcerers, Gojou Satoru, Itadori is admitted to the Tokyo Metropolitan Technical High School of Sorcery, an organization that fights the Curses... and thus begins the heroic tale of a boy who became a Curse to exorcise a Curse, a life from which he could never turn back.\n<br><br>\n(Source: Crunchyroll)<br>\n<br>\n<i>Note: The first episode received an early web premiere on September 19th, 2020. The regular TV broadcast started on October 3rd, 2020.</i>",
+              "season": "FALL",
+              "seasonYear": 2020,
+              "status": "FINISHED"
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 97938,
+              "title": {
+                "english": "Boruto: Naruto Next Generations",
+                "romaji": "BORUTO: NARUTO NEXT GENERATIONS",
+                "native": "BORUTO-\u30dc\u30eb\u30c8- NARUTO NEXT GENERATIONS"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97938-BnF6M5yTaNB1.jpg",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97938-BnF6M5yTaNB1.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx97938-BnF6M5yTaNB1.jpg",
+                "color": "#00c9ff"
+              },
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/97938-cT6wkSRifTEC.jpg",
+              "averageScore": 56,
+              "episodes": 293,
+              "genres": [
+                "Action",
+                "Adventure",
+                "Fantasy"
+              ],
+              "description": "Naruto was a young shinobi with an incorrigible knack for mischief. He achieved his dream to become the greatest ninja in the village and his face sits atop the Hokage monument. But this is not his story... A new generation of ninja are ready to take the stage, led by Naruto's own son, Boruto!<br><br>\n\n(Source: VIZ Media)",
+              "season": "SPRING",
+              "seasonYear": 2017,
+              "status": "FINISHED"
+            }
+          },
+          {
+            "mediaRecommendation": {
+              "id": 11061,
+              "title": {
+                "english": "Hunter x Hunter (2011)",
+                "romaji": "HUNTER\u00d7HUNTER (2011)",
+                "native": "HUNTER\u00d7HUNTER (2011)"
+              },
+              "coverImage": {
+                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-y5gsT1hoHuHw.png",
+                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx11061-y5gsT1hoHuHw.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx11061-y5gsT1hoHuHw.png",
+                "color": "#f1d65d"
+              },
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/11061-8WkkTZ6duKpq.jpg",
+              "averageScore": 89,
+              "episodes": 148,
+              "genres": [
+                "Action",
+                "Adventure",
+                "Fantasy"
+              ],
+              "description": "A new adaption of the manga of the same name by Togashi Yoshihiro.<br><br>\nA Hunter is one who travels the world doing all sorts of dangerous tasks. From capturing criminals to searching deep within uncharted lands for any lost treasures. Gon is a young boy whose father disappeared long ago, being a Hunter. He believes if he could also follow his father's path, he could one day reunite with him.<br><br>\nAfter becoming 12, Gon leaves his home and takes on the task of entering the Hunter exam, notorious for its low success rate and high probability of death to become an official Hunter. He befriends the revenge-driven Kurapika, the doctor-to-be Leorio and the rebellious ex-assassin Killua in the exam, with their friendship prevailing throughout the many trials and threats they come upon taking on the dangerous career of a Hunter.",
+              "season": "FALL",
+              "seasonYear": 2011,
+              "status": "FINISHED"
+            }
           }
         ]
       },
@@ -40,20 +380,31 @@
             "node": {
               "id": 1735,
               "title": {
-                "userPreferred": "NARUTO: Shippuuden",
-                "english": "Naruto: Shippuden"
+                "english": "Naruto: Shippuden",
+                "romaji": "NARUTO: Shippuuden",
+                "native": "NARUTO -\u30ca\u30eb\u30c8- \u75be\u98a8\u4f1d"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx1735-kGfVm0YqCPcu.png",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx1735-kGfVm0YqCPcu.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx1735-kGfVm0YqCPcu.png",
                 "color": "#e4865d"
               },
-              "type": "ANIME",
-              "format": "TV",
-              "status": "FINISHED",
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/1735.jpg",
               "averageScore": 82,
               "episodes": 500,
-              "isAdult": false
+              "genres": [
+                "Action",
+                "Adventure",
+                "Comedy",
+                "Drama",
+                "Fantasy",
+                "Supernatural"
+              ],
+              "description": "Naruto: Shippuuden is the continuation of the original animated TV series Naruto. The story revolves around an older and slightly more matured Uzumaki Naruto and his quest to save his friend Uchiha Sasuke from the grips of the snake-like Shinobi, Orochimaru. After 2 and a half years Naruto finally returns to his village of Konoha, and sets about putting his ambitions to work, though it will not be easy, as he has amassed a few (more dangerous) enemies, in the likes of the shinobi organization; Akatsuki. <br><br>\n(Source: Anime News Network)",
+              "season": "WINTER",
+              "seasonYear": 2007,
+              "status": "FINISHED"
             }
           },
           {
@@ -61,20 +412,28 @@
             "node": {
               "id": 30011,
               "title": {
-                "userPreferred": "NARUTO",
-                "english": "Naruto"
+                "english": "Naruto",
+                "romaji": "NARUTO",
+                "native": "NARUTO -\u30ca\u30eb\u30c8-"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/large/nx30011-9yUF1dXWgDOx.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/medium/nx30011-9yUF1dXWgDOx.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/manga/cover/small/nx30011-9yUF1dXWgDOx.jpg",
                 "color": "#fe7828"
               },
-              "type": "MANGA",
-              "format": "MANGA",
-              "status": "FINISHED",
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/manga/banner/30011-pkX1O0EFqvV7.jpg",
               "averageScore": 79,
               "episodes": null,
-              "isAdult": false
+              "genres": [
+                "Action",
+                "Adventure",
+                "Supernatural"
+              ],
+              "description": "Before Naruto's birth, a great demon fox had attacked the Hidden Leaf Village. A man known as the 4th Hokage sealed the demon inside the newly born Naruto, causing him to unknowingly grow up detested by his fellow villagers. Despite his lack of talent in many areas of ninjutsu, Naruto strives for only one goal: to gain the title of Hokage, the strongest ninja in his village. Desiring the respect he never received, Naruto works towards his dream with fellow friends Sasuke and Sakura and mentor Kakashi as they go through many trials and battles that come with being a ninja. ",
+              "season": null,
+              "seasonYear": null,
+              "status": "FINISHED"
             }
           },
           {
@@ -82,20 +441,30 @@
             "node": {
               "id": 442,
               "title": {
-                "userPreferred": "NARUTO: Dai Katsugeki! Yuki Hime Ninpouchou Dattebayo!!",
-                "english": "Naruto the Movie: Ninja Clash in the Land of Snow"
+                "english": "Naruto the Movie: Ninja Clash in the Land of Snow",
+                "romaji": "NARUTO: Dai Katsugeki! Yuki Hime Ninpouchou Dattebayo!!",
+                "native": "\u5287\u5834\u7248 NARUTO -\u30ca\u30eb\u30c8- \u5927\u6d3b\u5287!\u96ea\u59eb\u5fcd\u6cd5\u5e16\u3060\u3063\u3066\u3070\u3088!!"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx442-VJbmIVTgmne3.png",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx442-VJbmIVTgmne3.png",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx442-VJbmIVTgmne3.png",
                 "color": "#e46b50"
               },
-              "type": "ANIME",
-              "format": "MOVIE",
-              "status": "FINISHED",
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/442-Mi9O1QwTaXqQ.jpg",
               "averageScore": 67,
               "episodes": 1,
-              "isAdult": false
+              "genres": [
+                "Action",
+                "Adventure",
+                "Comedy",
+                "Drama",
+                "Supernatural"
+              ],
+              "description": "Kakashi orders Naruto, Sasuke, and Sakura to watch a movie before their next mission. Naruto is a big fan of the lead actress. After the movie, they see the heroine in person and being chased. They help her and Naruto asks for an autograph but she wouldn't give him one. When the three returns, Kakashi tells them about their mission: to escort the actress to the Snow Country to film a new movie.\n<br><br>\n(Source: Anime News Network)",
+              "season": "SUMMER",
+              "seasonYear": 2004,
+              "status": "FINISHED"
             }
           },
           {
@@ -103,20 +472,28 @@
             "node": {
               "id": 594,
               "title": {
-                "userPreferred": "NARUTO: Takigakure no Shitou - Ore ga Eiyuu Dattebayo!",
-                "english": "Naruto: The Lost Story - Mission: Protect the Waterfall Village"
+                "english": "Naruto: The Lost Story - Mission: Protect the Waterfall Village",
+                "romaji": "NARUTO: Takigakure no Shitou - Ore ga Eiyuu Dattebayo!",
+                "native": "NARUTO -\u30ca\u30eb\u30c8- \u6edd\u96a0\u308c\u306e\u6b7b\u95d8 \u30aa\u30ec\u304c\u82f1\u96c4\u3060\u3063\u3066\u3070\u3088\uff01"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/594.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/594.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/594.jpg",
                 "color": "#d6ae5d"
               },
-              "type": "ANIME",
-              "format": "SPECIAL",
-              "status": "FINISHED",
+              "bannerImage": null,
               "averageScore": 64,
               "episodes": 1,
-              "isAdult": false
+              "genres": [
+                "Action",
+                "Adventure",
+                "Comedy"
+              ],
+              "description": "A routine rank-C mission turned into a full-blown battle as the Hidden Fall village is attacked by enemy ninjas. Now Naruto, Sasuke and Sakura must help the leader of the Hidden Fall, Shibuki, protect his village and show him what being a hero is all about.\n<br><br>\n(Source: Anime News Network)",
+              "season": "WINTER",
+              "seasonYear": 2003,
+              "status": "FINISHED"
             }
           },
           {
@@ -124,20 +501,27 @@
             "node": {
               "id": 761,
               "title": {
-                "userPreferred": "NARUTO: Akaki Yotsuba no Clover wo Sagase",
-                "english": null
+                "english": null,
+                "romaji": "NARUTO: Akaki Yotsuba no Clover wo Sagase",
+                "native": "NARUTO -\u30ca\u30eb\u30c8- \u7d05\u304d\u56db\u3064\u8449\u306e\u30af\u30ed\u30fc\u30d0\u30fc\u3092\u63a2\u305b"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/761.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/761.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/761.jpg",
                 "color": "#f17843"
               },
-              "type": "ANIME",
-              "format": "SPECIAL",
-              "status": "FINISHED",
+              "bannerImage": null,
               "averageScore": 62,
               "episodes": 1,
-              "isAdult": false
+              "genres": [
+                "Adventure",
+                "Comedy"
+              ],
+              "description": "The grandson of the 3rd Hokage, Konohamaru, finally has a crush on a girl, but he has a big problem she is soon to be moving away from the hidden leaf village. Konohamaru trying to make her stay seeks out the legendary crimson four-leaf clover, which is rumored to grant one wish.\n<br><br>\n(Source: Anime News Network)",
+              "season": "SPRING",
+              "seasonYear": 2003,
+              "status": "FINISHED"
             }
           },
           {
@@ -145,20 +529,30 @@
             "node": {
               "id": 936,
               "title": {
-                "userPreferred": "NARUTO: Dai Gekitotsu! Maboroshi no Chitei Iseki Dattebayo",
-                "english": "Naruto the Movie: Legend of the Stone of Gelel"
+                "english": "Naruto the Movie: Legend of the Stone of Gelel",
+                "romaji": "NARUTO: Dai Gekitotsu! Maboroshi no Chitei Iseki Dattebayo",
+                "native": "\u5287\u5834\u7248 NARUTO -\u30ca\u30eb\u30c8- \u5927\u6fc0\u7a81!\u5e7b\u306e\u5730\u5e95\u907a\u8de1\u3060\u3063\u3066\u3070\u3088"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx936-P1ogcIs07UR8.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx936-P1ogcIs07UR8.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx936-P1ogcIs07UR8.jpg",
                 "color": "#f18643"
               },
-              "type": "ANIME",
-              "format": "MOVIE",
-              "status": "FINISHED",
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/936-q1NJoF3NDEjF.jpg",
               "averageScore": 65,
               "episodes": 1,
-              "isAdult": false
+              "genres": [
+                "Adventure",
+                "Comedy",
+                "Drama",
+                "Fantasy",
+                "Supernatural"
+              ],
+              "description": "Naruto, Shikamaru, and Sakura are executing their mission of delivering a lost pet to a certain village. However, right in the midst of things, troops led by the mysterious knight, Temujin, attack them. In the violent battle, the three become separated. Temujin challenges Naruto to a fight and at the end of the fierce battle, both fall together from a high cliff. Furthermore, Shikamaru, having been left behind, beholds a giant moving fortress as it appears before his very eyes. In order to get a grasp on the situation, he infiltrates the fortress by himself, however once there he witnesses a frightening sight...\n<br><br>\n(Source: Anime News Network)",
+              "season": "SUMMER",
+              "seasonYear": 2005,
+              "status": "FINISHED"
             }
           },
           {
@@ -166,20 +560,27 @@
             "node": {
               "id": 1074,
               "title": {
-                "userPreferred": "NARUTO: Narutimate Hero 3: Tsui ni Gekitotsu! Jounin VS Genin!! Musabetsu Dairansen Taikai Kaisai!!",
-                "english": null
+                "english": null,
+                "romaji": "NARUTO: Narutimate Hero 3: Tsui ni Gekitotsu! Jounin VS Genin!! Musabetsu Dairansen Taikai Kaisai!!",
+                "native": "NARUTO -\u30ca\u30eb\u30c8- \u30ca\u30eb\u30c6\u30a3\u30e1\u30c3\u30c8\u30d2\u30fc\u30ed\u30fc3 \u3064\u3044\u306b\u6fc0\u7a81! \u4e0a\u5fcdVS\u4e0b\u5fcd!! \u7121\u5dee\u5225\u5927\u4e71\u6226\u5927\u4f1a\u958b\u50ac!!"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/1074.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/1074.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/1074.jpg",
                 "color": "#e48628"
               },
-              "type": "ANIME",
-              "format": "OVA",
-              "status": "FINISHED",
+              "bannerImage": null,
               "averageScore": 63,
               "episodes": 1,
-              "isAdult": false
+              "genres": [
+                "Adventure",
+                "Comedy"
+              ],
+              "description": "A contest is made by the Fifth Hokage called Jonin vs Genin. The point is to collect crystals for points, with the higher-ranked Chunin and Jonin holding crystals worth more points. The Genin have blue crystals, while the Chunin and Jonin have red crystals.<br><br>\nThe video shows various fights between the Genin and Jonin, which each instance ending in the Jonin unknowingly losing their crystal (or discarding it).<br>",
+              "season": "WINTER",
+              "seasonYear": 2006,
+              "status": "FINISHED"
             }
           },
           {
@@ -187,20 +588,27 @@
             "node": {
               "id": 2144,
               "title": {
-                "userPreferred": "NARUTO: Dai Koufun! Mikazukijima no Animal Panic Dattebayo!",
-                "english": "Naruto the Movie: Guardians of the Crescent Moon Kingdom"
+                "english": "Naruto the Movie: Guardians of the Crescent Moon Kingdom",
+                "romaji": "NARUTO: Dai Koufun! Mikazukijima no Animal Panic Dattebayo!",
+                "native": "\u5287\u5834\u7248 NARUTO -\u30ca\u30eb\u30c8- \u5927\u8208\u596e!\u307f\u304b\u3065\u304d\u5cf6\u306e\u30a2\u30cb\u30de\u30eb\u9a12\u52d5\u3060\u3063\u3066\u3070\u3088"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx2144-9FITEzdGnlWC.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx2144-9FITEzdGnlWC.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx2144-9FITEzdGnlWC.jpg",
                 "color": "#e48650"
               },
-              "type": "ANIME",
-              "format": "MOVIE",
-              "status": "FINISHED",
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/2144-KnEAcgexm2SI.jpg",
               "averageScore": 66,
               "episodes": 1,
-              "isAdult": false
+              "genres": [
+                "Action",
+                "Adventure"
+              ],
+              "description": "Led by Kakashi Hatake, Naruto Uzumaki, Sakura Haruno, and Rock Lee are tasked to escort the extravagant Prince Michiru Tsuki and his spoiled son Hikaru to the prosperous Land of Moon when the two return from a long trip around the world. As if guarding two whimsical high-ranked individuals was not challenging enough, the prince's reckless decision to acquire an entire circus during their journey\u2014mainly to entertain Hikaru's wish of owning the saber-toothed tiger featured in the show\u2014further propels the mission into disarray.<br>\n<br>\nJust as things are finally settling down, the arrival of Michiru's convoy at the Land of Moon is met with an unforeseen crisis\u2014the greedy Chief Minister Shabadaba has taken over the country with the assistance of mysterious, powerful ninjas. While Kakashi's team relentlessly fights the enemy by any means necessary, the two princes are forced to confront a new outlook on life through adversity.<br><br>\n(Source: MAL Rewrite)",
+              "season": "SUMMER",
+              "seasonYear": 2006,
+              "status": "FINISHED"
             }
           },
           {
@@ -208,20 +616,28 @@
             "node": {
               "id": 7367,
               "title": {
-                "userPreferred": "NARUTO: THE CROSS ROADS",
-                "english": null
+                "english": null,
+                "romaji": "NARUTO: THE CROSS ROADS",
+                "native": "NARUTO -\u30ca\u30eb\u30c8- THE CROSS ROADS"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/7367.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/7367.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/7367.jpg",
                 "color": "#e4780d"
               },
-              "type": "ANIME",
-              "format": "SPECIAL",
-              "status": "FINISHED",
+              "bannerImage": null,
               "averageScore": 63,
               "episodes": 1,
-              "isAdult": false
+              "genres": [
+                "Action",
+                "Adventure",
+                "Comedy"
+              ],
+              "description": "This year is the 10th anniversary of Naruto's serialization start. This work will feature an episode with Team Kakashi from Naruto's youth era. It will be surprisingly different from the TV series, don't miss it&#8252;",
+              "season": "FALL",
+              "seasonYear": 2009,
+              "status": "FINISHED"
             }
           },
           {
@@ -229,20 +645,27 @@
             "node": {
               "id": 10659,
               "title": {
-                "userPreferred": "NARUTO: Soyokazeden - Naruto to Mashin to Mitsu no Onegai Dattebayo!!",
-                "english": null
+                "english": null,
+                "romaji": "NARUTO: Soyokazeden - Naruto to Mashin to Mitsu no Onegai Dattebayo!!",
+                "native": "\u5287\u5834\u7248 NARUTO -\u30ca\u30eb\u30c8- \u305d\u3088\u304b\u305c\u4f1d \u30ca\u30eb\u30c8\u3068\u9b54\u795e\u30683\u3064\u306e\u304a\u9858\u3044\u3060\u3063\u3066\u3070\u3088!!"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/10659.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/10659.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/10659.jpg",
                 "color": "#e48650"
               },
-              "type": "ANIME",
-              "format": "SPECIAL",
-              "status": "FINISHED",
+              "bannerImage": null,
               "averageScore": 64,
               "episodes": 1,
-              "isAdult": false
+              "genres": [
+                "Action",
+                "Comedy"
+              ],
+              "description": "Naruto discovers a genie's bottle while he and the gang are at a genin grill party. When everyone finds out about the genie's ability to grant wishes, the ultimate chase begins.<br>\n<br>\n<i>Note: Screened together with NARUTO: Shippuuden - The Lost Tower</i>",
+              "season": "SUMMER",
+              "seasonYear": 2010,
+              "status": "FINISHED"
             }
           },
           {
@@ -250,20 +673,30 @@
             "node": {
               "id": 155348,
               "title": {
-                "userPreferred": "ROAD OF NARUTO",
-                "english": null
+                "english": null,
+                "romaji": "ROAD OF NARUTO",
+                "native": "ROAD OF NARUTO"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx155348-4ipji8SvTjyh.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx155348-4ipji8SvTjyh.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx155348-4ipji8SvTjyh.jpg",
                 "color": "#f18650"
               },
-              "type": "ANIME",
-              "format": "SPECIAL",
-              "status": "FINISHED",
+              "bannerImage": "https://s4.anilist.co/file/anilistcdn/media/anime/banner/155348-I6f4TQKslVx2.jpg",
               "averageScore": 82,
               "episodes": 1,
-              "isAdult": false
+              "genres": [
+                "Action",
+                "Adventure",
+                "Drama",
+                "Fantasy",
+                "Supernatural"
+              ],
+              "description": "A special animation made to commemorate the 20th anniversary of the <i>NARUTO</i> anime.",
+              "season": "FALL",
+              "seasonYear": 2022,
+              "status": "FINISHED"
             }
           },
           {
@@ -271,164 +704,28 @@
             "node": {
               "id": 162561,
               "title": {
-                "userPreferred": "NARUTO (Shinsaku Anime)",
-                "english": null
+                "english": null,
+                "romaji": "NARUTO (Shinsaku Anime)",
+                "native": "NARUTO -\u30ca\u30eb\u30c8- (\u65b0\u4f5c\u30a2\u30cb\u30e1)"
               },
               "coverImage": {
                 "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx162561-Uk4eZAwcmcWk.jpg",
                 "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx162561-Uk4eZAwcmcWk.jpg",
+                "medium": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/small/bx162561-Uk4eZAwcmcWk.jpg",
                 "color": "#43bbe4"
               },
-              "type": "ANIME",
-              "format": "TV",
-              "status": "NOT_YET_RELEASED",
+              "bannerImage": null,
               "averageScore": null,
               "episodes": 4,
-              "isAdult": false
-            }
-          }
-        ]
-      },
-      "recommendations": {
-        "nodes": [
-          {
-            "mediaRecommendation": {
-              "id": 21,
-              "title": {
-                "userPreferred": "ONE PIECE",
-                "english": "ONE PIECE"
-              },
-              "coverImage": {
-                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21-ELSYx3yMPcKM.jpg",
-                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21-ELSYx3yMPcKM.jpg",
-                "color": "#e49335"
-              },
-              "type": "ANIME",
-              "format": "TV",
-              "status": "RELEASING",
-              "averageScore": 88,
-              "episodes": null,
-              "isAdult": false
-            }
-          },
-          {
-            "mediaRecommendation": {
-              "id": 97940,
-              "title": {
-                "userPreferred": "Black Clover",
-                "english": "Black Clover"
-              },
-              "coverImage": {
-                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97940-fyh8o7gNbha0.png",
-                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97940-fyh8o7gNbha0.png",
-                "color": "#d6c96b"
-              },
-              "type": "ANIME",
-              "format": "TV",
-              "status": "FINISHED",
-              "averageScore": 79,
-              "episodes": 170,
-              "isAdult": false
-            }
-          },
-          {
-            "mediaRecommendation": {
-              "id": 21459,
-              "title": {
-                "userPreferred": "Boku no Hero Academia",
-                "english": "My Hero Academia"
-              },
-              "coverImage": {
-                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx21459-nYh85uj2Fuwr.jpg",
-                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx21459-nYh85uj2Fuwr.jpg",
-                "color": "#ffd600"
-              },
-              "type": "ANIME",
-              "format": "TV",
-              "status": "FINISHED",
-              "averageScore": 76,
-              "episodes": 13,
-              "isAdult": false
-            }
-          },
-          {
-            "mediaRecommendation": {
-              "id": 269,
-              "title": {
-                "userPreferred": "BLEACH",
-                "english": "Bleach"
-              },
-              "coverImage": {
-                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx269-d2GmRkJbMopq.png",
-                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx269-d2GmRkJbMopq.png",
-                "color": "#f1a150"
-              },
-              "type": "ANIME",
-              "format": "TV",
-              "status": "FINISHED",
-              "averageScore": 79,
-              "episodes": 366,
-              "isAdult": false
-            }
-          },
-          {
-            "mediaRecommendation": {
-              "id": 113415,
-              "title": {
-                "userPreferred": "Jujutsu Kaisen",
-                "english": "JUJUTSU KAISEN"
-              },
-              "coverImage": {
-                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx113415-LHBAeoZDIsnF.jpg",
-                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx113415-LHBAeoZDIsnF.jpg",
-                "color": "#e45d5d"
-              },
-              "type": "ANIME",
-              "format": "TV",
-              "status": "FINISHED",
-              "averageScore": 84,
-              "episodes": 24,
-              "isAdult": false
-            }
-          },
-          {
-            "mediaRecommendation": {
-              "id": 97938,
-              "title": {
-                "userPreferred": "BORUTO: NARUTO NEXT GENERATIONS",
-                "english": "Boruto: Naruto Next Generations"
-              },
-              "coverImage": {
-                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx97938-BnF6M5yTaNB1.jpg",
-                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx97938-BnF6M5yTaNB1.jpg",
-                "color": "#00c9ff"
-              },
-              "type": "ANIME",
-              "format": "TV",
-              "status": "FINISHED",
-              "averageScore": 56,
-              "episodes": 293,
-              "isAdult": false
-            }
-          },
-          {
-            "mediaRecommendation": {
-              "id": 11061,
-              "title": {
-                "userPreferred": "HUNTER\u00d7HUNTER (2011)",
-                "english": "Hunter x Hunter (2011)"
-              },
-              "coverImage": {
-                "extraLarge": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/large/bx11061-y5gsT1hoHuHw.png",
-                "large": "https://s4.anilist.co/file/anilistcdn/media/anime/cover/medium/bx11061-y5gsT1hoHuHw.png",
-                "color": "#f1d65d"
-              },
-              "type": "ANIME",
-              "format": "TV",
-              "status": "FINISHED",
-              "averageScore": 89,
-              "episodes": 148,
-              "isAdult": false
+              "genres": [
+                "Action",
+                "Adventure",
+                "Comedy"
+              ],
+              "description": "The official website for the <i>NARUTO</i> anime franchise announced a new anime project: to air four \"brand-new\" episodes to celebrate the TV anime's 20th anniversary back in 2022. <br><br>(Source: Anime News Network, edited) <br><br>\n<i>Note: Title, format, and relations are provisional and will be updated when more info is announced.</i>",
+              "season": null,
+              "seasonYear": null,
+              "status": "NOT_YET_RELEASED"
             }
           }
         ]

@@ -7,11 +7,20 @@ import '../theme/expressive_theme.dart';
 class SectionTitle extends StatelessWidget {
   final String title;
   final VoidCallback? onPressed;
+  final double vibeScore;
 
-  const SectionTitle({super.key, required this.title, this.onPressed});
+  const SectionTitle({
+    super.key,
+    required this.title,
+    this.onPressed,
+    this.vibeScore = 0.0,
+  });
 
   @override
   Widget build(BuildContext context) {
+    final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
+    final inverseText = Theme.of(context).scaffoldBackgroundColor;
+
     return Padding(
       padding: const EdgeInsets.symmetric(
         horizontal: ExpressiveTheme.spacingXL,
@@ -25,17 +34,15 @@ class SectionTitle extends StatelessWidget {
               vertical: ExpressiveTheme.spacingXS,
             ),
             decoration: BoxDecoration(
-              color: ExpressiveTheme.primaryBlack,
+              color: primaryText,
               border: Border.all(
-                color: ExpressiveTheme.primaryBlack,
+                color: primaryText,
                 width: ExpressiveTheme.borderWidthThin,
               ),
             ),
             child: Text(
               title.toUpperCase(),
-              style: ExpressiveTheme.titleLarge(
-                color: ExpressiveTheme.surfaceWhite,
-              ),
+              style: ExpressiveTheme.titleLarge(color: inverseText),
             ),
           ),
           if (onPressed != null)
@@ -46,7 +53,7 @@ class SectionTitle extends StatelessWidget {
                 style: GoogleFonts.teko(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: ExpressiveTheme.primaryBlack,
+                  color: primaryText,
                 ),
               ),
             ),

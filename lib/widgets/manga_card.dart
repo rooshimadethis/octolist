@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import '../models/anime.dart';
 import '../theme/expressive_theme.dart';
-import '../utils/color_parser.dart';
 import '../screens/anime_details_page.dart';
 import 'expressive_image.dart';
 import 'outlined_star.dart';
+
+import '../widgets/grain_overlay.dart';
 
 /// A reusable manga-style anime card with consistent styling
 /// Used across home, search, and library pages
@@ -13,17 +14,24 @@ class MangaCard extends StatelessWidget {
   final Anime anime;
   final double width;
   final Widget? overlayBadge;
+  final double vibeScore;
 
   const MangaCard({
     super.key,
     required this.anime,
     this.width = 180,
     this.overlayBadge,
+    this.vibeScore = 0.0,
   });
 
   @override
   Widget build(BuildContext context) {
-    final shadowColor = ColorParser.parseAnimeColor(anime.color);
+    final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
+    final shadowColor = ExpressiveTheme.getShadowColor(
+      vibeScore,
+      anime.parsedColor,
+    );
+    final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
 
     return RepaintBoundary(
       child: GestureDetector(
@@ -38,16 +46,19 @@ class MangaCard extends StatelessWidget {
         child: Container(
           width: width,
           decoration: BoxDecoration(
-            color: ExpressiveTheme.surfaceWhite,
+            color: scaffoldBg,
             border: Border.all(
               width: ExpressiveTheme.borderWidthMedium,
-              color: ExpressiveTheme.primaryBlack,
+              color: primaryText,
             ),
             borderRadius: BorderRadius.zero,
-            boxShadow: ExpressiveTheme.hardShadows(
-              color: shadowColor,
-              offset: ExpressiveTheme.shadowOffsetXLarge,
-            ),
+            boxShadow: [
+              BoxShadow(
+                color: shadowColor,
+                offset: ExpressiveTheme.getShadowOffset(vibeScore),
+                blurRadius: 0,
+              ),
+            ],
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -58,10 +69,31 @@ class MangaCard extends StatelessWidget {
                   children: [
                     Hero(
                       tag: 'anime_cover_${anime.id}',
-                      child: ExpressiveImage(
-                        imageUrl: anime.coverImage,
-                        fit: BoxFit.cover,
-                        skeletonColor: anime.parsedColor,
+                      child: Builder(
+                        builder: (context) {
+                          final filter = ExpressiveTheme.getImageFilter(
+                            vibeScore,
+                          );
+                          final image = ExpressiveImage(
+                            imageUrl: anime.coverImage,
+                            fit: BoxFit.cover,
+                            skeletonColor: anime.parsedColor,
+                          );
+
+                          if (filter == null) return image;
+
+                          return Stack(
+                            fit: StackFit.expand,
+                            children: [
+                              ColorFiltered(colorFilter: filter, child: image),
+                              GrainOverlay(
+                                opacity: ExpressiveTheme.getGrainOpacity(
+                                  vibeScore,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
                     ),
                     if (anime.averageScore != null)
@@ -74,24 +106,28 @@ class MangaCard extends StatelessWidget {
                             vertical: ExpressiveTheme.spacingXS,
                           ),
                           decoration: BoxDecoration(
-                            color: ExpressiveTheme.primaryBlack,
+                            color: primaryText,
                             border: Border.all(
-                              color: ExpressiveTheme.surfaceWhite,
+                              color: scaffoldBg,
                               width: ExpressiveTheme.borderWidthThin,
                             ),
-                            boxShadow: ExpressiveTheme.hardShadows(
-                              offset: ExpressiveTheme.shadowOffsetSmall,
-                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: shadowColor,
+                                offset: ExpressiveTheme.shadowOffsetSmall,
+                                blurRadius: 0,
+                              ),
+                            ],
                           ),
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const OutlinedStar(size: 12),
+                              OutlinedStar(size: 12, color: scaffoldBg),
                               const SizedBox(width: ExpressiveTheme.spacingXS),
                               Text(
                                 '${anime.averageScore}%',
                                 style: ExpressiveTheme.monoMedium(
-                                  color: ExpressiveTheme.surfaceWhite,
+                                  color: scaffoldBg,
                                 ),
                               ),
                             ],
@@ -109,11 +145,11 @@ class MangaCard extends StatelessWidget {
               ),
               Container(
                 padding: const EdgeInsets.all(ExpressiveTheme.spacingM),
-                decoration: const BoxDecoration(
+                decoration: BoxDecoration(
                   border: Border(
                     top: BorderSide(
                       width: ExpressiveTheme.borderWidthMedium,
-                      color: ExpressiveTheme.primaryBlack,
+                      color: primaryText,
                     ),
                   ),
                 ),
@@ -124,7 +160,7 @@ class MangaCard extends StatelessWidget {
                       anime.title.toUpperCase(),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: ExpressiveTheme.cardTitle(),
+                      style: ExpressiveTheme.cardTitle(color: primaryText),
                     ),
                   ],
                 ),

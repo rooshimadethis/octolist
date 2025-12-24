@@ -12,6 +12,8 @@ import '../widgets/expressive_image.dart';
 import '../widgets/outlined_star.dart';
 import '../widgets/metadata_chip.dart';
 import '../utils/color_parser.dart';
+import '../theme/expressive_theme.dart';
+import '../widgets/grain_overlay.dart';
 
 class AnimeDetailsPage extends StatefulWidget {
   final Anime anime;
@@ -61,24 +63,31 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   Future<void> _showListSelectionDialog(
     Anime anime,
     String? currentList,
+    double vibeScore,
   ) async {
     final listNames = await _animeService.getAvailableListNames();
 
     if (!mounted) return;
 
+    final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
+    final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
+
     showDialog(
       context: context,
       builder: (context) => Dialog(
-        backgroundColor: Colors.white,
-        shape: const RoundedRectangleBorder(
+        backgroundColor: scaffoldBg,
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.zero,
-          side: BorderSide(color: Colors.black, width: 3),
+          side: BorderSide(color: primaryText, width: 3),
         ),
         child: Container(
           decoration: BoxDecoration(
-            border: Border.all(color: Colors.black, width: 3),
-            boxShadow: const [
-              BoxShadow(color: Colors.black, offset: Offset(8, 8)),
+            border: Border.all(color: primaryText, width: 3),
+            boxShadow: [
+              BoxShadow(
+                color: ExpressiveTheme.getShadowColor(vibeScore),
+                offset: ExpressiveTheme.getShadowOffset(vibeScore),
+              ),
             ],
           ),
           child: Column(
@@ -87,10 +96,10 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
               // Dialog Header
               Container(
                 padding: const EdgeInsets.all(16),
-                decoration: const BoxDecoration(
-                  color: Colors.black,
+                decoration: BoxDecoration(
+                  color: primaryText,
                   border: Border(
-                    bottom: BorderSide(color: Colors.black, width: 3),
+                    bottom: BorderSide(color: primaryText, width: 3),
                   ),
                 ),
                 child: Row(
@@ -101,12 +110,12 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                         style: GoogleFonts.teko(
                           fontSize: 28,
                           fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                          color: scaffoldBg,
                         ),
                       ),
                     ),
                     IconButton(
-                      icon: const Icon(Icons.close, color: Colors.white),
+                      icon: Icon(Icons.close, color: scaffoldBg),
                       onPressed: () => Navigator.pop(context),
                     ),
                   ],
@@ -117,7 +126,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 shrinkWrap: true,
                 itemCount: listNames.length,
                 separatorBuilder: (_, __) =>
-                    const Divider(height: 1, thickness: 2, color: Colors.black),
+                    Divider(height: 1, thickness: 2, color: primaryText),
                 itemBuilder: (context, index) {
                   final listName = listNames[index];
                   final isCurrentList = listName == currentList;
@@ -126,11 +135,13 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                     onTap: () {
                       HapticFeedback.lightImpact();
                       Navigator.pop(context);
-                      _updateListStatus(anime, listName);
+                      _updateListStatus(anime, listName, vibeScore);
                     },
                     child: Container(
                       padding: const EdgeInsets.all(16),
-                      color: isCurrentList ? Colors.grey[200] : Colors.white,
+                      color: isCurrentList
+                          ? primaryText.withValues(alpha: 0.1)
+                          : scaffoldBg,
                       child: Row(
                         children: [
                           Expanded(
@@ -139,12 +150,12 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                               style: GoogleFonts.teko(
                                 fontSize: 20,
                                 fontWeight: FontWeight.bold,
-                                color: Colors.black,
+                                color: primaryText,
                               ),
                             ),
                           ),
                           if (isCurrentList)
-                            const Icon(Icons.check, color: Colors.black),
+                            Icon(Icons.check, color: primaryText),
                         ],
                       ),
                     ),
@@ -159,16 +170,19 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   }
 
   /// Update the list status for the anime
-  Future<void> _updateListStatus(Anime anime, String listName) async {
+  Future<void> _updateListStatus(
+    Anime anime,
+    String listName,
+    double vibeScore,
+  ) async {
     setState(() => _isUpdating = true);
-
     try {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Adding to $listName...'),
             duration: const Duration(milliseconds: 500),
-            backgroundColor: Colors.black,
+            backgroundColor: ExpressiveTheme.getPrimaryText(vibeScore),
           ),
         );
       }
@@ -199,7 +213,11 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   }
 
   /// Update episode progress with delta (+1 or -1)
-  Future<void> _updateEpisodeProgress(Anime anime, int delta) async {
+  Future<void> _updateEpisodeProgress(
+    Anime anime,
+    int delta,
+    double vibeScore,
+  ) async {
     try {
       if (delta > 0) {
         _confettiController.play();
@@ -210,10 +228,10 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Progress saved!'),
-            duration: Duration(milliseconds: 500),
-            backgroundColor: Colors.black,
+          SnackBar(
+            content: const Text('Progress saved!'),
+            duration: const Duration(milliseconds: 500),
+            backgroundColor: ExpressiveTheme.getPrimaryText(vibeScore),
           ),
         );
       }
@@ -252,8 +270,15 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
           }
         }
 
+        final vibeScore = store.vibeScore;
+        final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
+        final shadowOffset = ExpressiveTheme.getShadowOffset(vibeScore);
+        final vibeDuration = ExpressiveTheme.vibeDuration(vibeScore);
+        final vibeCurve = ExpressiveTheme.vibeCurve(vibeScore);
+        final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
+
         return Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: scaffoldBg,
           body: Stack(
             children: [
               FutureBuilder<Anime?>(
@@ -269,23 +294,27 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                             300, // Increased height for the covering effect
                         pinned: true,
                         stretch: true,
-                        backgroundColor: Colors.black,
+                        backgroundColor: primaryText,
                         leading: Container(
                           margin: const EdgeInsets.all(8),
                           decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(color: Colors.black, width: 2),
-                            boxShadow: const [
+                            color: scaffoldBg,
+                            border: Border.all(color: primaryText, width: 2),
+                            boxShadow: [
                               BoxShadow(
-                                color: Colors.black,
-                                offset: Offset(2, 2),
+                                color: ExpressiveTheme.getShadowColor(
+                                  vibeScore,
+                                  anime.parsedColor,
+                                ),
+                                offset: const Offset(2, 2),
+                                blurRadius: 0,
                               ),
                             ],
                           ),
                           child: IconButton(
-                            icon: const Icon(
+                            icon: Icon(
                               Icons.arrow_back_rounded,
-                              color: Colors.black,
+                              color: primaryText,
                             ),
                             onPressed: () => Navigator.pop(context),
                             padding: EdgeInsets.zero,
@@ -333,11 +362,11 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                 Container(color: Colors.black),
 
                               // Decoration / Border
-                              const DecoratedBox(
+                              DecoratedBox(
                                 decoration: BoxDecoration(
                                   border: Border(
                                     bottom: BorderSide(
-                                      color: Colors.black,
+                                      color: primaryText,
                                       width: 4,
                                     ),
                                   ),
@@ -359,16 +388,48 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                       ),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: shadowColor,
-                                          offset: const Offset(8, 8),
+                                          color: ExpressiveTheme.getShadowColor(
+                                            vibeScore,
+                                            anime.parsedColor,
+                                          ),
+                                          offset:
+                                              ExpressiveTheme.getShadowOffset(
+                                                vibeScore,
+                                              ),
                                           blurRadius: 0,
                                         ),
                                       ],
                                     ),
-                                    child: ExpressiveImage(
-                                      imageUrl: anime.coverImage,
-                                      fit: BoxFit.cover,
-                                      skeletonColor: anime.parsedColor,
+                                    child: Builder(
+                                      builder: (context) {
+                                        final filter =
+                                            ExpressiveTheme.getImageFilter(
+                                              vibeScore,
+                                            );
+                                        final image = ExpressiveImage(
+                                          imageUrl: anime.coverImage,
+                                          fit: BoxFit.cover,
+                                          skeletonColor: anime.parsedColor,
+                                        );
+
+                                        if (filter == null) return image;
+
+                                        return Stack(
+                                          fit: StackFit.expand,
+                                          children: [
+                                            ColorFiltered(
+                                              colorFilter: filter,
+                                              child: image,
+                                            ),
+                                            GrainOverlay(
+                                              opacity:
+                                                  ExpressiveTheme.getGrainOpacity(
+                                                    vibeScore,
+                                                  ),
+                                            ),
+                                          ],
+                                        );
+                                      },
                                     ),
                                   ),
                                 ),
@@ -379,8 +440,8 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                       ),
                       SliverToBoxAdapter(
                         child: Container(
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
+                          decoration: BoxDecoration(
+                            color: scaffoldBg,
                             // No rounded top, maybe just a hard separation
                           ),
                           child: Padding(
@@ -404,17 +465,25 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                           Expanded(
                                             child:
                                                 Text(
-                                                  anime.title.toUpperCase(),
-                                                  style: GoogleFonts.teko(
-                                                    fontSize: 42,
-                                                    fontWeight: FontWeight.bold,
-                                                    height: 0.9,
-                                                    color: Colors.black,
-                                                  ),
-                                                ).animate().fadeIn().slideY(
-                                                  begin: 0.2,
-                                                  end: 0,
-                                                ),
+                                                      anime.title.toUpperCase(),
+                                                      style: GoogleFonts.teko(
+                                                        fontSize: 42,
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        height: 0.9,
+                                                        color: primaryText,
+                                                      ),
+                                                    )
+                                                    .animate()
+                                                    .fadeIn(
+                                                      duration: vibeDuration,
+                                                    )
+                                                    .slideY(
+                                                      begin: 0.2,
+                                                      end: 0,
+                                                      duration: vibeDuration,
+                                                      curve: vibeCurve,
+                                                    ),
                                           ),
                                           if (anime.averageScore != null)
                                             Container(
@@ -424,22 +493,33 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                     vertical: 8,
                                                   ),
                                               decoration: BoxDecoration(
-                                                color: Colors.white,
+                                                color: scaffoldBg,
                                                 border: Border.all(
-                                                  color: Colors.black,
+                                                  color: primaryText,
                                                   width: 2,
                                                 ),
                                                 boxShadow: [
                                                   BoxShadow(
-                                                    color: shadowColor,
-                                                    offset: const Offset(4, 4),
+                                                    color:
+                                                        ExpressiveTheme.getShadowColor(
+                                                          vibeScore,
+                                                          anime.parsedColor,
+                                                        ),
+                                                    offset:
+                                                        ExpressiveTheme.getShadowOffset(
+                                                          vibeScore,
+                                                        ) /
+                                                        2,
                                                     blurRadius: 0,
                                                   ),
                                                 ],
                                               ),
                                               child: Row(
                                                 children: [
-                                                  const OutlinedStar(size: 18),
+                                                  OutlinedStar(
+                                                    size: 18,
+                                                    color: primaryText,
+                                                  ),
                                                   const SizedBox(width: 4),
                                                   Text(
                                                     '${anime.averageScore}%',
@@ -447,12 +527,16 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                         GoogleFonts.robotoMono(
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          color: Colors.black,
+                                                          color: primaryText,
                                                         ),
                                                   ),
                                                 ],
                                               ),
-                                            ).animate().scale(delay: 200.ms),
+                                            ).animate().scale(
+                                              delay: 200.ms,
+                                              duration: vibeDuration,
+                                              curve: vibeCurve,
+                                            ),
                                         ],
                                       ),
                                       const SizedBox(height: 16),
@@ -499,7 +583,10 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                 ),
                                               ),
                                         ],
-                                      ).animate().fadeIn(delay: 300.ms),
+                                      ).animate().fadeIn(
+                                        delay: 300.ms,
+                                        duration: vibeDuration,
+                                      ),
                                       const SizedBox(height: 24),
                                       // Action Button
                                       SizedBox(
@@ -513,6 +600,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                       _showListSelectionDialog(
                                                         anime,
                                                         currentListName,
+                                                        vibeScore,
                                                       );
                                                     },
                                               icon: Icon(
@@ -532,22 +620,21 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                 ),
                                               ),
                                               style: ElevatedButton.styleFrom(
-                                                backgroundColor: Colors.black,
-                                                foregroundColor: Colors.white,
+                                                backgroundColor: primaryText,
+                                                foregroundColor: scaffoldBg,
                                                 padding:
                                                     const EdgeInsets.symmetric(
                                                       vertical: 16,
                                                     ),
                                                 elevation: 0,
-                                                shape:
-                                                    const RoundedRectangleBorder(
-                                                      borderRadius:
-                                                          BorderRadius.zero,
-                                                      side: BorderSide(
-                                                        color: Colors.black,
-                                                        width: 3,
-                                                      ),
-                                                    ),
+                                                shape: RoundedRectangleBorder(
+                                                  borderRadius:
+                                                      BorderRadius.zero,
+                                                  side: BorderSide(
+                                                    color: primaryText,
+                                                    width: 3,
+                                                  ),
+                                                ),
                                                 disabledBackgroundColor:
                                                     Colors.grey,
                                               ),
@@ -562,15 +649,19 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                         Container(
                                           padding: const EdgeInsets.all(16),
                                           decoration: BoxDecoration(
-                                            color: Colors.white,
+                                            color: scaffoldBg,
                                             border: Border.all(
-                                              color: Colors.black,
+                                              color: primaryText,
                                               width: 3,
                                             ),
                                             boxShadow: [
                                               BoxShadow(
-                                                color: shadowColor,
-                                                offset: const Offset(6, 6),
+                                                color:
+                                                    ExpressiveTheme.getShadowColor(
+                                                      vibeScore,
+                                                      anime.parsedColor,
+                                                    ).withValues(alpha: 0.5),
+                                                offset: shadowOffset,
                                                 blurRadius: 0,
                                               ),
                                             ],
@@ -590,7 +681,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                       fontSize: 20,
                                                       fontWeight:
                                                           FontWeight.bold,
-                                                      color: Colors.black,
+                                                      color: primaryText,
                                                     ),
                                                   ),
                                                   Text(
@@ -600,7 +691,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                           fontSize: 18,
                                                           fontWeight:
                                                               FontWeight.bold,
-                                                          color: Colors.black,
+                                                          color: primaryText,
                                                         ),
                                                   ),
                                                 ],
@@ -611,14 +702,14 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                 height: 12,
                                                 decoration: BoxDecoration(
                                                   border: Border.all(
-                                                    color: Colors.black,
+                                                    color: primaryText,
                                                     width: 2,
                                                   ),
                                                 ),
                                                 child: Stack(
                                                   children: [
                                                     Container(
-                                                      color: Colors.white,
+                                                      color: scaffoldBg,
                                                     ),
                                                     FractionallySizedBox(
                                                       widthFactor:
@@ -627,7 +718,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                                 anime.episodes!
                                                           : 0,
                                                       child: Container(
-                                                        color: shadowColor,
+                                                        color: primaryText,
                                                       ),
                                                     ),
                                                   ],
@@ -647,31 +738,35 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                               _updateEpisodeProgress(
                                                                 anime,
                                                                 -1,
+                                                                vibeScore,
                                                               );
                                                             },
                                                       style: ElevatedButton.styleFrom(
                                                         backgroundColor:
-                                                            Colors.white,
+                                                            scaffoldBg,
                                                         foregroundColor:
-                                                            Colors.black,
+                                                            primaryText,
                                                         padding:
                                                             const EdgeInsets.symmetric(
                                                               vertical: 12,
                                                             ),
                                                         elevation: 0,
                                                         shape:
-                                                            const RoundedRectangleBorder(
+                                                            RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .zero,
                                                               side: BorderSide(
-                                                                color: Colors
-                                                                    .black,
+                                                                color:
+                                                                    primaryText,
                                                                 width: 2,
                                                               ),
                                                             ),
                                                         disabledBackgroundColor:
-                                                            Colors.grey[300],
+                                                            Colors.grey
+                                                                .withValues(
+                                                                  alpha: 0.3,
+                                                                ),
                                                       ),
                                                       child: Text(
                                                         '-',
@@ -695,26 +790,27 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                               _updateEpisodeProgress(
                                                                 anime,
                                                                 1,
+                                                                vibeScore,
                                                               );
                                                             },
                                                       style: ElevatedButton.styleFrom(
                                                         backgroundColor:
-                                                            Colors.black,
+                                                            primaryText,
                                                         foregroundColor:
-                                                            Colors.white,
+                                                            scaffoldBg,
                                                         padding:
                                                             const EdgeInsets.symmetric(
                                                               vertical: 12,
                                                             ),
                                                         elevation: 0,
                                                         shape:
-                                                            const RoundedRectangleBorder(
+                                                            RoundedRectangleBorder(
                                                               borderRadius:
                                                                   BorderRadius
                                                                       .zero,
                                                               side: BorderSide(
-                                                                color: Colors
-                                                                    .black,
+                                                                color:
+                                                                    primaryText,
                                                                 width: 2,
                                                               ),
                                                             ),
@@ -744,7 +840,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                         style: GoogleFonts.teko(
                                           fontSize: 32,
                                           fontWeight: FontWeight.bold,
-                                          color: Colors.black,
+                                          color: primaryText,
                                           fontStyle: FontStyle.italic,
                                         ),
                                       ),
@@ -754,7 +850,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                         decoration: BoxDecoration(
                                           border: Border(
                                             left: BorderSide(
-                                              color: Colors.black,
+                                              color: primaryText,
                                               width: 4,
                                             ),
                                           ),
@@ -769,7 +865,9 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               .textTheme
                                               .bodyLarge
                                               ?.copyWith(
-                                                color: Colors.black87,
+                                                color: primaryText.withValues(
+                                                  alpha: 0.8,
+                                                ),
                                                 height: 1.5,
                                                 fontFamily:
                                                     GoogleFonts.robotoMono()
@@ -792,7 +890,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                       style: GoogleFonts.teko(
                                         fontSize: 32,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: primaryText,
                                         fontStyle: FontStyle.italic,
                                       ),
                                     ),
@@ -1056,7 +1154,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                 style: GoogleFonts.teko(
                                                   fontSize: 16,
                                                   fontWeight: FontWeight.bold,
-                                                  color: Colors.black,
+                                                  color: primaryText,
                                                   height: 1.1,
                                                 ),
                                               ),

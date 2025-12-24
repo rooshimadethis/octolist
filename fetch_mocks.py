@@ -5,98 +5,113 @@ import time
 import argparse
 
 # Create a directory for mocks if it doesn't exist
-output_dir = "mock_data"
+output_dir = "assets/anilist_data"
 if not os.path.exists(output_dir):
     os.makedirs(output_dir)
 
 url = 'https://graphql.anilist.co'
 
 # --- FRAGMENTS ---
-media_short_fragment = '''
-fragment MediaShort on Media {
+# Matching lib/graphql/queries.dart:MediaFragment
+media_fragment = '''
+fragment MediaFragment on Media {
   id
   title {
-    userPreferred
     english
+    romaji
+    native
   }
   coverImage {
     extraLarge
     large
+    medium
     color
   }
-  type
-  format
-  status(version: 2)
+  bannerImage
   averageScore
   episodes
-  isAdult
+  genres
+  description
+  season
+  seasonYear
+  status
 }
 '''
 
 # --- QUERIES ---
 
+# Matching lib/graphql/queries.dart:getTrendingAnime
 query_home = f'''
-query GetHomeData {{
-  trending: Page(page: 1, perPage: 10) {{
+query GetTrendingAnime($page: Int = 1, $perPage: Int = 10) {{
+  trending: Page(page: $page, perPage: $perPage) {{
     media(sort: TRENDING_DESC, type: ANIME) {{
-      ...MediaShort
+      ...MediaFragment
     }}
   }}
 }}
-{media_short_fragment}
+{media_fragment}
 '''
 
+# Matching lib/graphql/queries.dart:getAnimeDetails
 query_details = f'''
-query GetMediaDetails($id: Int) {{
+query GetAnimeDetails($id: Int) {{
   Media(id: $id) {{
-    ...MediaShort
-    bannerImage
-    description
-    startDate {{
-      year
-      month
-      day
+    ...MediaFragment
+    characters(sort: ROLE, perPage: 10) {{
+      edges {{
+        role
+        node {{
+          id
+          name {{
+            full
+          }}
+          image {{
+            large
+            medium
+          }}
+        }}
+      }}
     }}
-    season
-    seasonYear
     studios(isMain: true) {{
       nodes {{
+        id
         name
+      }}
+    }}
+    recommendations(sort: RATING_DESC, perPage: 7) {{
+      nodes {{
+        mediaRecommendation {{
+           ...MediaFragment
+        }}
       }}
     }}
     relations {{
       edges {{
         relationType
         node {{
-          ...MediaShort
-        }}
-      }}
-    }}
-    recommendations(perPage: 7, sort: RATING_DESC) {{
-      nodes {{
-        mediaRecommendation {{
-          ...MediaShort
+          ...MediaFragment
         }}
       }}
     }}
   }}
 }}
-{media_short_fragment}
+{media_fragment}
 '''
 
+# Matching lib/graphql/queries.dart:searchAnime
 query_search = f'''
-query SearchAnime($search: String, $genre: String, $year: Int, $season: MediaSeason) {{
-  Page(page: 1, perPage: 10) {{
-    media(search: $search, genre: $genre, seasonYear: $year, season: $season, type: ANIME, sort: POPULARITY_DESC) {{
-      ...MediaShort
+query SearchAnime($query: String, $page: Int = 1, $perPage: Int = 10) {{
+  Page(page: $page, perPage: $perPage) {{
+    media(search: $query, type: ANIME, sort: SEARCH_MATCH) {{
+      ...MediaFragment
     }}
   }}
 }}
-{media_short_fragment}
+{media_fragment}
 '''
 
-# Redundant queries (GetUserLibrary, GetUserProfile) removed in favor of consolidated GetViewerData
-
+# Matching lib/graphql/queries.dart:getViewer and getMediaList
+# Note: Combining them as fetch_mocks.py does
 query_viewer = f'''
 query GetViewerData($name: String) {{
   Viewer: User(name: $name) {{
@@ -104,6 +119,7 @@ query GetViewerData($name: String) {{
     name
     avatar {{
       large
+      medium
     }}
     statistics {{
       anime {{
@@ -120,7 +136,7 @@ query GetViewerData($name: String) {{
     favourites {{
       anime {{
         nodes {{
-          ...MediaShort
+          ...MediaFragment
         }}
       }}
       characters {{
@@ -157,13 +173,13 @@ query GetViewerData($name: String) {{
         progress
         updatedAt
         media {{
-          ...MediaShort
+          ...MediaFragment
         }}
       }}
     }}
   }}
 }}
-{media_short_fragment}
+{media_fragment}
 '''
 
 def fetch_and_save(name, query, variables=None):

@@ -1,20 +1,113 @@
-/// Utility functions for generating time-based greetings
+/// Helper class to determine greetings based on time of day and vibe score.
 class GreetingHelper {
   GreetingHelper._();
 
-  /// Returns a greeting based on the current time of day
-  /// - Morning: before 12:00
-  /// - Afternoon: 12:00 - 16:59
-  /// - Evening: 17:00 onwards
-  static String getGreeting() {
-    final hour = DateTime.now().hour;
+  /// Returns a [GreetingData] object containing the main title and subtitle
+  /// for the current time and vibe.
+  static GreetingData getGreeting({double vibeScore = 0.0}) {
+    final timeRange = _getTimeRange();
+    final vibeLevel = _getVibeLevel(vibeScore);
 
-    if (hour < 12) {
-      return 'Good Morning';
-    } else if (hour < 17) {
-      return 'Good Afternoon';
-    } else {
-      return 'Good Evening';
-    }
+    return _greetings[vibeLevel]?[timeRange] ??
+        const GreetingData('Hello.', 'Welcome back.');
   }
+
+  static TimeRange _getTimeRange() {
+    final hour = DateTime.now().hour;
+    if (hour >= 5 && hour < 12) return TimeRange.morning;
+    if (hour >= 12 && hour < 18) return TimeRange.afternoon;
+    if (hour >= 18) return TimeRange.evening;
+    return TimeRange.deepNight;
+  }
+
+  static VibeLevel _getVibeLevel(double score) {
+    if (score < 0.25) return VibeLevel.radiant;
+    if (score < 0.50) return VibeLevel.neutral;
+    if (score < 0.75) return VibeLevel.grim;
+    return VibeLevel.abyssal;
+  }
+
+
+  static const Map<VibeLevel, Map<TimeRange, GreetingData>> _greetings = {
+    VibeLevel.radiant: {
+      TimeRange.morning: GreetingData(
+        'Rise and shine!',
+        'A new adventure awaits! ☀️',
+      ),
+      TimeRange.afternoon: GreetingData(
+        'The sun is high!',
+        'Time for a snack and a show? 🍰',
+      ),
+      TimeRange.evening: GreetingData(
+        'Rest well!',
+        'Dream of magic and starlight. ✨',
+      ),
+      TimeRange.deepNight: GreetingData(
+        'Still awake?',
+        'Just one more episode! 🌙',
+      ),
+    },
+    VibeLevel.neutral: {
+      TimeRange.morning: GreetingData(
+        'Good morning.',
+        'Ready to update your list?',
+      ),
+      TimeRange.afternoon: GreetingData(
+        'Checking in?',
+        'Here is what\'s trending today.',
+      ),
+      TimeRange.evening: GreetingData(
+        'Settling in?',
+        'What\'s on the menu tonight?',
+      ),
+      TimeRange.deepNight: GreetingData(
+        'Burning the midnight oil, are we?',
+        '',
+      ),
+    },
+    VibeLevel.grim: {
+      TimeRange.morning: GreetingData(
+        'The sun rises,',
+        'but the shadows linger.',
+      ),
+      TimeRange.afternoon: GreetingData(
+        'The glare is harsh.',
+        'Hide away for a while.',
+      ),
+      TimeRange.evening: GreetingData(
+        'The day ends.',
+        'Now, the real stories begin.',
+      ),
+      TimeRange.deepNight: GreetingData(
+        'The world is quiet.',
+        'Only you and the screen.',
+      ),
+    },
+    VibeLevel.abyssal: {
+      TimeRange.morning: GreetingData('You survived the night...', 'for now.'),
+      TimeRange.afternoon: GreetingData(
+        'Noon offers no protection.',
+        'We see you.',
+      ),
+      TimeRange.evening: GreetingData(
+        'Surrender to the dark.',
+        'The void is watching.',
+      ),
+      TimeRange.deepNight: GreetingData(
+        'Go to sleep.',
+        'Before something else wakes up.',
+      ),
+    },
+  };
+}
+
+enum VibeLevel { radiant, neutral, grim, abyssal }
+
+enum TimeRange { morning, afternoon, evening, deepNight }
+
+class GreetingData {
+  final String title;
+  final String subtitle;
+
+  const GreetingData(this.title, this.subtitle);
 }

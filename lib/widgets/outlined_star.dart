@@ -4,15 +4,16 @@ import 'package:flutter/material.dart';
 /// Used for displaying ratings and scores throughout the app
 class OutlinedStar extends StatelessWidget {
   final double size;
+  final Color color;
 
-  const OutlinedStar({super.key, this.size = 18});
+  const OutlinedStar({super.key, this.size = 18, this.color = Colors.black});
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
-        Icon(Icons.star, size: size, color: Colors.black),
-        Icon(Icons.star_border, size: size, color: Colors.black),
+        Icon(Icons.star, size: size, color: color),
+        Icon(Icons.star_border, size: size, color: color),
         Positioned(
           top: 1,
           left: 1,

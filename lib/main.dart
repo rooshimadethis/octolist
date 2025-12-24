@@ -34,10 +34,15 @@ void main() async {
   // Initialize AuthService
   await AuthService().init();
 
+  // Initialize AnimeStore
+  final animeStore = AnimeStore(
+    service: useMocks ? MockDataService() : AniListService(),
+  );
+  await animeStore.initVibe();
+
   runApp(
-    ChangeNotifierProvider(
-      create: (_) =>
-          AnimeStore(service: useMocks ? MockDataService() : AniListService()),
+    ChangeNotifierProvider.value(
+      value: animeStore,
       child: const ExpressiveApp(),
     ),
   );
