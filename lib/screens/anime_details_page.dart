@@ -306,30 +306,10 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                         pinned: true,
                         stretch: true,
                         backgroundColor: primaryText,
-                        leading: Container(
-                          margin: const EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: scaffoldBg,
-                            border: Border.all(color: primaryText, width: 2),
-                            boxShadow: [
-                              BoxShadow(
-                                color: ExpressiveTheme.getShadowColor(
-                                  vibeScore,
-                                  anime.parsedColor,
-                                ),
-                                offset: const Offset(2, 2),
-                                blurRadius: 0,
-                              ),
-                            ],
-                          ),
-                          child: IconButton(
-                            icon: Icon(
-                              Icons.arrow_back_rounded,
-                              color: primaryText,
-                            ),
-                            onPressed: () => Navigator.pop(context),
-                            padding: EdgeInsets.zero,
-                          ),
+                        leading: _PressableBackButton(
+                          vibeScore: vibeScore,
+                          parsedColor: anime.parsedColor,
+                          onPressed: () => Navigator.pop(context),
                         ),
                         flexibleSpace: FlexibleSpaceBar(
                           stretchModes: const [
@@ -994,7 +974,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                   ),
                                   const SizedBox(height: 16),
                                   SizedBox(
-                                    height: 220,
+                                    height: 240,
                                     child: ListView.separated(
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 24,
@@ -1065,7 +1045,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                   ),
                                   const SizedBox(height: 16),
                                   SizedBox(
-                                    height: 200,
+                                    height: 240,
                                     child: ListView.separated(
                                       padding: const EdgeInsets.symmetric(
                                         horizontal: 24,
@@ -1238,6 +1218,79 @@ class _PressableVerticalCardState extends State<_PressableVerticalCard> {
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PressableBackButton extends StatefulWidget {
+  final double vibeScore;
+  final Color parsedColor;
+  final VoidCallback onPressed;
+
+  const _PressableBackButton({
+    required this.vibeScore,
+    required this.parsedColor,
+    required this.onPressed,
+  });
+
+  @override
+  State<_PressableBackButton> createState() => _PressableBackButtonState();
+}
+
+class _PressableBackButtonState extends State<_PressableBackButton> {
+  bool _isPressed = false;
+
+  @override
+  Widget build(BuildContext context) {
+    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
+    final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
+    final shadowColor = ExpressiveTheme.getShadowColor(
+      widget.vibeScore,
+      widget.parsedColor,
+    );
+    final shadowOffset = const Offset(2, 2);
+
+    return Center(
+      child: GestureDetector(
+        onTapDown: (_) => setState(() => _isPressed = true),
+        onTapCancel: () => setState(() => _isPressed = false),
+        onTap: () async {
+          setState(() => _isPressed = true);
+          HapticFeedback.lightImpact();
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (mounted) setState(() => _isPressed = false);
+          await Future.delayed(const Duration(milliseconds: 50));
+          if (context.mounted) {
+            widget.onPressed();
+          }
+        },
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 100),
+          curve: Curves.easeOutQuad,
+          margin: const EdgeInsets.all(8),
+          transform: Matrix4.translationValues(
+            _isPressed ? shadowOffset.dx : 0,
+            _isPressed ? shadowOffset.dy : 0,
+            0,
+          ),
+          decoration: BoxDecoration(
+            color: scaffoldBg,
+            border: Border.all(color: primaryText, width: 2),
+            boxShadow: [
+              BoxShadow(
+                color: shadowColor,
+                offset: _isPressed ? Offset.zero : shadowOffset,
+                blurRadius: 0,
+              ),
+            ],
+          ),
+          child: SizedBox(
+            width: 40,
+            height: 40,
+            child: Icon(Icons.arrow_back_rounded, color: primaryText),
+          ),
         ),
       ),
     );
