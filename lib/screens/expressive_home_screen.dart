@@ -193,7 +193,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
         children: [
           SafeArea(
             child: SingleChildScrollView(
-              padding: const EdgeInsets.symmetric(vertical: 24.0),
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -213,12 +213,12 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
 
                         return Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  const SizedBox(height: 20),
                                   FittedBox(
                                     fit: BoxFit.scaleDown,
                                     alignment: Alignment.centerLeft,
@@ -229,12 +229,12 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                           .textTheme
                                           .headlineMedium
                                           ?.copyWith(
-                                            fontSize: 32,
+                                            fontSize: 28,
                                             fontStyle: FontStyle.italic,
                                           ),
                                     ),
                                   ),
-                                  const SizedBox(height: 4),
+                                  const SizedBox(height: 2),
                                   if (isGuest)
                                     ElevatedButton(
                                       onPressed: () async {
@@ -274,8 +274,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   else if (greeting.subtitle.isNotEmpty)
                                     Container(
                                       padding: const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 2,
+                                        horizontal: 6,
+                                        vertical: 1,
                                       ),
                                       color: vibe.primaryText,
                                       child: Text(
@@ -283,8 +283,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                         style: GoogleFonts.teko(
                                           color: vibe.scaffoldBg,
                                           fontWeight: FontWeight.bold,
-                                          letterSpacing: 2.0,
-                                          fontSize: 15,
+                                          letterSpacing: 1.5,
+                                          fontSize: 13,
                                         ),
                                       ),
                                     ),
@@ -292,7 +292,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               ),
                             ),
                             const SizedBox(
-                              width: 16,
+                              width: 12,
                             ), // Spacing between text and avatar
                             if (avatarUrl != null && avatarUrl.isNotEmpty)
                               GestureDetector(
@@ -334,7 +334,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                       },
                     ),
                   ),
-                  const SizedBox(height: 32),
+                  const SizedBox(height: 24),
                   // Watching Section (Always visible - shows skeletons when empty)
                   Consumer<AnimeStore>(
                     builder: (context, store, _) {
