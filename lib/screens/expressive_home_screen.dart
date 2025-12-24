@@ -381,44 +381,52 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   const SizedBox(width: 16),
                               itemBuilder: (context, index) {
                                 if (entries.isEmpty) {
-                                  // Limit animation to first 3 skeleton cards
-                                  return const AnimeCardSkeleton(
-                                        isHorizontal: true,
-                                      )
-                                      .animate(delay: (index < 3 ? index * 100 : 0).ms)
-                                      .fadeIn(duration: vibe.animationDuration);
+                                  // Only animate first 3 skeleton cards
+                                  final skeleton = const AnimeCardSkeleton(
+                                    isHorizontal: true,
+                                  );
+
+                                  if (index < 3) {
+                                    return skeleton
+                                        .animate(delay: (index * 100).ms)
+                                        .fadeIn(duration: vibe.animationDuration);
+                                  }
+                                  return skeleton;
                                 }
 
                                 // Render Real Card
                                 final entry = entries[index];
+                                final card = WatchingCard(
+                                  entry: entry,
+                                  progress: entry.progress,
+                                  heroPrefix: 'home',
+                                  vibeScore: widget.vibeScore,
+                                  onIncrement: () => _updateProgress(
+                                    entry,
+                                    entry.progress,
+                                    1,
+                                  ),
+                                );
+
+                                // Only animate first 3 items to reduce animation overhead
+                                if (index < 3) {
+                                  return KeyedSubtree(
+                                    key: ValueKey('watching_${entry.id}'),
+                                    child: card
+                                        .animate(delay: (index * 100).ms)
+                                        .fadeIn(duration: vibe.animationDuration)
+                                        .slideX(
+                                          begin: 0.3,
+                                          end: 0,
+                                          curve: vibe.animationCurve,
+                                          duration: vibe.animationDuration,
+                                        ),
+                                  );
+                                }
+
                                 return KeyedSubtree(
                                   key: ValueKey('watching_${entry.id}'),
-                                  child:
-                                      WatchingCard(
-                                            entry: entry,
-                                            progress: entry.progress,
-                                            heroPrefix: 'home',
-                                            vibeScore: widget.vibeScore,
-                                            onIncrement: () => _updateProgress(
-                                              entry,
-                                              entry.progress,
-                                              1,
-                                            ),
-                                          )
-                                          .animate(
-                                            // Limit staggered animation to first 3 items
-                                            delay: (index < 3 ? index * 100 : 0)
-                                                .ms,
-                                          )
-                                          .fadeIn(
-                                            duration: vibe.animationDuration,
-                                          )
-                                          .slideX(
-                                            begin: 0.3,
-                                            end: 0,
-                                            curve: vibe.animationCurve,
-                                            duration: vibe.animationDuration,
-                                          ),
+                                  child: card,
                                 );
                               },
                             ),
@@ -459,10 +467,15 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             itemCount: 4,
                             separatorBuilder: (_, __) =>
                                 const SizedBox(width: 16),
-                            itemBuilder: (context, index) =>
-                                const AnimeCardSkeleton()
-                                    .animate(delay: (index < 3 ? index * 100 : 0).ms)
-                                    .fadeIn(duration: vibe.animationDuration),
+                            itemBuilder: (context, index) {
+                              final skeleton = const AnimeCardSkeleton();
+                              if (index < 3) {
+                                return skeleton
+                                    .animate(delay: (index * 100).ms)
+                                    .fadeIn(duration: vibe.animationDuration);
+                              }
+                              return skeleton;
+                            },
                           );
                         }
                         final animeList = snapshot.data ?? [];
@@ -474,28 +487,33 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                           separatorBuilder: (_, __) =>
                               const SizedBox(width: 16),
                           itemBuilder: (context, index) {
+                            final card = Padding(
+                              padding: const EdgeInsets.only(bottom: 10),
+                              child: MangaCard(
+                                anime: animeList[index],
+                                vibeScore: widget.vibeScore,
+                              ),
+                            );
+
+                            // Only animate first 3 items to reduce animation overhead
+                            if (index < 3) {
+                              return KeyedSubtree(
+                                key: ValueKey('trending_${animeList[index].id}'),
+                                child: card
+                                    .animate(delay: (index * 100).ms)
+                                    .fadeIn(duration: vibe.animationDuration)
+                                    .scale(
+                                      begin: const Offset(0.8, 0.8),
+                                      end: const Offset(1.0, 1.0),
+                                      curve: vibe.animationCurve,
+                                      duration: vibe.animationDuration,
+                                    ),
+                              );
+                            }
+
                             return KeyedSubtree(
                               key: ValueKey('trending_${animeList[index].id}'),
-                              child:
-                                  Padding(
-                                        padding: const EdgeInsets.only(
-                                          bottom: 10,
-                                        ),
-                                        child: MangaCard(
-                                          anime: animeList[index],
-                                          vibeScore: widget.vibeScore,
-                                        ),
-                                      )
-                                      .animate(
-                                        delay: (index < 3 ? index * 100 : 0).ms,
-                                      )
-                                      .fadeIn(duration: vibe.animationDuration)
-                                      .scale(
-                                        begin: const Offset(0.8, 0.8),
-                                        end: const Offset(1.0, 1.0),
-                                        curve: vibe.animationCurve,
-                                        duration: vibe.animationDuration,
-                                      ),
+                              child: card,
                             );
                           },
                         );

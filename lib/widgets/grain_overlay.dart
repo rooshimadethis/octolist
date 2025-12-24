@@ -15,12 +15,15 @@ class GrainOverlay extends StatelessWidget {
   Widget build(BuildContext context) {
     if (opacity <= 0.01) return const SizedBox.shrink();
 
-    return IgnorePointer(
-      child: Opacity(
-        opacity: opacity.clamp(0.0, 1.0),
-        child: CustomPaint(
-          painter: _GrainPainter(color: color),
-          size: Size.infinite,
+    // Wrap in RepaintBoundary to isolate repaints and improve performance
+    return RepaintBoundary(
+      child: IgnorePointer(
+        child: Opacity(
+          opacity: opacity.clamp(0.0, 1.0),
+          child: CustomPaint(
+            painter: _GrainPainter(color: color),
+            size: Size.infinite,
+          ),
         ),
       ),
     );
@@ -82,7 +85,11 @@ class _GrainPainter extends CustomPainter {
     required double maxSize,
     required double baseOpacity,
   }) {
-    final count = (size.width * size.height * density).toInt().clamp(0, 3000);
+    // Reduced max count from 3000 to 1500 for better performance
+    final count = (size.width * size.height * density).toInt().clamp(0, 1500);
+
+    // Pre-allocate paint object to avoid repeated allocations
+    final paint = Paint()..style = PaintingStyle.fill;
 
     for (int i = 0; i < count; i++) {
       final x = random.nextDouble() * size.width;
@@ -90,9 +97,8 @@ class _GrainPainter extends CustomPainter {
       final grainSize = minSize + random.nextDouble() * (maxSize - minSize);
       final opacity = baseOpacity * (0.5 + random.nextDouble() * 0.5);
 
-      final paint = Paint()
-        ..color = color.withValues(alpha: opacity)
-        ..style = PaintingStyle.fill;
+      // Reuse paint object and only update color
+      paint.color = color.withValues(alpha: opacity);
 
       // Draw small circles instead of points for smoother grain
       canvas.drawCircle(Offset(x, y), grainSize, paint);

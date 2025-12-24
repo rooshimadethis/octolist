@@ -50,16 +50,33 @@ class PressableCard extends StatefulWidget {
 class _PressableCardState extends State<PressableCard> {
   bool _isPressed = false;
 
+  void _handleTapDown(TapDownDetails details) {
+    if (!_isPressed) {
+      setState(() => _isPressed = true);
+    }
+  }
+
+  void _handleTapCancel() {
+    if (_isPressed) {
+      setState(() => _isPressed = false);
+    }
+  }
+
   Future<void> _handleTap() async {
     if (widget.onTap == null) return;
 
-    setState(() => _isPressed = true);
+    // Only trigger haptic if not already pressed (avoid duplicate from onTapDown)
+    if (!_isPressed) {
+      setState(() => _isPressed = true);
+    }
     HapticFeedback.lightImpact();
 
     // Wait for animation to complete
     await Future.delayed(widget.tapDelay ?? widget.animationDuration);
 
-    if (mounted) setState(() => _isPressed = false);
+    if (mounted && _isPressed) {
+      setState(() => _isPressed = false);
+    }
 
     // Small delay before navigation for better UX
     await Future.delayed(const Duration(milliseconds: 50));
@@ -72,8 +89,8 @@ class _PressableCardState extends State<PressableCard> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTapDown: (_) => setState(() => _isPressed = true),
-      onTapCancel: () => setState(() => _isPressed = false),
+      onTapDown: _handleTapDown,
+      onTapCancel: _handleTapCancel,
       onTap: _handleTap,
       child: AnimatedContainer(
         duration: widget.animationDuration,

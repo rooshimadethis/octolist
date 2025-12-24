@@ -255,23 +255,53 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
   @override
   bool get wantKeepAlive => true;
 
-  @override
-  Widget build(BuildContext context) {
-    super.build(context);
-    final store = context.watch<AnimeStore>();
-    final rawEntries = store.getListEntries(widget.listName);
+  // Cache sorted entries to avoid re-sorting on every build
+  List<WatchingEntry>? _cachedEntries;
+  LibrarySortMode? _lastSortMode;
+  int? _lastEntriesHash;
 
-    // Apply sorting
-    final List<WatchingEntry> entries = List.from(rawEntries);
-    if (widget.sortMode == LibrarySortMode.name) {
+  List<WatchingEntry> _getSortedEntries(
+    List<WatchingEntry> rawEntries,
+    LibrarySortMode sortMode,
+  ) {
+    // Calculate a simple hash of the entries to detect changes
+    final entriesHash = rawEntries.length * 1000 + rawEntries.hashCode;
+
+    // Only re-sort if sort mode changed or entries changed
+    if (_cachedEntries != null &&
+        _lastSortMode == sortMode &&
+        _lastEntriesHash == entriesHash) {
+      return _cachedEntries!;
+    }
+
+    // Create a copy and sort
+    final entries = List<WatchingEntry>.from(rawEntries);
+    if (sortMode == LibrarySortMode.name) {
       entries.sort((a, b) => a.anime.title.compareTo(b.anime.title));
-    } else if (widget.sortMode == LibrarySortMode.lastUpdated) {
+    } else if (sortMode == LibrarySortMode.lastUpdated) {
       entries.sort((a, b) {
         final timeA = a.updatedAt ?? 0;
         final timeB = b.updatedAt ?? 0;
         return timeB.compareTo(timeA); // Newest first
       });
     }
+
+    // Cache the result
+    _cachedEntries = entries;
+    _lastSortMode = sortMode;
+    _lastEntriesHash = entriesHash;
+
+    return entries;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    super.build(context);
+    final store = context.watch<AnimeStore>();
+    final rawEntries = store.getListEntries(widget.listName);
+
+    // Use cached sorted entries
+    final entries = _getSortedEntries(rawEntries, widget.sortMode);
 
     if (entries.isEmpty) {
       if (store.isLoading) {
@@ -364,39 +394,43 @@ class _AnimatedWatchingCard extends StatefulWidget {
 }
 
 class _AnimatedWatchingCardState extends State<_AnimatedWatchingCard> {
-  bool _hasAnimated = false;
+  double _animationTarget = 0;
 
   @override
   Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key('watching_card_visibility_${widget.entry.id}'),
-      onVisibilityChanged: (info) {
-        // Trigger animation as soon as card starts becoming visible
-        if (!_hasAnimated && info.visibleFraction > 0.01) {
-          setState(() {
-            _hasAnimated = true;
-          });
-        }
-      },
-      child:
-          WatchingCard(
-                entry: widget.entry,
-                progress: widget.entry.progress,
-                heroPrefix: 'library',
-                vibeScore: widget.vibeScore,
-                onIncrement: () =>
-                    widget.onUpdate(widget.entry, widget.listName, 1),
-                width: double.infinity,
-                height: 140,
-              )
-              .animate(target: _hasAnimated ? 1 : 0)
-              // .fadeIn(begin: 0.5, duration: widget.vibeDuration * 0.8)
-              .scale(
-                begin: const Offset(0.9, 0.9),
-                end: const Offset(1.0, 1.0),
-                duration: widget.vibeDuration * 0.8,
-                curve: widget.vibeCurve,
-              ),
+    return RepaintBoundary(
+      child: VisibilityDetector(
+        key: Key('watching_card_visibility_${widget.entry.id}'),
+        onVisibilityChanged: (info) {
+          // Trigger animation as soon as card starts becoming visible
+          // Only update if we haven't animated yet (target is still 0)
+          if (_animationTarget == 0 && info.visibleFraction > 0.05) {
+            // Use setState but only once per card
+            setState(() {
+              _animationTarget = 1;
+            });
+          }
+        },
+        child:
+            WatchingCard(
+                  entry: widget.entry,
+                  progress: widget.entry.progress,
+                  heroPrefix: 'library',
+                  vibeScore: widget.vibeScore,
+                  onIncrement: () =>
+                      widget.onUpdate(widget.entry, widget.listName, 1),
+                  width: double.infinity,
+                  height: 140,
+                )
+                .animate(target: _animationTarget)
+                // .fadeIn(begin: 0.5, duration: widget.vibeDuration * 0.8)
+                .scale(
+                  begin: const Offset(0.9, 0.9),
+                  end: const Offset(1.0, 1.0),
+                  duration: widget.vibeDuration * 0.8,
+                  curve: widget.vibeCurve,
+                ),
+      ),
     );
   }
 }
@@ -420,29 +454,33 @@ class _AnimatedLibraryCard extends StatefulWidget {
 }
 
 class _AnimatedLibraryCardState extends State<_AnimatedLibraryCard> {
-  bool _hasAnimated = false;
+  double _animationTarget = 0;
 
   @override
   Widget build(BuildContext context) {
-    return VisibilityDetector(
-      key: Key('library_card_visibility_${widget.entry.id}'),
-      onVisibilityChanged: (info) {
-        // Trigger animation as soon as card starts becoming visible
-        if (!_hasAnimated && info.visibleFraction > 0.05) {
-          setState(() {
-            _hasAnimated = true;
-          });
-        }
-      },
-      child: _LibraryCard(entry: widget.entry, vibeScore: widget.vibeScore)
-          .animate(target: _hasAnimated ? 1 : 0)
-          .fadeIn(begin: 0.75, duration: widget.vibeDuration * 0.8)
-          .scale(
-            begin: const Offset(0.9, 0.9),
-            end: const Offset(1.0, 1.0),
-            duration: widget.vibeDuration * 0.8,
-            curve: widget.vibeCurve,
-          ),
+    return RepaintBoundary(
+      child: VisibilityDetector(
+        key: Key('library_card_visibility_${widget.entry.id}'),
+        onVisibilityChanged: (info) {
+          // Trigger animation as soon as card starts becoming visible
+          // Only update if we haven't animated yet (target is still 0)
+          if (_animationTarget == 0 && info.visibleFraction > 0.05) {
+            // Use setState but only once per card
+            setState(() {
+              _animationTarget = 1;
+            });
+          }
+        },
+        child: _LibraryCard(entry: widget.entry, vibeScore: widget.vibeScore)
+            .animate(target: _animationTarget)
+            .fadeIn(begin: 0.75, duration: widget.vibeDuration * 0.8)
+            .scale(
+              begin: const Offset(0.9, 0.9),
+              end: const Offset(1.0, 1.0),
+              duration: widget.vibeDuration * 0.8,
+              curve: widget.vibeCurve,
+            ),
+      ),
     );
   }
 }
@@ -460,17 +498,29 @@ class _LibraryCard extends StatefulWidget {
 class _LibraryCardState extends State<_LibraryCard> {
   bool _isPressed = false;
 
+  // Cache expensive theme calculations
+  late final Color _shadowColor;
+  late final Offset _shadowOffset;
+  late final Color _primaryText;
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    super.initState();
     final anime = widget.entry.anime;
-    // Calculate color once or use theme helper
-    // Accessing theme inside build to ensure reactivity
-    final shadowColor = ExpressiveTheme.getShadowColor(
+    _shadowColor = ExpressiveTheme.getShadowColor(
       widget.vibeScore,
       anime.parsedColor,
     );
-    final shadowOffset = ExpressiveTheme.getShadowOffset(widget.vibeScore);
-    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
+    _shadowOffset = ExpressiveTheme.getShadowOffset(widget.vibeScore);
+    _primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final anime = widget.entry.anime;
+    final shadowColor = _shadowColor;
+    final shadowOffset = _shadowOffset;
+    final primaryText = _primaryText;
 
     return GestureDetector(
       onTapDown: (_) => setState(() => _isPressed = true),
