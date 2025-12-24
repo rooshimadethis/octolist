@@ -915,14 +915,18 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               width: 100,
                                               height: 100,
                                               decoration: BoxDecoration(
+                                                color: scaffoldBg,
                                                 border: Border.all(
-                                                  color: Colors.black,
+                                                  color: primaryText,
                                                   width: 2,
                                                 ),
-                                                boxShadow: const [
+                                                boxShadow: [
                                                   BoxShadow(
-                                                    color: Colors.black,
-                                                    offset: Offset(4, 4),
+                                                    color:
+                                                        ExpressiveTheme.getShadowColor(
+                                                          vibeScore,
+                                                        ),
+                                                    offset: const Offset(4, 4),
                                                   ),
                                                 ],
                                               ),
@@ -940,7 +944,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               style: GoogleFonts.teko(
                                                 fontWeight: FontWeight.bold,
                                                 fontSize: 18,
-                                                color: Colors.black,
+                                                color: primaryText,
                                               ),
                                             ),
                                             Text(
@@ -948,7 +952,9 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               style: GoogleFonts.robotoMono(
                                                 fontSize: 10,
                                                 fontWeight: FontWeight.bold,
-                                                color: Colors.grey[700],
+                                                color: primaryText.withValues(
+                                                  alpha: 0.7,
+                                                ),
                                               ),
                                             ),
                                           ],
@@ -969,7 +975,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                       style: GoogleFonts.teko(
                                         fontSize: 42,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: primaryText,
                                         fontStyle: FontStyle.italic,
                                       ),
                                     ),
@@ -1010,16 +1016,23 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                     width: 100,
                                                     height: 140,
                                                     decoration: BoxDecoration(
+                                                      color: scaffoldBg,
                                                       borderRadius:
                                                           BorderRadius.zero,
                                                       border: Border.all(
-                                                        color: Colors.black,
+                                                        color: primaryText,
                                                         width: 3,
                                                       ),
-                                                      boxShadow: const [
+                                                      boxShadow: [
                                                         BoxShadow(
-                                                          color: Colors.black,
-                                                          offset: Offset(4, 4),
+                                                          color:
+                                                              ExpressiveTheme.getShadowColor(
+                                                                vibeScore,
+                                                              ),
+                                                          offset: const Offset(
+                                                            4,
+                                                            4,
+                                                          ),
                                                         ),
                                                       ],
                                                     ),
@@ -1042,7 +1055,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                             vertical: 3,
                                                           ),
                                                       decoration: BoxDecoration(
-                                                        color: Colors.black,
+                                                        color: primaryText,
                                                         borderRadius:
                                                             BorderRadius
                                                                 .zero, // Sharp
@@ -1055,7 +1068,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                             )
                                                             .toUpperCase(),
                                                         style: GoogleFonts.teko(
-                                                          color: Colors.white,
+                                                          color: scaffoldBg,
                                                           fontSize: 12,
                                                           fontWeight:
                                                               FontWeight.bold,
@@ -1076,7 +1089,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                   style: GoogleFonts.teko(
                                                     fontSize: 16,
                                                     fontWeight: FontWeight.bold,
-                                                    color: Colors.black,
+                                                    color: primaryText,
                                                     height: 1.1,
                                                   ),
                                                 ),
@@ -1099,7 +1112,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                       style: GoogleFonts.teko(
                                         fontSize: 42,
                                         fontWeight: FontWeight.bold,
-                                        color: Colors.black,
+                                        color: primaryText,
                                         fontStyle: FontStyle.italic,
                                       ),
                                     ),
@@ -1126,15 +1139,19 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               width: 100,
                                               height: 140,
                                               decoration: BoxDecoration(
+                                                color: scaffoldBg,
                                                 borderRadius: BorderRadius.zero,
                                                 border: Border.all(
-                                                  color: Colors.black,
+                                                  color: primaryText,
                                                   width: 3,
                                                 ),
-                                                boxShadow: const [
+                                                boxShadow: [
                                                   BoxShadow(
-                                                    color: Colors.black,
-                                                    offset: Offset(4, 4),
+                                                    color:
+                                                        ExpressiveTheme.getShadowColor(
+                                                          vibeScore,
+                                                        ),
+                                                    offset: const Offset(4, 4),
                                                   ),
                                                 ],
                                               ),
