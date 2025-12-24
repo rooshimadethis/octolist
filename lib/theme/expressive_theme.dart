@@ -162,8 +162,8 @@ class ExpressiveTheme {
   // ANIMATION
   // ============================================================================
 
-  static const Duration animationFast = Duration(milliseconds: 200);
-  static const Duration animationMedium = Duration(milliseconds: 300);
+  static const Duration animationFast = Duration(milliseconds: 300);
+  static const Duration animationMedium = Duration(milliseconds: 400);
   static const Duration animationSlow = Duration(milliseconds: 500);
 
   // ============================================================================

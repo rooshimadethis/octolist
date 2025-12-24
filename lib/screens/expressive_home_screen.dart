@@ -180,6 +180,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   }
 
   void _performSearch() {
+    // Dismiss keyboard
+    FocusScope.of(context).unfocus();
+
     setState(() {
       _searchFuture = _searchQuery.isEmpty
           ? Future.value([])
