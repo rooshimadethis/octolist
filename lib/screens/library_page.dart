@@ -390,7 +390,7 @@ class _AnimatedWatchingCardState extends State<_AnimatedWatchingCard> {
                 height: 140,
               )
               .animate(target: _hasAnimated ? 1 : 0)
-              .fadeIn(begin: 0.5, duration: widget.vibeDuration * 0.8)
+              // .fadeIn(begin: 0.5, duration: widget.vibeDuration * 0.8)
               .scale(
                 begin: const Offset(0.9, 0.9),
                 end: const Offset(1.0, 1.0),
