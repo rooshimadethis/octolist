@@ -360,14 +360,21 @@ class ExpressiveTheme {
 
   /// Creates the MaterialApp ThemeData for the Expressive Anime prototype
   static ThemeData themeData({double vibeScore = 0.0}) {
+    // Smoothly transition background from pure white to dark with easing
+    final t = Curves.easeInOutCubic.transform(vibeScore);
     final Color scaffoldBg = Color.lerp(
       surfaceWhite,
       const Color(0xFF0A0A0A),
-      vibeScore,
+      t,
     )!;
 
-    // Use a hard switch for text color at the 0.5 threshold to ensure maximum readability.
-    final double textT = vibeScore < 0.5 ? 0.0 : 1.0;
+    // Use a very narrow text transition to maintain readability
+    // Text stays pure black/white except in a small transition zone
+    final double textT = vibeScore < 0.47
+        ? 0.0
+        : vibeScore > 0.53
+            ? 1.0
+            : (vibeScore - 0.47) / 0.06; // Linear interpolation in the 0.47-0.53 range
 
     final Color primaryText = Color.lerp(primaryBlack, surfaceWhite, textT)!;
 
@@ -401,17 +408,27 @@ class ExpressiveTheme {
 
   /// Get the scaffold background color for a given vibe score
   static Color getScaffoldBg(double score) {
-    return Color.lerp(surfaceWhite, const Color(0xFF0A0A0A), score)!;
+    // Use an easing curve to make the middle values less muddy
+    // This keeps backgrounds cleaner in the 0.3-0.7 range
+    final t = Curves.easeInOutCubic.transform(score);
+    return Color.lerp(surfaceWhite, const Color(0xFF0A0A0A), t)!;
   }
 
   static Color getPrimaryText(double score) {
-    // Hard switch at 0.5 for accessibility and clarity.
-    return score < 0.5 ? primaryBlack : surfaceWhite;
+    // Very narrow transition window for maximum readability
+    final double textT = score < 0.47
+        ? 0.0
+        : score > 0.53
+            ? 1.0
+            : (score - 0.47) / 0.06;
+    return Color.lerp(primaryBlack, surfaceWhite, textT)!;
   }
 
   static Color getShadowColor(double score, [Color baseColor = primaryBlack]) {
     if (baseColor == primaryBlack) {
-      return Color.lerp(primaryBlack, bloodRed, score)!;
+      // Use easing to avoid muddy middle colors
+      final t = Curves.easeInQuad.transform(score);
+      return Color.lerp(primaryBlack, bloodRed, t)!;
     }
 
     final hsl = HSLColor.fromColor(baseColor);
@@ -429,7 +446,9 @@ class ExpressiveTheme {
         .withSaturation((hsl.saturation * 1.2).clamp(0.0, 1.0))
         .toColor();
 
-    return Color.lerp(pastel, serious, score)!;
+    // Use easing for smoother transition
+    final t = Curves.easeInOut.transform(score);
+    return Color.lerp(pastel, serious, t)!;
   }
 
   static Offset getShadowOffset(double score) =>
