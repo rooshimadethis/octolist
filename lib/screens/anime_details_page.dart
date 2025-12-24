@@ -566,6 +566,12 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                               icon: Icons.movie_filter_rounded,
                                               shadowColor: shadowColor,
                                             ),
+                                          if (anime.isAdult)
+                                            MetadataChip(
+                                              label: '18+',
+                                              icon: Icons.explicit_rounded,
+                                              shadowColor: shadowColor,
+                                            ),
                                           ...anime.genres
                                               .take(3)
                                               .map(

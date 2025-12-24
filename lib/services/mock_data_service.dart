@@ -96,6 +96,15 @@ class MockDataService implements IAnimeService {
     return orderedLibrary;
   }
 
+  /// Loads all of the user's library lists with a pre-fetched user profile.
+  /// For mock data, this just calls getLibraryLists since we don't make real API calls.
+  @override
+  Future<Map<String, List<WatchingEntry>>> getLibraryListsWithUser(
+    UserProfile user,
+  ) async {
+    return getLibraryLists();
+  }
+
   /// Loads the list of currently trending anime.
   @override
   Future<List<Anime>> getTrendingAnime() async {

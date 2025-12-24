@@ -25,9 +25,29 @@ class VibeColors {
     required this.grainOpacity,
   });
 
+  // Cache for VibeColors instances
+  static final Map<int, VibeColors> _cache = {};
+  static final Map<String, VibeColors> _accentCache = {};
+
   /// Factory constructor to compute all colors from a vibe score
   factory VibeColors.fromScore(double score, [Color? accentColor]) {
-    return VibeColors(
+    // Quantize score to reduce cache size (0.01 precision)
+    final cacheKey = (score * 100).round();
+
+    // Check cache based on whether we have an accent color
+    if (accentColor == null) {
+      if (_cache.containsKey(cacheKey)) {
+        return _cache[cacheKey]!;
+      }
+    } else {
+      final accentKey = '${cacheKey}_${accentColor.hashCode}';
+      if (_accentCache.containsKey(accentKey)) {
+        return _accentCache[accentKey]!;
+      }
+    }
+
+    // Compute new VibeColors instance
+    final vibeColors = VibeColors(
       vibeScore: score,
       primaryText: ExpressiveTheme.getPrimaryText(score),
       scaffoldBg: ExpressiveTheme.getScaffoldBg(score),
@@ -41,6 +61,22 @@ class VibeColors {
       imageFilter: ExpressiveTheme.getImageFilter(score),
       grainOpacity: ExpressiveTheme.getGrainOpacity(score),
     );
+
+    // Cache the result (limit cache size to prevent memory issues)
+    if (accentColor == null) {
+      if (_cache.length > 100) {
+        _cache.clear();
+      }
+      _cache[cacheKey] = vibeColors;
+    } else {
+      if (_accentCache.length > 100) {
+        _accentCache.clear();
+      }
+      final accentKey = '${cacheKey}_${accentColor.hashCode}';
+      _accentCache[accentKey] = vibeColors;
+    }
+
+    return vibeColors;
   }
 
   /// Get inverse color (for text on colored backgrounds)
@@ -315,7 +351,7 @@ class ExpressiveTheme {
 
   /// Helper to get a dynamic duration based on vibe
   static Duration vibeDuration(double score) {
-    return Duration(milliseconds: (400 + (800 * score)).toInt());
+    return Duration(milliseconds: (400 + (600 * score)).toInt());
   }
 
   /// Creates the MaterialApp ThemeData for the Expressive Anime prototype
@@ -400,6 +436,9 @@ class ExpressiveTheme {
     return background.computeLuminance() > 0.5 ? primaryBlack : surfaceWhite;
   }
 
+  // Cache for expensive ColorFilter calculations
+  static final Map<int, ColorFilter?> _imageFilterCache = {};
+
   /// Creates a dynamic image filter based on vibe score
   /// Returns null if the effect would be invisible (vibe near 0)
   ///
@@ -408,6 +447,12 @@ class ExpressiveTheme {
   /// - 30% brightness reduction
   static ColorFilter? getImageFilter(double score) {
     if (score < 0.1) return null;
+
+    // Use cached value if available (quantize to reduce cache size)
+    final cacheKey = (score * 100).round();
+    if (_imageFilterCache.containsKey(cacheKey)) {
+      return _imageFilterCache[cacheKey];
+    }
 
     // Interpolation factor with easing for smoother transitions
     final t = Curves.easeInOut.transform(score);
@@ -421,7 +466,7 @@ class ExpressiveTheme {
     const kDesatR2 = 0.0744;
 
     // Lerp from identity matrix to target desaturated matrix
-    return ColorFilter.matrix([
+    final filter = ColorFilter.matrix([
       1.0 + (kDesatR - 1.0) * t,
       kDesatG1 * t,
       kDesatB1 * t,
@@ -443,6 +488,14 @@ class ExpressiveTheme {
       1,
       0,
     ]);
+
+    // Cache the result (limit cache size to prevent memory issues)
+    if (_imageFilterCache.length > 100) {
+      _imageFilterCache.clear();
+    }
+    _imageFilterCache[cacheKey] = filter;
+
+    return filter;
   }
 
   /// Calculates the grain overlay opacity for a given vibe score

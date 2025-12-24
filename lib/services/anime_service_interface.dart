@@ -6,6 +6,9 @@ abstract class IAnimeService {
   Future<UserProfile?> getUserProfile();
   Future<List<WatchingEntry>> getWatchingList();
   Future<Map<String, List<WatchingEntry>>> getLibraryLists();
+  Future<Map<String, List<WatchingEntry>>> getLibraryListsWithUser(
+    UserProfile user,
+  );
   Future<List<Anime>> getTrendingAnime();
   Future<Anime?> getAnimeDetails(int id);
   Future<List<Anime>> searchAnime(String query);

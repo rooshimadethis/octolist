@@ -69,6 +69,18 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   late Future<List<Anime>> _trendingFuture;
   late Future<List<Anime>> _searchFuture;
 
+  // Cache VibeColors to avoid recalculating on every build
+  VibeColors? _cachedVibeColors;
+  double? _cachedVibeScore;
+
+  VibeColors get _vibe {
+    if (_cachedVibeColors == null || _cachedVibeScore != widget.vibeScore) {
+      _cachedVibeColors = VibeColors.fromScore(widget.vibeScore);
+      _cachedVibeScore = widget.vibeScore;
+    }
+    return _cachedVibeColors!;
+  }
+
   @override
   void initState() {
     super.initState();
@@ -98,10 +110,20 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
         );
       }
     });
+
+    // Fetch user profile once and reuse it
     _profileFuture = _animeService.getUserProfile();
-    // Use the store for watching data
-    context.read<AnimeStore>().fetchLibrary();
+
+    // Use the profile to fetch library without duplicate getUserProfile call
+    _profileFuture.then((profile) {
+      if (profile != null && mounted) {
+        context.read<AnimeStore>().fetchLibraryWithUser(profile);
+      }
+    });
+
+    // Fetch trending in parallel
     _trendingFuture = _animeService.getTrendingAnime();
+
     _searchFuture = _searchQuery.isEmpty
         ? Future.value([])
         : _animeService.searchAnime(_searchQuery);
@@ -177,7 +199,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final vibe = VibeColors.fromScore(widget.vibeScore);
+    final vibe = _vibe; // Use cached VibeColors
 
     return Scaffold(
       body: IndexedStack(
@@ -388,27 +410,34 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
 
                                 // Render Real Card
                                 final entry = entries[index];
-                                return WatchingCard(
-                                      entry: entry,
-                                      progress: entry.progress,
-                                      heroPrefix: 'home',
-                                      vibeScore: widget.vibeScore,
-                                      onIncrement: () => _updateProgress(
-                                        entry,
-                                        entry.progress,
-                                        1,
-                                      ),
-                                    )
-                                    .animate(
-                                      delay: (index < 6 ? index * 100 : 0).ms,
-                                    )
-                                    .fadeIn(duration: vibe.animationDuration)
-                                    .slideX(
-                                      begin: 0.1,
-                                      end: 0,
-                                      curve: vibe.animationCurve,
-                                      duration: vibe.animationDuration,
-                                    );
+                                return KeyedSubtree(
+                                  key: ValueKey('watching_${entry.id}'),
+                                  child:
+                                      WatchingCard(
+                                            entry: entry,
+                                            progress: entry.progress,
+                                            heroPrefix: 'home',
+                                            vibeScore: widget.vibeScore,
+                                            onIncrement: () => _updateProgress(
+                                              entry,
+                                              entry.progress,
+                                              1,
+                                            ),
+                                          )
+                                          .animate(
+                                            delay: (index < 6 ? index * 100 : 0)
+                                                .ms,
+                                          )
+                                          .fadeIn(
+                                            duration: vibe.animationDuration,
+                                          )
+                                          .slideX(
+                                            begin: 0.3,
+                                            end: 0,
+                                            curve: vibe.animationCurve,
+                                            duration: vibe.animationDuration,
+                                          ),
+                                );
                               },
                             ),
                           ),
@@ -463,23 +492,29 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                           separatorBuilder: (_, __) =>
                               const SizedBox(width: 16),
                           itemBuilder: (context, index) {
-                            return Padding(
-                                  padding: const EdgeInsets.only(bottom: 10),
-                                  child: MangaCard(
-                                    anime: animeList[index],
-                                    vibeScore: widget.vibeScore,
-                                  ),
-                                )
-                                .animate(
-                                  delay: (index < 6 ? index * 100 : 0).ms,
-                                )
-                                .fadeIn(duration: vibe.animationDuration)
-                                .scale(
-                                  begin: const Offset(0.9, 0.9),
-                                  end: const Offset(1.0, 1.0),
-                                  curve: vibe.animationCurve,
-                                  duration: vibe.animationDuration,
-                                );
+                            return KeyedSubtree(
+                              key: ValueKey('trending_${animeList[index].id}'),
+                              child:
+                                  Padding(
+                                        padding: const EdgeInsets.only(
+                                          bottom: 10,
+                                        ),
+                                        child: MangaCard(
+                                          anime: animeList[index],
+                                          vibeScore: widget.vibeScore,
+                                        ),
+                                      )
+                                      .animate(
+                                        delay: (index < 6 ? index * 100 : 0).ms,
+                                      )
+                                      .fadeIn(duration: vibe.animationDuration)
+                                      .scale(
+                                        begin: const Offset(0.8, 0.8),
+                                        end: const Offset(1.0, 1.0),
+                                        curve: vibe.animationCurve,
+                                        duration: vibe.animationDuration,
+                                      ),
+                            );
                           },
                         );
                       },
@@ -647,20 +682,25 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               ),
                           itemCount: animeList.length,
                           itemBuilder: (context, index) {
-                            return MangaCard(
-                                  anime: animeList[index],
-                                  vibeScore: widget.vibeScore,
-                                )
-                                .animate(
-                                  delay: (index < 10 ? index * 100 : 0).ms,
-                                )
-                                .fadeIn(duration: vibe.animationDuration)
-                                .scale(
-                                  begin: const Offset(0.9, 0.9),
-                                  end: const Offset(1, 1),
-                                  curve: vibe.animationCurve,
-                                  duration: vibe.animationDuration,
-                                );
+                            return KeyedSubtree(
+                              key: ValueKey('search_${animeList[index].id}'),
+                              child:
+                                  MangaCard(
+                                        anime: animeList[index],
+                                        vibeScore: widget.vibeScore,
+                                      )
+                                      .animate(
+                                        delay:
+                                            (index < 10 ? index * 100 : 0).ms,
+                                      )
+                                      .fadeIn(duration: vibe.animationDuration)
+                                      .scale(
+                                        begin: const Offset(0.8, 0.8),
+                                        end: const Offset(1, 1),
+                                        curve: vibe.animationCurve,
+                                        duration: vibe.animationDuration,
+                                      ),
+                            );
                           },
                         );
                       },

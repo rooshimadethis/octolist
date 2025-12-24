@@ -21,6 +21,7 @@ class AnimeQueries {
       season
       seasonYear
       status
+      isAdult
     }
   """;
 

@@ -139,6 +139,46 @@ class AniListService implements IAnimeService {
     return library;
   }
 
+  /// Loads all of the user's library lists with a pre-fetched user profile.
+  /// This avoids duplicate getUserProfile API calls.
+  @override
+  Future<Map<String, List<WatchingEntry>>> getLibraryListsWithUser(
+    UserProfile user,
+  ) async {
+    final QueryOptions options = QueryOptions(
+      document: gql(AnimeQueries.getMediaList),
+      variables: {'userId': user.id},
+      fetchPolicy: FetchPolicy.networkOnly,
+    );
+
+    final QueryResult result = await _client.query(options);
+
+    if (result.hasException) {
+      throw result.exception!;
+    }
+
+    final lists = result.data?['MediaListCollection']?['lists'] as List?;
+    if (lists == null) return {};
+
+    final Map<String, List<WatchingEntry>> library = {};
+
+    for (var list in lists) {
+      final String name = list['name'];
+      final List entries = list['entries'];
+      library[name] = entries.map((e) {
+        return WatchingEntry(
+          progress: e['progress'] ?? 0,
+          userScore: (e['score'] as num?)?.toInt() ?? 0,
+          id: e['id'],
+          updatedAt: e['updatedAt'],
+          anime: Anime.fromJson(e['media']),
+        );
+      }).toList();
+    }
+
+    return library;
+  }
+
   /// Loads the list of currently trending anime.
   @override
   Future<List<Anime>> getTrendingAnime() async {

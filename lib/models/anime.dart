@@ -69,6 +69,7 @@ class Anime {
   final String? season;
   final int? seasonYear;
   final String? status;
+  final bool isAdult;
   final List<RelatedMedia> relations;
 
   Anime({
@@ -87,6 +88,7 @@ class Anime {
     this.season,
     this.seasonYear,
     this.status,
+    this.isAdult = false,
     this.relations = const [],
   });
 
@@ -112,6 +114,7 @@ class Anime {
       season: json['season'],
       seasonYear: json['seasonYear'],
       status: json['status'],
+      isAdult: json['isAdult'] ?? false,
       characters: json['characters'] != null
           ? (json['characters']['edges'] as List)
                 .map((e) => Character.fromEdge(e))

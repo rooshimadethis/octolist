@@ -4,26 +4,65 @@ import 'dart:math';
 class VibeTextHelper {
   VibeTextHelper._();
 
+  // Shared Random instance to avoid creating new instances
+  static final Random _random = Random();
+
+  // Cache for random selections to avoid recalculating on every build
+  static String? _cachedSearchHint;
+  static VibeLevel? _cachedSearchHintLevel;
+
+  static String? _cachedContinueWatchingHeader;
+  static VibeLevel? _cachedContinueWatchingLevel;
+
+  static String? _cachedTrendingNowHeader;
+  static VibeLevel? _cachedTrendingNowLevel;
+
   /// Returns a random search hint text based on vibe score.
   static String getSearchHint({double vibeScore = 0.0}) {
     final vibeLevel = _getVibeLevel(vibeScore);
+
+    // Return cached value if vibe level hasn't changed
+    if (_cachedSearchHint != null && _cachedSearchHintLevel == vibeLevel) {
+      return _cachedSearchHint!;
+    }
+
     final options = _searchHints[vibeLevel] ?? ['Find anime...'];
-    return options[Random().nextInt(options.length)];
+    _cachedSearchHint = options[_random.nextInt(options.length)];
+    _cachedSearchHintLevel = vibeLevel;
+    return _cachedSearchHint!;
   }
 
   /// Returns a random header text for "Continue Watching" based on vibe score.
   static String getContinueWatchingHeader({double vibeScore = 0.0}) {
     final vibeLevel = _getVibeLevel(vibeScore);
+
+    // Return cached value if vibe level hasn't changed
+    if (_cachedContinueWatchingHeader != null &&
+        _cachedContinueWatchingLevel == vibeLevel) {
+      return _cachedContinueWatchingHeader!;
+    }
+
     final options =
         _continueWatchingHeaders[vibeLevel] ?? ['Continue Watching'];
-    return options[Random().nextInt(options.length)];
+    _cachedContinueWatchingHeader = options[_random.nextInt(options.length)];
+    _cachedContinueWatchingLevel = vibeLevel;
+    return _cachedContinueWatchingHeader!;
   }
 
   /// Returns a random header text for "Trending Now" based on vibe score.
   static String getTrendingNowHeader({double vibeScore = 0.0}) {
     final vibeLevel = _getVibeLevel(vibeScore);
+
+    // Return cached value if vibe level hasn't changed
+    if (_cachedTrendingNowHeader != null &&
+        _cachedTrendingNowLevel == vibeLevel) {
+      return _cachedTrendingNowHeader!;
+    }
+
     final options = _trendingNowHeaders[vibeLevel] ?? ['Trending Now'];
-    return options[Random().nextInt(options.length)];
+    _cachedTrendingNowHeader = options[_random.nextInt(options.length)];
+    _cachedTrendingNowLevel = vibeLevel;
+    return _cachedTrendingNowHeader!;
   }
 
   static VibeLevel _getVibeLevel(double score) {

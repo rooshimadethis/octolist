@@ -2,14 +2,34 @@
 class GreetingHelper {
   GreetingHelper._();
 
+  // Cache for greeting data
+  static GreetingData? _cachedGreeting;
+  static TimeRange? _cachedTimeRange;
+  static VibeLevel? _cachedVibeLevel;
+
   /// Returns a [GreetingData] object containing the main title and subtitle
   /// for the current time and vibe.
   static GreetingData getGreeting({double vibeScore = 0.0}) {
     final timeRange = _getTimeRange();
     final vibeLevel = _getVibeLevel(vibeScore);
 
-    return _greetings[vibeLevel]?[timeRange] ??
+    // Return cached value if time range and vibe level haven't changed
+    if (_cachedGreeting != null &&
+        _cachedTimeRange == timeRange &&
+        _cachedVibeLevel == vibeLevel) {
+      return _cachedGreeting!;
+    }
+
+    final greeting =
+        _greetings[vibeLevel]?[timeRange] ??
         const GreetingData('Hello.', 'Welcome back.');
+
+    // Update cache
+    _cachedGreeting = greeting;
+    _cachedTimeRange = timeRange;
+    _cachedVibeLevel = vibeLevel;
+
+    return greeting;
   }
 
   static TimeRange _getTimeRange() {
@@ -26,7 +46,6 @@ class GreetingHelper {
     if (score < 0.75) return VibeLevel.grim;
     return VibeLevel.abyssal;
   }
-
 
   static const Map<VibeLevel, Map<TimeRange, GreetingData>> _greetings = {
     VibeLevel.radiant: {

@@ -29,10 +29,9 @@ class _LibraryPageState extends State<LibraryPage> {
   @override
   void initState() {
     super.initState();
-    // Fetch if needed, though usually Home or previous page might have started it
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      context.read<AnimeStore>().fetchLibrary();
-    });
+    // No need to fetch here - the AnimeStore is shared and already loaded by the home page
+    // If the user navigates directly to this page (unlikely in current app flow),
+    // the store will handle showing loading/empty states appropriately
   }
 
   @override
@@ -254,6 +253,8 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
   @override
   bool get wantKeepAlive => true;
 
+  bool _hasAnimated = false;
+
   @override
   Widget build(BuildContext context) {
     super.build(context);
@@ -269,6 +270,17 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
         final timeA = a.updatedAt ?? 0;
         final timeB = b.updatedAt ?? 0;
         return timeB.compareTo(timeA); // Newest first
+      });
+    }
+
+    // Trigger animation when data first appears
+    if (!_hasAnimated && entries.isNotEmpty && !store.isLoading) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            _hasAnimated = true;
+          });
+        }
       });
     }
 
@@ -297,15 +309,35 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
     if (widget.listName == 'Watching' || widget.listName == 'Current') {
       return ListView.builder(
         key: PageStorageKey<String>('library_list_${widget.listName}'),
-        cacheExtent: 1000,
         padding: const EdgeInsets.all(24),
         itemCount: entries.length,
         itemBuilder: (context, index) {
           final entry = entries[index];
           return Padding(
             padding: const EdgeInsets.only(bottom: 16),
-            child:
-                WatchingCard(
+            child: KeyedSubtree(
+              key: ValueKey('library_list_${entry.id}_$_hasAnimated'),
+              child: _hasAnimated
+                  ? WatchingCard(
+                          entry: entry,
+                          progress: entry.progress,
+                          heroPrefix: 'library',
+                          vibeScore: widget.vibeScore,
+                          onIncrement: () =>
+                              widget.onUpdate(entry, widget.listName, 1),
+                          width: double.infinity,
+                          height: 140,
+                        )
+                        .animate(delay: (index < 6 ? index * 100 : 0).ms)
+                        .fadeIn(duration: vibeDuration)
+                        .slideX(
+                          begin: 0.3,
+                          end: 0,
+                          curve: vibeCurve,
+                          duration: vibeDuration,
+                          delay: (index < 6 ? index * 50 : 0).ms,
+                        )
+                  : WatchingCard(
                       entry: entry,
                       progress: entry.progress,
                       heroPrefix: 'library',
@@ -314,16 +346,8 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
                           widget.onUpdate(entry, widget.listName, 1),
                       width: double.infinity,
                       height: 140,
-                    )
-                    .animate(delay: (index < 6 ? index * 100 : 0).ms)
-                    .fadeIn(duration: vibeDuration)
-                    .slideX(
-                      begin: 0.1,
-                      end: 0,
-                      curve: vibeCurve,
-                      duration: vibeDuration,
-                      delay: (index < 6 ? index * 50 : 0).ms,
                     ),
+            ),
           );
         },
       );
@@ -342,15 +366,20 @@ class _LibraryTabContentState extends State<_LibraryTabContent>
       itemCount: entries.length,
       itemBuilder: (context, index) {
         final entry = entries[index];
-        return _LibraryCard(entry: entry, vibeScore: widget.vibeScore)
-            .animate()
-            .fadeIn(duration: vibeDuration)
-            .scale(
-              begin: const Offset(0.9, 0.9),
-              end: const Offset(1.0, 1.0),
-              duration: vibeDuration,
-              curve: vibeCurve,
-            );
+        return KeyedSubtree(
+          key: ValueKey('library_grid_${entry.id}_$_hasAnimated'),
+          child: _hasAnimated
+              ? _LibraryCard(entry: entry, vibeScore: widget.vibeScore)
+                    .animate()
+                    .fadeIn(duration: vibeDuration)
+                    .scale(
+                      begin: const Offset(0.8, 0.8),
+                      end: const Offset(1.0, 1.0),
+                      duration: vibeDuration,
+                      curve: vibeCurve,
+                    )
+              : _LibraryCard(entry: entry, vibeScore: widget.vibeScore),
+        );
       },
     );
   }

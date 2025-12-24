@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../models/watching_entry.dart';
 import '../models/anime.dart';
+import '../models/user_profile.dart';
 import 'anime_service_interface.dart';
 import 'anilist_service.dart';
 
@@ -77,6 +78,39 @@ class AnimeStore extends ChangeNotifier {
 
     try {
       final library = await _service.getLibraryLists();
+
+      _allEntries.clear();
+      _listMemberships.clear();
+
+      library.forEach((listName, entries) {
+        final ids = <int>[];
+        for (var entry in entries) {
+          _allEntries[entry.anime.id] = entry;
+          ids.add(entry.anime.id);
+        }
+        _listMemberships[listName] = ids;
+      });
+
+      _isLoading = false;
+      notifyListeners();
+    } catch (e) {
+      _isLoading = false;
+      _error = e.toString();
+      notifyListeners();
+      rethrow;
+    }
+  }
+
+  /// Initial load of the library with a pre-fetched user profile.
+  /// This avoids duplicate getUserProfile API calls.
+  Future<void> fetchLibraryWithUser(UserProfile user) async {
+    _isLoading = true;
+    _error = null;
+    // Defer notification to avoid "setState() or markNeedsBuild() called during build"
+    Future.microtask(() => notifyListeners());
+
+    try {
+      final library = await _service.getLibraryListsWithUser(user);
 
       _allEntries.clear();
       _listMemberships.clear();
