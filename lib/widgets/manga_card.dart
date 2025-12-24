@@ -26,12 +26,7 @@ class MangaCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
-    final shadowColor = ExpressiveTheme.getShadowColor(
-      vibeScore,
-      anime.parsedColor,
-    );
-    final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
+    final vibe = VibeColors.fromScore(vibeScore, anime.parsedColor);
 
     return RepaintBoundary(
       child: GestureDetector(
@@ -46,16 +41,16 @@ class MangaCard extends StatelessWidget {
         child: Container(
           width: width,
           decoration: BoxDecoration(
-            color: scaffoldBg,
+            color: vibe.scaffoldBg,
             border: Border.all(
               width: ExpressiveTheme.borderWidthMedium,
-              color: primaryText,
+              color: vibe.primaryText,
             ),
             borderRadius: BorderRadius.zero,
             boxShadow: [
               BoxShadow(
-                color: shadowColor,
-                offset: ExpressiveTheme.getShadowOffset(vibeScore),
+                color: vibe.shadowColor,
+                offset: vibe.shadowOffset,
                 blurRadius: 0,
               ),
             ],
@@ -71,26 +66,22 @@ class MangaCard extends StatelessWidget {
                       tag: 'anime_cover_${anime.id}',
                       child: Builder(
                         builder: (context) {
-                          final filter = ExpressiveTheme.getImageFilter(
-                            vibeScore,
-                          );
                           final image = ExpressiveImage(
                             imageUrl: anime.coverImage,
                             fit: BoxFit.cover,
                             skeletonColor: anime.parsedColor,
                           );
 
-                          if (filter == null) return image;
+                          if (vibe.imageFilter == null) return image;
 
                           return Stack(
                             fit: StackFit.expand,
                             children: [
-                              ColorFiltered(colorFilter: filter, child: image),
-                              GrainOverlay(
-                                opacity: ExpressiveTheme.getGrainOpacity(
-                                  vibeScore,
-                                ),
+                              ColorFiltered(
+                                colorFilter: vibe.imageFilter!,
+                                child: image,
                               ),
+                              GrainOverlay(opacity: vibe.grainOpacity),
                             ],
                           );
                         },
@@ -106,14 +97,14 @@ class MangaCard extends StatelessWidget {
                             vertical: ExpressiveTheme.spacingXS,
                           ),
                           decoration: BoxDecoration(
-                            color: primaryText,
+                            color: vibe.primaryText,
                             border: Border.all(
-                              color: scaffoldBg,
+                              color: vibe.scaffoldBg,
                               width: ExpressiveTheme.borderWidthThin,
                             ),
                             boxShadow: [
                               BoxShadow(
-                                color: shadowColor,
+                                color: vibe.shadowColor,
                                 offset: ExpressiveTheme.shadowOffsetSmall,
                                 blurRadius: 0,
                               ),
@@ -122,12 +113,12 @@ class MangaCard extends StatelessWidget {
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              OutlinedStar(size: 12, color: scaffoldBg),
+                              OutlinedStar(size: 12, color: vibe.scaffoldBg),
                               const SizedBox(width: ExpressiveTheme.spacingXS),
                               Text(
                                 '${anime.averageScore}%',
                                 style: ExpressiveTheme.monoMedium(
-                                  color: scaffoldBg,
+                                  color: vibe.scaffoldBg,
                                 ),
                               ),
                             ],
@@ -149,7 +140,7 @@ class MangaCard extends StatelessWidget {
                   border: Border(
                     top: BorderSide(
                       width: ExpressiveTheme.borderWidthMedium,
-                      color: primaryText,
+                      color: vibe.primaryText,
                     ),
                   ),
                 ),
@@ -160,7 +151,7 @@ class MangaCard extends StatelessWidget {
                       anime.title.toUpperCase(),
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
-                      style: ExpressiveTheme.cardTitle(color: primaryText),
+                      style: ExpressiveTheme.cardTitle(color: vibe.primaryText),
                     ),
                   ],
                 ),

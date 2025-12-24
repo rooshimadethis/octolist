@@ -1,6 +1,52 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+/// Encapsulates all vibe-dependent colors and styling properties
+class VibeColors {
+  final double vibeScore;
+  final Color primaryText;
+  final Color scaffoldBg;
+  final Color shadowColor;
+  final Offset shadowOffset;
+  final Curve animationCurve;
+  final Duration animationDuration;
+  final ColorFilter? imageFilter;
+  final double grainOpacity;
+
+  const VibeColors({
+    required this.vibeScore,
+    required this.primaryText,
+    required this.scaffoldBg,
+    required this.shadowColor,
+    required this.shadowOffset,
+    required this.animationCurve,
+    required this.animationDuration,
+    required this.imageFilter,
+    required this.grainOpacity,
+  });
+
+  /// Factory constructor to compute all colors from a vibe score
+  factory VibeColors.fromScore(double score, [Color? accentColor]) {
+    return VibeColors(
+      vibeScore: score,
+      primaryText: ExpressiveTheme.getPrimaryText(score),
+      scaffoldBg: ExpressiveTheme.getScaffoldBg(score),
+      shadowColor: ExpressiveTheme.getShadowColor(
+        score,
+        accentColor ?? ExpressiveTheme.primaryBlack,
+      ),
+      shadowOffset: ExpressiveTheme.getShadowOffset(score),
+      animationCurve: ExpressiveTheme.vibeCurve(score),
+      animationDuration: ExpressiveTheme.vibeDuration(score),
+      imageFilter: ExpressiveTheme.getImageFilter(score),
+      grainOpacity: ExpressiveTheme.getGrainOpacity(score),
+    );
+  }
+
+  /// Get inverse color (for text on colored backgrounds)
+  Color get inverseColor => scaffoldBg;
+}
+
 /// Centralized theme configuration for the Expressive Anime prototype.
 /// Provides manga/comic-inspired design tokens and styles.
 class ExpressiveTheme {
@@ -312,6 +358,12 @@ class ExpressiveTheme {
   }
 
   /// Static access to dynamic tokens for manual styling
+
+  /// Get the scaffold background color for a given vibe score
+  static Color getScaffoldBg(double score) {
+    return Color.lerp(surfaceWhite, const Color(0xFF0A0A0A), score)!;
+  }
+
   static Color getPrimaryText(double score) {
     // Hard switch at 0.5 for accessibility and clarity.
     return score < 0.5 ? primaryBlack : surfaceWhite;
@@ -342,6 +394,11 @@ class ExpressiveTheme {
 
   static Offset getShadowOffset(double score) =>
       Offset.lerp(shadowOffsetXLarge, const Offset(10, 10), score)!;
+
+  /// Returns black or white text color based on background luminance
+  static Color getContrastText(Color background) {
+    return background.computeLuminance() > 0.5 ? primaryBlack : surfaceWhite;
+  }
 
   /// Creates a dynamic image filter based on vibe score
   /// Returns null if the effect would be invisible (vibe near 0)

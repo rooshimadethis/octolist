@@ -1,5 +1,4 @@
 import 'dart:math';
-import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 
 class GrainOverlay extends StatelessWidget {
@@ -92,7 +91,7 @@ class _GrainPainter extends CustomPainter {
       final opacity = baseOpacity * (0.5 + random.nextDouble() * 0.5);
 
       final paint = Paint()
-        ..color = color.withOpacity(opacity)
+        ..color = color.withValues(alpha: opacity)
         ..style = PaintingStyle.fill;
 
       // Draw small circles instead of points for smoother grain

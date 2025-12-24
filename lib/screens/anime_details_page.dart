@@ -286,6 +286,10 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                 builder: (context, snapshot) {
                   final anime = snapshot.data ?? widget.anime;
                   final shadowColor = ColorParser.parseAnimeColor(anime.color);
+                  final dynamicShadowColor = ExpressiveTheme.getShadowColor(
+                    vibeScore,
+                    anime.parsedColor,
+                  );
 
                   return CustomScrollView(
                     slivers: [
@@ -656,11 +660,8 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                             ),
                                             boxShadow: [
                                               BoxShadow(
-                                                color:
-                                                    ExpressiveTheme.getShadowColor(
-                                                      vibeScore,
-                                                      anime.parsedColor,
-                                                    ).withValues(alpha: 0.5),
+                                                color: dynamicShadowColor
+                                                    .withValues(alpha: 0.5),
                                                 offset: shadowOffset,
                                                 blurRadius: 0,
                                               ),
@@ -795,9 +796,11 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                             },
                                                       style: ElevatedButton.styleFrom(
                                                         backgroundColor:
-                                                            primaryText,
+                                                            dynamicShadowColor,
                                                         foregroundColor:
-                                                            scaffoldBg,
+                                                            ExpressiveTheme.getContrastText(
+                                                              dynamicShadowColor,
+                                                            ),
                                                         padding:
                                                             const EdgeInsets.symmetric(
                                                               vertical: 12,

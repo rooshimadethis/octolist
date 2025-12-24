@@ -57,9 +57,7 @@ class _WatchingCardState extends State<WatchingCard> {
     final progressFraction = (widget.progress / totalEpisodes).clamp(0.0, 1.0);
     final hasNext = widget.progress < totalEpisodes;
 
-    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
-    final shadowOffset = ExpressiveTheme.getShadowOffset(widget.vibeScore);
-    final shadowColor = ExpressiveTheme.getShadowColor(
+    final vibe = VibeColors.fromScore(
       widget.vibeScore,
       widget.entry.anime.parsedColor,
     );
@@ -80,13 +78,13 @@ class _WatchingCardState extends State<WatchingCard> {
           margin: const EdgeInsets.only(bottom: 12, right: 12),
           decoration: BoxDecoration(
             color: Theme.of(context).scaffoldBackgroundColor,
-            border: Border.all(width: 3, color: primaryText),
+            border: Border.all(width: 3, color: vibe.primaryText),
             borderRadius: BorderRadius.zero,
             boxShadow: [
               BoxShadow(
-                color: shadowColor,
+                color: vibe.shadowColor,
                 blurRadius: 0,
-                offset: shadowOffset,
+                offset: vibe.shadowOffset,
               ),
             ],
           ),
@@ -97,7 +95,7 @@ class _WatchingCardState extends State<WatchingCard> {
               Container(
                 decoration: BoxDecoration(
                   border: Border(
-                    right: BorderSide(width: 3, color: primaryText),
+                    right: BorderSide(width: 3, color: vibe.primaryText),
                   ),
                 ),
                 child: Hero(
@@ -106,9 +104,6 @@ class _WatchingCardState extends State<WatchingCard> {
                     width: 100,
                     child: Builder(
                       builder: (context) {
-                        final filter = ExpressiveTheme.getImageFilter(
-                          widget.vibeScore,
-                        );
                         final image = ExpressiveImage(
                           imageUrl: widget.entry.anime.coverImage,
                           fit: BoxFit.cover,
@@ -117,17 +112,16 @@ class _WatchingCardState extends State<WatchingCard> {
                           skeletonColor: widget.entry.anime.parsedColor,
                         );
 
-                        if (filter == null) return image;
+                        if (vibe.imageFilter == null) return image;
 
                         return Stack(
                           fit: StackFit.expand,
                           children: [
-                            ColorFiltered(colorFilter: filter, child: image),
-                            GrainOverlay(
-                              opacity: ExpressiveTheme.getGrainOpacity(
-                                widget.vibeScore,
-                              ),
+                            ColorFiltered(
+                              colorFilter: vibe.imageFilter!,
+                              child: image,
                             ),
+                            GrainOverlay(opacity: vibe.grainOpacity),
                           ],
                         );
                       },
@@ -151,7 +145,7 @@ class _WatchingCardState extends State<WatchingCard> {
                           fontSize: 22,
                           fontWeight: FontWeight.bold,
                           height: 0.9,
-                          color: primaryText,
+                          color: vibe.primaryText,
                         ),
                       ),
                       const SizedBox(height: 8),
@@ -167,7 +161,7 @@ class _WatchingCardState extends State<WatchingCard> {
                                     horizontal: 6,
                                     vertical: 2,
                                   ),
-                                  color: primaryText,
+                                  color: vibe.primaryText,
                                   child: Text(
                                     'EPISODE ${widget.progress}',
                                     style: GoogleFonts.robotoMono(
@@ -184,7 +178,7 @@ class _WatchingCardState extends State<WatchingCard> {
                                   height: 12,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: primaryText,
+                                      color: vibe.primaryText,
                                       width: 1,
                                     ),
                                     borderRadius: BorderRadius.zero,
@@ -194,7 +188,7 @@ class _WatchingCardState extends State<WatchingCard> {
                                     backgroundColor: Theme.of(
                                       context,
                                     ).scaffoldBackgroundColor,
-                                    color: shadowColor,
+                                    color: vibe.shadowColor,
                                     minHeight: 12,
                                   ),
                                 ),
@@ -221,20 +215,20 @@ class _WatchingCardState extends State<WatchingCard> {
                                         context,
                                       ).scaffoldBackgroundColor,
                                       border: Border.all(
-                                        color: primaryText,
+                                        color: vibe.primaryText,
                                         width: 2,
                                       ),
                                       shape: BoxShape.rectangle,
                                       boxShadow: [
                                         BoxShadow(
-                                          color: primaryText,
+                                          color: vibe.primaryText,
                                           offset: const Offset(2, 2),
                                         ),
                                       ],
                                     ),
                                     child: Icon(
                                       Icons.remove_sharp,
-                                      color: primaryText,
+                                      color: vibe.primaryText,
                                       size: 18,
                                     ),
                                   ),
@@ -275,18 +269,20 @@ class _WatchingCardState extends State<WatchingCard> {
                                     child: Container(
                                       padding: const EdgeInsets.all(6),
                                       decoration: BoxDecoration(
-                                        color: shadowColor,
+                                        color: vibe.shadowColor,
                                         shape: BoxShape.rectangle,
                                         boxShadow: [
                                           BoxShadow(
-                                            color: primaryText,
+                                            color: vibe.primaryText,
                                             offset: const Offset(2, 2),
                                           ),
                                         ],
                                       ),
                                       child: Icon(
                                         Icons.add_sharp,
-                                        color: primaryText,
+                                        color: ExpressiveTheme.getContrastText(
+                                          vibe.shadowColor,
+                                        ),
                                         size: 18,
                                       ),
                                     ),

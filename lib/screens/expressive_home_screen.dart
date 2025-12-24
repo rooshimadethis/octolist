@@ -19,6 +19,7 @@ import '../widgets/user_profile_dialog.dart';
 import '../widgets/expressive_image.dart';
 import '../theme/expressive_theme.dart';
 import '../utils/greeting_helper.dart';
+import '../utils/section_header_helper.dart';
 import '../widgets/vibe_slider.dart';
 
 class ExpressiveApp extends StatelessWidget {
@@ -144,12 +145,14 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
       await context.read<AnimeStore>().updateProgress(entry.anime.id, delta);
 
       if (mounted) {
-        final vibeScore = context.read<AnimeStore>().vibeScore;
+        final currentVibe = VibeColors.fromScore(
+          context.read<AnimeStore>().vibeScore,
+        );
         ScaffoldMessenger.of(context).hideCurrentSnackBar();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: const Text('Progress updated!'),
-            backgroundColor: ExpressiveTheme.getPrimaryText(vibeScore),
+            backgroundColor: currentVibe.primaryText,
             duration: const Duration(milliseconds: 500),
           ),
         );
@@ -174,12 +177,11 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
     });
 
     if (_searchQuery.isNotEmpty) {
-      final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text('Searching for "$_searchQuery"...'),
           duration: const Duration(milliseconds: 500),
-          backgroundColor: primaryText,
+          backgroundColor: ExpressiveTheme.getPrimaryText(widget.vibeScore),
         ),
       );
     }
@@ -187,9 +189,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final vibeCurve = ExpressiveTheme.vibeCurve(widget.vibeScore);
-    final vibeDuration = ExpressiveTheme.vibeDuration(widget.vibeScore);
-    final primaryText = ExpressiveTheme.getPrimaryText(widget.vibeScore);
+    final vibe = VibeColors.fromScore(widget.vibeScore);
 
     return Scaffold(
       body: IndexedStack(
@@ -258,10 +258,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                         }
                                       },
                                       style: ElevatedButton.styleFrom(
-                                        backgroundColor: primaryText,
-                                        foregroundColor: Theme.of(
-                                          context,
-                                        ).scaffoldBackgroundColor,
+                                        backgroundColor: vibe.primaryText,
+                                        foregroundColor: vibe.scaffoldBg,
                                         shape: const RoundedRectangleBorder(),
                                       ),
                                       child: Text(
@@ -278,13 +276,11 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                         horizontal: 8,
                                         vertical: 2,
                                       ),
-                                      color: primaryText,
+                                      color: vibe.primaryText,
                                       child: Text(
                                         greeting.subtitle,
                                         style: GoogleFonts.teko(
-                                          color: Theme.of(
-                                            context,
-                                          ).scaffoldBackgroundColor,
+                                          color: vibe.scaffoldBg,
                                           fontWeight: FontWeight.bold,
                                           letterSpacing: 2.0,
                                         ),
@@ -308,7 +304,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   decoration: BoxDecoration(
                                     shape: BoxShape.circle, // Circular avatar
                                     border: Border.all(
-                                      color: primaryText,
+                                      color: vibe.primaryText,
                                       width: 3,
                                     ),
                                     boxShadow: [
@@ -345,7 +341,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         return Column(
                           children: [
                             SectionTitle(
-                                  title: 'Continue Watching',
+                                  title:
+                                      SectionHeaderHelper.getContinueWatchingHeader(
+                                        vibeScore: widget.vibeScore,
+                                      ),
                                   vibeScore: widget.vibeScore,
                                   onPressed: () {
                                     setState(() {
@@ -355,12 +354,15 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   },
                                 )
                                 .animate()
-                                .fadeIn(delay: 100.ms, duration: vibeDuration)
+                                .fadeIn(
+                                  delay: 100.ms,
+                                  duration: vibe.animationDuration,
+                                )
                                 .slideX(
                                   begin: -0.2,
                                   end: 0,
-                                  curve: vibeCurve,
-                                  duration: vibeDuration,
+                                  curve: vibe.animationCurve,
+                                  duration: vibe.animationDuration,
                                 ),
                             const SizedBox(height: 16),
                             SizedBox(
@@ -376,7 +378,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 itemBuilder: (context, index) =>
                                     const AnimeCardSkeleton(isHorizontal: true)
                                         .animate(delay: (index * 100).ms)
-                                        .fadeIn(duration: vibeDuration),
+                                        .fadeIn(
+                                          duration: vibe.animationDuration,
+                                        ),
                               ),
                             ),
                           ],
@@ -391,7 +395,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                       return Column(
                         children: [
                           SectionTitle(
-                                title: 'Continue Watching',
+                                title:
+                                    SectionHeaderHelper.getContinueWatchingHeader(
+                                      vibeScore: widget.vibeScore,
+                                    ),
                                 vibeScore: widget.vibeScore,
                                 onPressed: () {
                                   setState(() {
@@ -401,12 +408,15 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 },
                               )
                               .animate()
-                              .fadeIn(delay: 100.ms, duration: vibeDuration)
+                              .fadeIn(
+                                delay: 100.ms,
+                                duration: vibe.animationDuration,
+                              )
                               .slideX(
                                 begin: -0.2,
                                 end: 0,
-                                curve: vibeCurve,
-                                duration: vibeDuration,
+                                curve: vibe.animationCurve,
+                                duration: vibe.animationDuration,
                               ),
                           const SizedBox(height: 16),
                           SizedBox(
@@ -438,12 +448,12 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                     .animate(
                                       delay: (index < 6 ? index * 100 : 0).ms,
                                     )
-                                    .fadeIn(duration: vibeDuration)
+                                    .fadeIn(duration: vibe.animationDuration)
                                     .slideX(
                                       begin: 0.1,
                                       end: 0,
-                                      curve: vibeCurve,
-                                      duration: vibeDuration,
+                                      curve: vibe.animationCurve,
+                                      duration: vibe.animationDuration,
                                     );
                               },
                             ),
@@ -456,17 +466,19 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                   // Trending Section
                   // Trending Section
                   SectionTitle(
-                        title: 'Trending Now',
+                        title: SectionHeaderHelper.getTrendingNowHeader(
+                          vibeScore: widget.vibeScore,
+                        ),
                         vibeScore: widget.vibeScore,
                         // Button removed as per request
                       )
                       .animate()
-                      .fadeIn(delay: 200.ms, duration: vibeDuration)
+                      .fadeIn(delay: 200.ms, duration: vibe.animationDuration)
                       .slideX(
                         begin: -0.2,
                         end: 0,
-                        curve: vibeCurve,
-                        duration: vibeDuration,
+                        curve: vibe.animationCurve,
+                        duration: vibe.animationDuration,
                       ),
                   const SizedBox(height: 16),
                   SizedBox(
@@ -485,7 +497,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             itemBuilder: (context, index) =>
                                 const AnimeCardSkeleton()
                                     .animate(delay: (index * 100).ms)
-                                    .fadeIn(duration: vibeDuration),
+                                    .fadeIn(duration: vibe.animationDuration),
                           );
                         }
                         final animeList = snapshot.data ?? [];
@@ -504,12 +516,12 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 .animate(
                                   delay: (index < 6 ? index * 100 : 0).ms,
                                 )
-                                .fadeIn(duration: vibeDuration)
+                                .fadeIn(duration: vibe.animationDuration)
                                 .scale(
                                   begin: const Offset(0.9, 0.9),
                                   end: const Offset(1.0, 1.0),
-                                  curve: vibeCurve,
-                                  duration: vibeDuration,
+                                  curve: vibe.animationCurve,
+                                  duration: vibe.animationDuration,
                                 );
                           },
                         );
@@ -533,7 +545,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(
                       fontWeight: FontWeight.bold,
                       fontStyle: FontStyle.italic,
-                      color: primaryText,
+                      color: vibe.primaryText,
                     ),
                   ),
                   const SizedBox(height: 16),
@@ -556,17 +568,23 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                       ),
                       prefixIcon: Icon(
                         Icons.search_rounded,
-                        color: primaryText,
+                        color: vibe.primaryText,
                       ),
                       filled: true,
-                      fillColor: Theme.of(context).scaffoldBackgroundColor,
+                      fillColor: vibe.scaffoldBg,
                       enabledBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.zero,
-                        borderSide: BorderSide(color: primaryText, width: 3),
+                        borderSide: BorderSide(
+                          color: vibe.primaryText,
+                          width: 3,
+                        ),
                       ),
                       focusedBorder: OutlineInputBorder(
                         borderRadius: BorderRadius.zero,
-                        borderSide: BorderSide(color: primaryText, width: 4),
+                        borderSide: BorderSide(
+                          color: vibe.primaryText,
+                          width: 4,
+                        ),
                       ),
                       contentPadding: const EdgeInsets.symmetric(
                         vertical: 16,
@@ -581,10 +599,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                       _performSearch();
                     },
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: primaryText,
-                      foregroundColor: Theme.of(
-                        context,
-                      ).scaffoldBackgroundColor,
+                      backgroundColor: vibe.primaryText,
+                      foregroundColor: vibe.scaffoldBg,
                       minimumSize: const Size(double.infinity, 56),
                       elevation: 0,
                       shape: const RoundedRectangleBorder(),
@@ -617,7 +633,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             itemBuilder: (context, index) =>
                                 const AnimeCardSkeleton()
                                     .animate(delay: (index * 100).ms)
-                                    .fadeIn(duration: vibeDuration),
+                                    .fadeIn(duration: vibe.animationDuration),
                           );
                         }
 
@@ -652,7 +668,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               style: GoogleFonts.teko(
                                 fontSize: 24,
                                 fontWeight: FontWeight.bold,
-                                color: primaryText.withValues(alpha: 0.5),
+                                color: vibe.primaryText.withValues(alpha: 0.5),
                               ),
                             ),
                           );
@@ -676,12 +692,12 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 .animate(
                                   delay: (index < 10 ? index * 100 : 0).ms,
                                 )
-                                .fadeIn(duration: vibeDuration)
+                                .fadeIn(duration: vibe.animationDuration)
                                 .scale(
                                   begin: const Offset(0.9, 0.9),
                                   end: const Offset(1, 1),
-                                  curve: vibeCurve,
-                                  duration: vibeDuration,
+                                  curve: vibe.animationCurve,
+                                  duration: vibe.animationDuration,
                                 );
                           },
                         );
@@ -697,10 +713,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
       ),
       bottomNavigationBar: Container(
         decoration: BoxDecoration(
-          color: Theme.of(context).scaffoldBackgroundColor,
+          color: vibe.scaffoldBg,
           boxShadow: [
             BoxShadow(
-              color: primaryText.withValues(alpha: 0.1),
+              color: vibe.primaryText.withValues(alpha: 0.1),
               blurRadius: 10,
               offset: const Offset(0, -5),
             ),
@@ -713,11 +729,11 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
                 fontStyle: FontStyle.italic,
-                color: primaryText,
+                color: vibe.primaryText,
               ),
             ),
             iconTheme: WidgetStateProperty.all(
-              IconThemeData(color: primaryText),
+              IconThemeData(color: vibe.primaryText),
             ),
           ),
           child: NavigationBar(
@@ -733,8 +749,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
               });
             },
             elevation: 0,
-            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-            indicatorColor: primaryText.withValues(alpha: 0.2),
+            backgroundColor: vibe.scaffoldBg,
+            indicatorColor: vibe.primaryText.withValues(alpha: 0.2),
             destinations: const [
               NavigationDestination(
                 icon: Icon(Icons.home_outlined),
