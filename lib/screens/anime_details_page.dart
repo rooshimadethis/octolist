@@ -8,7 +8,9 @@ import 'package:provider/provider.dart';
 import '../models/anime.dart';
 import '../services/anime_service_interface.dart';
 import '../services/anime_store.dart';
+
 import '../widgets/expressive_image.dart';
+import '../widgets/expressive_vibe_image.dart';
 import '../widgets/outlined_star.dart';
 import '../widgets/metadata_chip.dart';
 import '../widgets/rating_slider.dart';
@@ -16,7 +18,7 @@ import '../widgets/pressable_card.dart';
 import '../widgets/expressive_button.dart';
 import '../utils/color_parser.dart';
 import '../theme/expressive_theme.dart';
-import '../widgets/grain_overlay.dart';
+
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class AnimeDetailsPage extends StatefulWidget {
@@ -416,36 +418,11 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                         ),
                                       ],
                                     ),
-                                    child: Builder(
-                                      builder: (context) {
-                                        final filter =
-                                            ExpressiveTheme.getImageFilter(
-                                              vibeScore,
-                                            );
-                                        final image = ExpressiveImage(
-                                          imageUrl: anime.coverImage,
-                                          fit: BoxFit.cover,
-                                          skeletonColor: anime.parsedColor,
-                                        );
-
-                                        if (filter == null) return image;
-
-                                        return Stack(
-                                          fit: StackFit.expand,
-                                          children: [
-                                            ColorFiltered(
-                                              colorFilter: filter,
-                                              child: image,
-                                            ),
-                                            GrainOverlay(
-                                              opacity:
-                                                  ExpressiveTheme.getGrainOpacity(
-                                                    vibeScore,
-                                                  ),
-                                            ),
-                                          ],
-                                        );
-                                      },
+                                    child: ExpressiveVibeImage(
+                                      imageUrl: anime.coverImage,
+                                      fit: BoxFit.cover,
+                                      skeletonColor: anime.parsedColor,
+                                      vibeScore: vibeScore,
                                     ),
                                   ),
                                 ),

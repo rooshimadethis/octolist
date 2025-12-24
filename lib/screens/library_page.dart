@@ -7,11 +7,12 @@ import '../services/anime_store.dart';
 import '../models/watching_entry.dart';
 import 'anime_details_page.dart';
 import '../widgets/watching_card.dart';
-import '../widgets/expressive_image.dart';
+
+import '../widgets/expressive_vibe_image.dart';
 import '../widgets/anime_card_skeleton.dart';
 import '../widgets/outlined_star.dart';
 import '../theme/expressive_theme.dart';
-import '../widgets/grain_overlay.dart';
+
 import '../widgets/pressable_card.dart';
 
 enum LibrarySortMode { name, lastUpdated }
@@ -550,31 +551,11 @@ class _LibraryCardState extends State<_LibraryCard> {
               child: Stack(
                 fit: StackFit.expand,
                 children: [
-                  Builder(
-                    builder: (context) {
-                      final filter = ExpressiveTheme.getImageFilter(
-                        widget.vibeScore,
-                      );
-                      final image = ExpressiveImage(
-                        imageUrl: anime.coverImage,
-                        fit: BoxFit.cover,
-                        skeletonColor: anime.parsedColor,
-                      );
-
-                      if (filter == null) return image;
-
-                      return Stack(
-                        fit: StackFit.expand,
-                        children: [
-                          ColorFiltered(colorFilter: filter, child: image),
-                          GrainOverlay(
-                            opacity: ExpressiveTheme.getGrainOpacity(
-                              widget.vibeScore,
-                            ),
-                          ),
-                        ],
-                      );
-                    },
+                  ExpressiveVibeImage(
+                    imageUrl: anime.coverImage,
+                    fit: BoxFit.cover,
+                    skeletonColor: anime.parsedColor,
+                    vibeScore: widget.vibeScore,
                   ),
                   if (widget.entry.progress > 0)
                     Positioned(

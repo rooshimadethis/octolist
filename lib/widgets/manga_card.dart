@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import '../models/anime.dart';
 import '../theme/expressive_theme.dart';
 import '../screens/anime_details_page.dart';
-import 'expressive_image.dart';
+
+import 'expressive_vibe_image.dart';
 import 'outlined_star.dart';
-import 'grain_overlay.dart';
+
 import 'pressable_card.dart';
 
 /// A reusable manga-style anime card with consistent styling
@@ -74,27 +75,11 @@ class _MangaCardState extends State<MangaCard> {
                   children: [
                     Hero(
                       tag: 'anime_cover_${widget.anime.id}',
-                      child: Builder(
-                        builder: (context) {
-                          final image = ExpressiveImage(
-                            imageUrl: widget.anime.coverImage,
-                            fit: BoxFit.cover,
-                            skeletonColor: widget.anime.parsedColor,
-                          );
-
-                          if (vibe.imageFilter == null) return image;
-
-                          return Stack(
-                            fit: StackFit.expand,
-                            children: [
-                              ColorFiltered(
-                                colorFilter: vibe.imageFilter!,
-                                child: image,
-                              ),
-                              GrainOverlay(opacity: vibe.grainOpacity),
-                            ],
-                          );
-                        },
+                      child: ExpressiveVibeImage(
+                        imageUrl: widget.anime.coverImage,
+                        fit: BoxFit.cover,
+                        skeletonColor: widget.anime.parsedColor,
+                        vibeScore: widget.vibeScore,
                       ),
                     ),
                     if (widget.anime.averageScore != null)

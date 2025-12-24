@@ -4,9 +4,10 @@ import 'package:confetti/confetti.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../models/watching_entry.dart';
 import '../screens/anime_details_page.dart';
-import 'expressive_image.dart';
+
+import 'expressive_vibe_image.dart';
 import '../theme/expressive_theme.dart';
-import 'grain_overlay.dart';
+
 import 'pressable_card.dart';
 
 class WatchingCard extends StatefulWidget {
@@ -106,29 +107,13 @@ class _WatchingCardState extends State<WatchingCard> {
                   tag: '${widget.heroPrefix ?? 'watching'}_${widget.entry.id}',
                   child: SizedBox(
                     width: 100,
-                    child: Builder(
-                      builder: (context) {
-                        final image = ExpressiveImage(
-                          imageUrl: widget.entry.anime.coverImage,
-                          fit: BoxFit.cover,
-                          width: 100,
-                          height: double.infinity,
-                          skeletonColor: widget.entry.anime.parsedColor,
-                        );
-
-                        if (vibe.imageFilter == null) return image;
-
-                        return Stack(
-                          fit: StackFit.expand,
-                          children: [
-                            ColorFiltered(
-                              colorFilter: vibe.imageFilter!,
-                              child: image,
-                            ),
-                            GrainOverlay(opacity: vibe.grainOpacity),
-                          ],
-                        );
-                      },
+                    child: ExpressiveVibeImage(
+                      imageUrl: widget.entry.anime.coverImage,
+                      fit: BoxFit.cover,
+                      width: 100,
+                      height: double.infinity,
+                      skeletonColor: widget.entry.anime.parsedColor,
+                      vibeScore: widget.vibeScore,
                     ),
                   ),
                 ),
