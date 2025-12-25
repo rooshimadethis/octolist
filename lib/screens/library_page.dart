@@ -11,6 +11,7 @@ import '../widgets/watching_card.dart';
 import '../widgets/expressive_vibe_image.dart';
 import '../widgets/anime_card_skeleton.dart';
 import '../widgets/outlined_star.dart';
+import '../widgets/octopus_mascot.dart';
 import '../theme/expressive_theme.dart';
 
 import '../widgets/pressable_card.dart';
@@ -134,101 +135,115 @@ class _LibraryPageState extends State<LibraryPage> {
     return DefaultTabController(
       length: listNames.length,
       initialIndex: initialIndex,
-      child: Scaffold(
-        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-        appBar: AppBar(
-          backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-          elevation: 0,
-          title: Text(
-            'YOUR LIBRARY',
-            style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-              fontWeight: FontWeight.bold,
-              fontStyle: FontStyle.italic,
-              fontSize: 32,
-              color: primaryText,
-            ),
-          ),
-          bottom: TabBar(
-            isScrollable: true,
-            indicatorColor: primaryText,
-            indicatorWeight: 4,
-            dividerHeight: 0,
-            labelColor: primaryText,
-            unselectedLabelColor: primaryText.withValues(alpha: 0.5),
-            labelStyle: GoogleFonts.teko(
-              fontSize: 20,
-              fontWeight: FontWeight.bold,
-              letterSpacing: 1.2,
-            ),
-            tabs: listNames
-                .map((name) => Tab(text: name.toUpperCase()))
-                .toList(),
-          ),
-          actions: [
-            PopupMenuButton<LibrarySortMode>(
-              icon: Icon(Icons.sort, color: primaryText, size: 28),
-              surfaceTintColor: Colors.transparent,
-              color: Theme.of(context).scaffoldBackgroundColor,
-              shape: RoundedRectangleBorder(
-                side: BorderSide(color: primaryText, width: 3),
+      child: Stack(
+        children: [
+          Scaffold(
+            backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+            appBar: AppBar(
+              backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+              elevation: 0,
+              title: Text(
+                'YOUR LIBRARY',
+                style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  fontStyle: FontStyle.italic,
+                  fontSize: 32,
+                  color: primaryText,
+                ),
               ),
-              onSelected: (mode) {
-                setState(() {
-                  _sortMode = mode;
-                });
-              },
-              itemBuilder: (context) => [
-                PopupMenuItem(
-                  value: LibrarySortMode.name,
-                  child: Row(
-                    children: [
-                      Icon(Icons.sort_by_alpha, color: primaryText),
-                      const SizedBox(width: 12),
-                      Text(
-                        'NAME',
-                        style: GoogleFonts.teko(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
-                          color: primaryText,
-                        ),
-                      ),
-                    ],
-                  ),
+              bottom: TabBar(
+                isScrollable: true,
+                indicatorColor: primaryText,
+                indicatorWeight: 4,
+                dividerHeight: 0,
+                labelColor: primaryText,
+                unselectedLabelColor: primaryText.withValues(alpha: 0.5),
+                labelStyle: GoogleFonts.teko(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  letterSpacing: 1.2,
                 ),
-                PopupMenuItem(
-                  value: LibrarySortMode.lastUpdated,
-                  child: Row(
-                    children: [
-                      Icon(Icons.history, color: primaryText),
-                      const SizedBox(width: 12),
-                      Text(
-                        'LAST UPDATED',
-                        style: GoogleFonts.teko(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.2,
-                          color: primaryText,
-                        ),
-                      ),
-                    ],
+                tabs: listNames
+                    .map((name) => Tab(text: name.toUpperCase()))
+                    .toList(),
+              ),
+              actions: [
+                PopupMenuButton<LibrarySortMode>(
+                  icon: Icon(Icons.sort, color: primaryText, size: 28),
+                  surfaceTintColor: Colors.transparent,
+                  color: Theme.of(context).scaffoldBackgroundColor,
+                  shape: RoundedRectangleBorder(
+                    side: BorderSide(color: primaryText, width: 3),
                   ),
+                  onSelected: (mode) {
+                    setState(() {
+                      _sortMode = mode;
+                    });
+                  },
+                  itemBuilder: (context) => [
+                    PopupMenuItem(
+                      value: LibrarySortMode.name,
+                      child: Row(
+                        children: [
+                          Icon(Icons.sort_by_alpha, color: primaryText),
+                          const SizedBox(width: 12),
+                          Text(
+                            'NAME',
+                            style: GoogleFonts.teko(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
+                              color: primaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    PopupMenuItem(
+                      value: LibrarySortMode.lastUpdated,
+                      child: Row(
+                        children: [
+                          Icon(Icons.history, color: primaryText),
+                          const SizedBox(width: 12),
+                          Text(
+                            'LAST UPDATED',
+                            style: GoogleFonts.teko(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              letterSpacing: 1.2,
+                              color: primaryText,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
+                const SizedBox(width: 8),
               ],
             ),
-            const SizedBox(width: 8),
-          ],
-        ),
-        body: TabBarView(
-          children: listNames.map((name) {
-            return _LibraryTabContent(
-              listName: name,
-              onUpdate: _handleUpdate,
-              sortMode: _sortMode,
-              vibeScore: vibeScore,
-            );
-          }).toList(),
-        ),
+            body: TabBarView(
+              children: listNames.map((name) {
+                return _LibraryTabContent(
+                  listName: name,
+                  onUpdate: _handleUpdate,
+                  sortMode: _sortMode,
+                  vibeScore: vibeScore,
+                );
+              }).toList(),
+            ),
+          ),
+          // Upside-down peeking octopus positioned behind the AppBar
+          Positioned(
+            top: -30, // Adjust vertical position
+            right:
+                80, // Adjust horizontal position (to the left of sort button)
+            child: const OctopusMascot(
+              size: 100,
+              rotation: 180, // Upside-down
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -668,12 +683,7 @@ class _EmptyLibraryState extends StatelessWidget {
             ),
             child: Column(
               children: [
-                Icon(Icons.auto_stories_outlined, size: 64, color: primaryText)
-                    .animate(onPlay: (controller) => controller.repeat())
-                    .shimmer(
-                      duration: 2.seconds,
-                      color: primaryText.withValues(alpha: 0.2),
-                    ),
+                const OctopusMascot(size: 80),
                 const SizedBox(height: 16),
                 Text(
                   'LIBRARY IS EMPTY',

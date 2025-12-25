@@ -17,6 +17,7 @@ import '../widgets/manga_card.dart';
 import '../widgets/section_title.dart';
 import '../widgets/user_profile_dialog.dart';
 import '../widgets/expressive_image.dart';
+import '../widgets/octopus_mascot.dart';
 import '../theme/expressive_theme.dart';
 import '../utils/greeting_helper.dart';
 import '../utils/vibe_text_helper.dart';
@@ -295,39 +296,55 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               width: 12,
                             ), // Spacing between text and avatar
                             if (avatarUrl != null && avatarUrl.isNotEmpty)
-                              GestureDetector(
-                                onTap: () {
-                                  HapticFeedback.lightImpact();
-                                  if (user != null) {
-                                    UserProfileDialog.show(context, user);
-                                  }
-                                },
-                                child: Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle, // Circular avatar
-                                    border: Border.all(
-                                      color: vibe.primaryText,
-                                      width: 3,
-                                    ),
-                                    boxShadow: [
-                                      BoxShadow(
-                                        color: ExpressiveTheme.getShadowColor(
-                                          widget.vibeScore,
+                              Stack(
+                                clipBehavior: Clip.none,
+                                children: [
+                                  GestureDetector(
+                                    onTap: () {
+                                      HapticFeedback.lightImpact();
+                                      if (user != null) {
+                                        UserProfileDialog.show(context, user);
+                                      }
+                                    },
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        shape:
+                                            BoxShape.circle, // Circular avatar
+                                        border: Border.all(
+                                          color: vibe.primaryText,
+                                          width: 3,
                                         ),
-                                        blurRadius: 0,
-                                        offset: const Offset(4, 4),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color:
+                                                ExpressiveTheme.getShadowColor(
+                                                  widget.vibeScore,
+                                                ),
+                                            blurRadius: 0,
+                                            offset: const Offset(4, 4),
+                                          ),
+                                        ],
                                       ),
-                                    ],
-                                  ),
-                                  child: ClipOval(
-                                    child: ExpressiveImage(
-                                      imageUrl: avatarUrl,
-                                      width: 56,
-                                      height: 56,
-                                      fit: BoxFit.cover,
+                                      child: ClipOval(
+                                        child: ExpressiveImage(
+                                          imageUrl: avatarUrl,
+                                          width: 56,
+                                          height: 56,
+                                          fit: BoxFit.cover,
+                                        ),
+                                      ),
                                     ),
                                   ),
-                                ),
+                                  // Octopus sitting on left side of avatar
+                                  Positioned(
+                                    top: -25,
+                                    left: -10,
+                                    child: OctopusMascot(
+                                      size: 50,
+                                      rotation: -20,
+                                    ),
+                                  ),
+                                ],
                               ),
                           ],
                         );
@@ -389,7 +406,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   if (index < 3) {
                                     return skeleton
                                         .animate(delay: (index * 100).ms)
-                                        .fadeIn(duration: vibe.animationDuration);
+                                        .fadeIn(
+                                          duration: vibe.animationDuration,
+                                        );
                                   }
                                   return skeleton;
                                 }
@@ -401,11 +420,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   progress: entry.progress,
                                   heroPrefix: 'home',
                                   vibeScore: widget.vibeScore,
-                                  onIncrement: () => _updateProgress(
-                                    entry,
-                                    entry.progress,
-                                    1,
-                                  ),
+                                  onIncrement: () =>
+                                      _updateProgress(entry, entry.progress, 1),
                                 );
 
                                 // Only animate first 3 items to reduce animation overhead
@@ -414,7 +430,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                     key: ValueKey('watching_${entry.id}'),
                                     child: card
                                         .animate(delay: (index * 100).ms)
-                                        .fadeIn(duration: vibe.animationDuration)
+                                        .fadeIn(
+                                          duration: vibe.animationDuration,
+                                        )
                                         .slideX(
                                           begin: 0.3,
                                           end: 0,
@@ -498,7 +516,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             // Only animate first 3 items to reduce animation overhead
                             if (index < 3) {
                               return KeyedSubtree(
-                                key: ValueKey('trending_${animeList[index].id}'),
+                                key: ValueKey(
+                                  'trending_${animeList[index].id}',
+                                ),
                                 child: card
                                     .animate(delay: (index * 100).ms)
                                     .fadeIn(duration: vibe.animationDuration)
@@ -629,7 +649,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             itemCount: 6,
                             itemBuilder: (context, index) =>
                                 const AnimeCardSkeleton()
-                                    .animate(delay: (index < 3 ? index * 100 : 0).ms)
+                                    .animate(
+                                      delay: (index < 3 ? index * 100 : 0).ms,
+                                    )
                                     .fadeIn(duration: vibe.animationDuration),
                           );
                         }
@@ -649,13 +671,15 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         if (animeList.isEmpty) {
                           if (_searchQuery.isEmpty) {
                             return Center(
-                              child: Text(
-                                '👀',
-                                style: GoogleFonts.teko(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.bold,
-                                  color: Colors.grey,
-                                ),
+                              child: Animate(
+                                onPlay: (controller) => controller.repeat(),
+                                effects: const [
+                                  RotateEffect(
+                                    duration: Duration(seconds: 3),
+                                    curve: Curves.linear,
+                                  ),
+                                ],
+                                child: const OctopusMascot(size: 60),
                               ),
                             );
                           }
@@ -690,8 +714,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                         vibeScore: widget.vibeScore,
                                       )
                                       .animate(
-                                        delay:
-                                            (index < 3 ? index * 100 : 0).ms,
+                                        delay: (index < 3 ? index * 100 : 0).ms,
                                       )
                                       .fadeIn(duration: vibe.animationDuration)
                                       .scale(
