@@ -1,4 +1,5 @@
 import 'dart:math';
+import 'vibe_level.dart';
 
 /// Helper class to determine text strings based on vibe score.
 class VibeTextHelper {
@@ -18,9 +19,7 @@ class VibeTextHelper {
   static VibeLevel? _cachedTrendingNowLevel;
 
   /// Returns a random search hint text based on vibe score.
-  static String getSearchHint({double vibeScore = 0.0}) {
-    final vibeLevel = _getVibeLevel(vibeScore);
-
+  static String getSearchHint(VibeLevel vibeLevel) {
     // Return cached value if vibe level hasn't changed
     if (_cachedSearchHint != null && _cachedSearchHintLevel == vibeLevel) {
       return _cachedSearchHint!;
@@ -33,9 +32,7 @@ class VibeTextHelper {
   }
 
   /// Returns a random header text for "Continue Watching" based on vibe score.
-  static String getContinueWatchingHeader({double vibeScore = 0.0}) {
-    final vibeLevel = _getVibeLevel(vibeScore);
-
+  static String getContinueWatchingHeader(VibeLevel vibeLevel) {
     // Return cached value if vibe level hasn't changed
     if (_cachedContinueWatchingHeader != null &&
         _cachedContinueWatchingLevel == vibeLevel) {
@@ -50,9 +47,7 @@ class VibeTextHelper {
   }
 
   /// Returns a random header text for "Trending Now" based on vibe score.
-  static String getTrendingNowHeader({double vibeScore = 0.0}) {
-    final vibeLevel = _getVibeLevel(vibeScore);
-
+  static String getTrendingNowHeader(VibeLevel vibeLevel) {
     // Return cached value if vibe level hasn't changed
     if (_cachedTrendingNowHeader != null &&
         _cachedTrendingNowLevel == vibeLevel) {
@@ -63,13 +58,6 @@ class VibeTextHelper {
     _cachedTrendingNowHeader = options[_random.nextInt(options.length)];
     _cachedTrendingNowLevel = vibeLevel;
     return _cachedTrendingNowHeader!;
-  }
-
-  static VibeLevel _getVibeLevel(double score) {
-    if (score < 0.25) return VibeLevel.radiant;
-    if (score < 0.50) return VibeLevel.neutral;
-    if (score < 0.75) return VibeLevel.grim;
-    return VibeLevel.abyssal;
   }
 
   static const Map<VibeLevel, List<String>> _searchHints = {
@@ -110,5 +98,3 @@ class VibeTextHelper {
     ],
   };
 }
-
-enum VibeLevel { radiant, neutral, grim, abyssal }

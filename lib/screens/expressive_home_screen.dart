@@ -210,7 +210,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         final isGuest = user == null;
 
                         final greeting = GreetingHelper.getGreeting(
-                          vibeScore: widget.vibeScore,
+                          context.read<AnimeStore>().vibeLevel,
                         );
 
                         return Row(
@@ -368,7 +368,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                         children: [
                           SectionTitle(
                                 title: VibeTextHelper.getContinueWatchingHeader(
-                                  vibeScore: widget.vibeScore,
+                                  store.vibeLevel,
                                 ),
                                 vibeScore: widget.vibeScore,
                                 onPressed: () {
@@ -463,7 +463,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                   // Trending Section
                   SectionTitle(
                         title: VibeTextHelper.getTrendingNowHeader(
-                          vibeScore: widget.vibeScore,
+                          context.read<AnimeStore>().vibeLevel,
                         ),
                         vibeScore: widget.vibeScore,
                         // Button removed as per request
@@ -582,7 +582,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                     ),
                     decoration: InputDecoration(
                       hintText: VibeTextHelper.getSearchHint(
-                        vibeScore: widget.vibeScore,
+                        context.read<AnimeStore>().vibeLevel,
                       ),
                       hintStyle: GoogleFonts.teko(
                         fontSize: 20,

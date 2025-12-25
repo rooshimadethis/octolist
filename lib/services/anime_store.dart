@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../utils/vibe_level.dart';
 import '../models/watching_entry.dart';
 import '../models/anime.dart';
 import '../models/user_profile.dart';
@@ -34,6 +35,9 @@ class AnimeStore extends ChangeNotifier {
     _saveVibe();
     notifyListeners();
   }
+
+  /// Get the current VibeLevel based on the score.
+  VibeLevel get vibeLevel => getVibeLevel(_vibeScore);
 
   /// Load vibe score from persistent storage
   Future<void> initVibe() async {

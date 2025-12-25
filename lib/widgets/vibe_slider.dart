@@ -34,7 +34,7 @@ class VibeSlider extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'DEBUG VIBE: ${(vibeScore * 100).toInt()}%',
+                  'DEBUG VIBE: ${(vibeScore * 100).toInt()}% (${store.vibeLevel.name})',
                   style: GoogleFonts.teko(
                     color: primaryText,
                     fontWeight: FontWeight.bold,

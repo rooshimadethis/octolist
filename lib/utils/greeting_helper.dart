@@ -1,3 +1,5 @@
+import 'package:octolist/utils/vibe_level.dart';
+
 /// Helper class to determine greetings based on time of day and vibe score.
 class GreetingHelper {
   GreetingHelper._();
@@ -9,9 +11,8 @@ class GreetingHelper {
 
   /// Returns a [GreetingData] object containing the main title and subtitle
   /// for the current time and vibe.
-  static GreetingData getGreeting({double vibeScore = 0.0}) {
+  static GreetingData getGreeting(VibeLevel vibeLevel) {
     final timeRange = _getTimeRange();
-    final vibeLevel = _getVibeLevel(vibeScore);
 
     // Return cached value if time range and vibe level haven't changed
     if (_cachedGreeting != null &&
@@ -38,13 +39,6 @@ class GreetingHelper {
     if (hour >= 12 && hour < 18) return TimeRange.afternoon;
     if (hour >= 18) return TimeRange.evening;
     return TimeRange.deepNight;
-  }
-
-  static VibeLevel _getVibeLevel(double score) {
-    if (score < 0.25) return VibeLevel.radiant;
-    if (score < 0.50) return VibeLevel.neutral;
-    if (score < 0.75) return VibeLevel.grim;
-    return VibeLevel.abyssal;
   }
 
   static const Map<VibeLevel, Map<TimeRange, GreetingData>> _greetings = {
@@ -119,8 +113,6 @@ class GreetingHelper {
     },
   };
 }
-
-enum VibeLevel { radiant, neutral, grim, abyssal }
 
 enum TimeRange { morning, afternoon, evening, deepNight }
 
