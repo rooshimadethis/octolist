@@ -18,6 +18,7 @@ import '../widgets/section_title.dart';
 import '../widgets/user_profile_dialog.dart';
 import '../widgets/expressive_image.dart';
 import '../widgets/octopus_mascot.dart';
+import '../widgets/typewriter_text.dart';
 import '../theme/expressive_theme.dart';
 import '../utils/greeting_helper.dart';
 import '../utils/vibe_text_helper.dart';
@@ -223,9 +224,13 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                   FittedBox(
                                     fit: BoxFit.scaleDown,
                                     alignment: Alignment.centerLeft,
-                                    child: Text(
-                                      '${greeting.title} $name',
+                                    child: TypewriterText(
+                                      text: '${greeting.title} $name',
                                       maxLines: 1,
+                                      duration: const Duration(
+                                        milliseconds: 1200,
+                                      ),
+                                      showCursor: true,
                                       style: Theme.of(context)
                                           .textTheme
                                           .headlineMedium
