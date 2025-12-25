@@ -373,8 +373,9 @@ class ExpressiveTheme {
     final double textT = vibeScore < 0.47
         ? 0.0
         : vibeScore > 0.53
-            ? 1.0
-            : (vibeScore - 0.47) / 0.06; // Linear interpolation in the 0.47-0.53 range
+        ? 1.0
+        : (vibeScore - 0.47) /
+              0.06; // Linear interpolation in the 0.47-0.53 range
 
     final Color primaryText = Color.lerp(primaryBlack, surfaceWhite, textT)!;
 
@@ -419,8 +420,8 @@ class ExpressiveTheme {
     final double textT = score < 0.47
         ? 0.0
         : score > 0.53
-            ? 1.0
-            : (score - 0.47) / 0.06;
+        ? 1.0
+        : (score - 0.47) / 0.06;
     return Color.lerp(primaryBlack, surfaceWhite, textT)!;
   }
 
@@ -480,13 +481,18 @@ class ExpressiveTheme {
     // Interpolation factor with easing for smoother transitions
     final t = Curves.easeInOut.transform(score);
 
-    // Target values: 50% desaturated + 70% brightness
+    // Target values: 30% desaturated + 80% brightness
     // These values are derived from Rec.709 grayscale coefficients
-    // scaled by 0.7 for brightness reduction
-    const kDesatR = 0.4244, kDesatG1 = 0.2503, kDesatB1 = 0.0253;
-    const kDesatG2 = 0.6003, kDesatG3 = 0.0253;
-    const kDesatB2 = 0.2503, kDesatB3 = 0.3753;
-    const kDesatR2 = 0.0744;
+    // scaled by 0.8 for brightness reduction
+    // R1C1: (0.3 * 0.2126 + 0.7) * 0.8 = 0.6110
+    // R1C2: (0.3 * 0.7152) * 0.8 = 0.1716
+    // R1C3: (0.3 * 0.0722) * 0.8 = 0.0173
+    const kDesatR = 0.6110, kDesatG1 = 0.1716, kDesatB1 = 0.0173;
+    const kDesatG2 = 0.7316,
+        kDesatG3 = 0.0173; // G2 = (0.3 * 0.7152 + 0.7) * 0.8
+    const kDesatB2 = 0.1716,
+        kDesatB3 = 0.5773; // B3 = (0.3 * 0.0722 + 0.7) * 0.8
+    const kDesatR2 = 0.0510; // R2 = (0.3 * 0.2126) * 0.8
 
     // Lerp from identity matrix to target desaturated matrix
     final filter = ColorFilter.matrix([
