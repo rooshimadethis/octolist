@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
+import 'package:visibility_detector/visibility_detector.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import '../models/anime.dart';
@@ -429,26 +430,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                       _updateProgress(entry, entry.progress, 1),
                                 );
 
-                                // Only animate first 3 items to reduce animation overhead
-                                if (index < 3) {
-                                  return KeyedSubtree(
-                                    key: ValueKey('watching_${entry.id}'),
-                                    child: card
-                                        .animate(delay: (index * 100).ms)
-                                        .fadeIn(
-                                          duration: vibe.animationDuration,
-                                        )
-                                        .slideX(
-                                          begin: 0.3,
-                                          end: 0,
-                                          curve: vibe.animationCurve,
-                                          duration: vibe.animationDuration,
-                                        ),
-                                  );
-                                }
-
-                                return KeyedSubtree(
-                                  key: ValueKey('watching_${entry.id}'),
+                                return _AnimatedVisibilityCard(
+                                  id: 'watching_${entry.id}',
+                                  vibeScore: widget.vibeScore,
                                   child: card,
                                 );
                               },
@@ -518,26 +502,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               ),
                             );
 
-                            // Only animate first 3 items to reduce animation overhead
-                            if (index < 3) {
-                              return KeyedSubtree(
-                                key: ValueKey(
-                                  'trending_${animeList[index].id}',
-                                ),
-                                child: card
-                                    .animate(delay: (index * 100).ms)
-                                    .fadeIn(duration: vibe.animationDuration)
-                                    .scale(
-                                      begin: const Offset(0.8, 0.8),
-                                      end: const Offset(1.0, 1.0),
-                                      curve: vibe.animationCurve,
-                                      duration: vibe.animationDuration,
-                                    ),
-                              );
-                            }
-
-                            return KeyedSubtree(
-                              key: ValueKey('trending_${animeList[index].id}'),
+                            return _AnimatedVisibilityCard(
+                              id: 'trending_${animeList[index].id}',
+                              vibeScore: widget.vibeScore,
                               child: card,
                             );
                           },
@@ -711,23 +678,13 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                               ),
                           itemCount: animeList.length,
                           itemBuilder: (context, index) {
-                            return KeyedSubtree(
-                              key: ValueKey('search_${animeList[index].id}'),
-                              child:
-                                  MangaCard(
-                                        anime: animeList[index],
-                                        vibeScore: widget.vibeScore,
-                                      )
-                                      .animate(
-                                        delay: (index < 3 ? index * 100 : 0).ms,
-                                      )
-                                      .fadeIn(duration: vibe.animationDuration)
-                                      .scale(
-                                        begin: const Offset(0.8, 0.8),
-                                        end: const Offset(1, 1),
-                                        curve: vibe.animationCurve,
-                                        duration: vibe.animationDuration,
-                                      ),
+                            return _AnimatedVisibilityCard(
+                              id: 'search_${animeList[index].id}',
+                              vibeScore: widget.vibeScore,
+                              child: MangaCard(
+                                anime: animeList[index],
+                                vibeScore: widget.vibeScore,
+                              ),
                             );
                           },
                         );
@@ -800,6 +757,55 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class _AnimatedVisibilityCard extends StatefulWidget {
+  final Widget child;
+  final String id;
+  final double vibeScore;
+
+  const _AnimatedVisibilityCard({
+    required this.child,
+    required this.id,
+    required this.vibeScore,
+  });
+
+  @override
+  State<_AnimatedVisibilityCard> createState() =>
+      _AnimatedVisibilityCardState();
+}
+
+class _AnimatedVisibilityCardState extends State<_AnimatedVisibilityCard> {
+  double _animationTarget = 0;
+
+  @override
+  Widget build(BuildContext context) {
+    // Get animation params from theme
+    final duration = ExpressiveTheme.vibeDuration(widget.vibeScore) * 0.8;
+    final curve = ExpressiveTheme.vibeCurve(widget.vibeScore);
+
+    return RepaintBoundary(
+      child: VisibilityDetector(
+        key: Key('home_card_visibility_${widget.id}'),
+        onVisibilityChanged: (info) {
+          if (_animationTarget == 0 && info.visibleFraction > 0.05) {
+            setState(() {
+              _animationTarget = 1;
+            });
+          }
+        },
+        child: widget.child
+            .animate(target: _animationTarget)
+            .fadeIn(begin: 0.75, duration: duration)
+            .scale(
+              begin: const Offset(0.9, 0.9),
+              end: const Offset(1.0, 1.0),
+              duration: duration,
+              curve: curve,
+            ),
       ),
     );
   }
