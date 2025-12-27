@@ -15,6 +15,7 @@ OctoList is a Flutter application for tracking anime. It consumes the [AniList G
 - **Feature-first or Layer-first**: Currently simple layer-based.
   - `lib/graphql/`: Contains Client configuration (`client.dart`) and Queries (`queries.dart`).
   - `lib/screens/`: Contains UI screens (e.g., `home_screen.dart`).
+  - `lib/services/`: Contains core services (`DiscussionService`, `AniListService`, `AnimeStore`).
 - **Styling**: Material 3 (`useMaterial3: true`), `Colors.deepPurple` seed.
 
 ## API & Data Strategy
@@ -24,6 +25,13 @@ OctoList is a Flutter application for tracking anime. It consumes the [AniList G
 > - **Search**: Input must be debounced (500ms+).
 > - **Caching**: Use `Hive` to persist generic data (Home, Profile) and User Library.
 > - **Pagination**: Avoid pagination for User Library (Fetch All Strategy).
+
+### Discussion Integration (Waterfall Strategy)
+To find episode discussion threads, we use a parallel/waterfall approach:
+1. **Jikan (MyAnimeList)**: Checks for "Episode X Discussion" topics via `idMal`.
+2. **AniList**: Checks for threads matching "Title Episode X" in the "Release Discussion" category.
+3. **Fallback**: Generates search URLs for Reddit, Google, and AniList.
+This logic is encapsulated in `DiscussionService`.
 
 ### Core Data Convention (`MediaShort`)
 All lists (Home, Search, Library) must use the standardized `MediaShort` fragment to prevent layout shifts.

@@ -8,6 +8,7 @@ import '../graphql/anilist_client.dart';
 import '../graphql/queries.dart';
 
 import 'anime_service_interface.dart';
+import 'discussion_service.dart';
 
 /// Service for interacting with the AniList GraphQL API.
 ///
@@ -389,6 +390,18 @@ class AniListService implements IAnimeService {
         if (!c.isCompleted) c.completeError(e);
       }
     }
+  }
+
+  late final DiscussionService _discussionService = DiscussionService(
+    graphQLClient: _client,
+  );
+
+  @override
+  Future<List<DiscussionOption>> getDiscussionLinks(
+    Anime anime,
+    int episodeNumber,
+  ) {
+    return _discussionService.getDiscussionLinks(anime, episodeNumber);
   }
 }
 

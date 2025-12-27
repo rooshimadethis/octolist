@@ -39,6 +39,7 @@ class Studio {
 
 class Anime {
   final int id;
+  final int? idMal;
   final String title;
   final String? coverImage;
   final String? bannerImage;
@@ -74,6 +75,7 @@ class Anime {
 
   Anime({
     required this.id,
+    this.idMal,
     required this.title,
     this.coverImage,
     this.bannerImage,
@@ -98,6 +100,7 @@ class Anime {
 
     return Anime(
       id: json['id'],
+      idMal: json['idMal'],
       title:
           titleObj['english'] ??
           titleObj['romaji'] ??

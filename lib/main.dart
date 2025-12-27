@@ -11,6 +11,7 @@ import 'services/anime_store.dart';
 import 'services/mock_data_service.dart';
 import 'services/anilist_service.dart';
 import 'screens/expressive_home_screen.dart';
+import 'graphql/anilist_client.dart';
 
 // SET THIS TO TRUE TO USE MOCK DATA
 const bool useMocks = false;
@@ -25,7 +26,9 @@ void main() async {
 
   // Configure VisibilityDetector to check more frequently (default is 500ms)
   // Lower value = more frequent checks = smoother animations but slightly more CPU usage
-  VisibilityDetectorController.instance.updateInterval = const Duration(milliseconds: 50);
+  VisibilityDetectorController.instance.updateInterval = const Duration(
+    milliseconds: 50,
+  );
 
   try {
     await FlutterDisplayMode.setHighRefreshRate();
@@ -49,10 +52,13 @@ void main() async {
   );
   await animeStore.initVibe();
 
+  // Initialize GraphQL Client
+  final client = AniListClient.initClient();
+
   runApp(
     ChangeNotifierProvider.value(
       value: animeStore,
-      child: const ExpressiveApp(),
+      child: GraphQLProvider(client: client, child: const ExpressiveApp()),
     ),
   );
 }
@@ -70,26 +76,3 @@ Future<void> _preCacheFonts() async {
     debugPrint("Error pre-caching fonts: $e");
   }
 }
-
-/*
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final ValueNotifier<GraphQLClient> client = AniListClient.initClient();
-
-    return GraphQLProvider(
-      client: client,
-      child: MaterialApp(
-        title: 'OctoList',
-        theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-          useMaterial3: true,
-        ),
-        home: const HomeScreen(),
-      ),
-    );
-  }
-}
-*/

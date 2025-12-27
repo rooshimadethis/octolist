@@ -12,6 +12,8 @@ import '../services/anime_service_interface.dart';
 import '../services/auth_service.dart';
 import '../services/anime_store.dart';
 import 'library_page.dart';
+import 'social_page.dart';
+import 'search_page.dart';
 import '../widgets/watching_card.dart';
 import '../widgets/anime_card_skeleton.dart';
 import '../widgets/manga_card.dart';
@@ -59,15 +61,12 @@ class ExpressiveHomePage extends StatefulWidget {
 
 class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   int _selectedIndex = 0;
-  String _searchQuery = '';
-  final TextEditingController _searchController = TextEditingController();
   String? _libraryInitialTab;
   final Key _libraryKey = const PageStorageKey('library_page');
 
   late IAnimeService _animeService;
   late Future<UserProfile?> _profileFuture;
   late Future<List<Anime>> _trendingFuture;
-  late Future<List<Anime>> _searchFuture;
 
   // Cache VibeColors to avoid recalculating on every build
   VibeColors? _cachedVibeColors;
@@ -94,7 +93,6 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
   @override
   void dispose() {
     AuthService().isLoggedIn.removeListener(_onAuthChanged);
-    _searchController.dispose();
     super.dispose();
   }
 
@@ -121,20 +119,10 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
 
     // Fetch trending in parallel
     _trendingFuture = _animeService.getTrendingAnime();
-
-    _searchFuture = _searchQuery.isEmpty
-        ? Future.value([])
-        : _animeService.searchAnime(_searchQuery);
   }
 
   void _onAuthChanged() {
     if (mounted) {
-      if (AuthService().isLoggedIn.value) {
-        SnackBarHelper.showSuccess(
-          context,
-          message: 'Successfully logged in to AniList!',
-        );
-      }
       setState(() {
         _loadData();
       });
@@ -156,6 +144,9 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
           message: 'Progress updated!',
           duration: const Duration(milliseconds: 500),
         );
+        setState(() {
+          _loadData();
+        });
       }
     } catch (e) {
       if (mounted) {
@@ -164,25 +155,6 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
           message: 'Failed to update progress: $e',
         );
       }
-    }
-  }
-
-  void _performSearch() {
-    // Dismiss keyboard
-    FocusScope.of(context).unfocus();
-
-    setState(() {
-      _searchFuture = _searchQuery.isEmpty
-          ? Future.value([])
-          : _animeService.searchAnime(_searchQuery);
-    });
-
-    if (_searchQuery.isNotEmpty) {
-      SnackBarHelper.showInfo(
-        context,
-        message: 'Searching for "$_searchQuery"...',
-        duration: const Duration(milliseconds: 500),
-      );
     }
   }
 
@@ -301,6 +273,24 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                             const SizedBox(
                               width: 12,
                             ), // Spacing between text and avatar
+                            IconButton(
+                              icon: Icon(
+                                Icons.search,
+                                color: vibe.primaryText,
+                                size: 30,
+                              ),
+                              onPressed: () {
+                                HapticFeedback.lightImpact();
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) =>
+                                        SearchPage(vibeScore: widget.vibeScore),
+                                  ),
+                                );
+                              },
+                            ),
+                            const SizedBox(width: 8),
                             if (avatarUrl != null && avatarUrl.isNotEmpty)
                               Stack(
                                 clipBehavior: Clip.none,
@@ -375,7 +365,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                                 onPressed: () {
                                   setState(() {
                                     _libraryInitialTab = 'Watching';
-                                    _selectedIndex = 2;
+                                    _selectedIndex = 1;
                                   });
                                 },
                               )
@@ -516,186 +506,8 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
               ),
             ),
           ),
-
-          // Search Page
-          SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'SEARCH',
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                      fontWeight: FontWeight.bold,
-                      fontStyle: FontStyle.italic,
-                      color: vibe.primaryText,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  TextField(
-                    controller: _searchController,
-                    textInputAction: TextInputAction.search,
-                    onChanged: (value) {
-                      _searchQuery = value;
-                    },
-                    onSubmitted: (_) {
-                      HapticFeedback.lightImpact();
-                      _performSearch();
-                    },
-                    style: GoogleFonts.robotoMono(
-                      fontWeight: FontWeight.bold,
-                      color: vibe.primaryText,
-                    ),
-                    decoration: InputDecoration(
-                      hintText: VibeTextHelper.getSearchHint(
-                        context.read<AnimeStore>().vibeLevel,
-                      ),
-                      hintStyle: GoogleFonts.teko(
-                        fontSize: 20,
-                        color: vibe.primaryText.withValues(alpha: 0.5),
-                      ),
-                      prefixIcon: Icon(
-                        Icons.search_rounded,
-                        color: vibe.primaryText,
-                      ),
-                      filled: true,
-                      fillColor: vibe.scaffoldBg,
-                      enabledBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.zero,
-                        borderSide: BorderSide(
-                          color: vibe.primaryText,
-                          width: 3,
-                        ),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderRadius: BorderRadius.zero,
-                        borderSide: BorderSide(
-                          color: vibe.primaryText,
-                          width: 4,
-                        ),
-                      ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        vertical: 16,
-                        horizontal: 16,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  ElevatedButton(
-                    onPressed: () {
-                      HapticFeedback.lightImpact();
-                      _performSearch();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: vibe.primaryText,
-                      foregroundColor: vibe.scaffoldBg,
-                      minimumSize: const Size(double.infinity, 56),
-                      elevation: 0,
-                      shape: const RoundedRectangleBorder(),
-                    ),
-                    child: Text(
-                      'SEARCH',
-                      style: GoogleFonts.teko(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Expanded(
-                    child: FutureBuilder<List<Anime>>(
-                      future: _searchFuture,
-                      builder: (context, snapshot) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return GridView.builder(
-                            gridDelegate:
-                                const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 16,
-                                  crossAxisSpacing: 16,
-                                  childAspectRatio: 0.7,
-                                ),
-                            itemCount: 6,
-                            itemBuilder: (context, index) =>
-                                const AnimeCardSkeleton()
-                                    .animate(
-                                      delay: (index < 3 ? index * 100 : 0).ms,
-                                    )
-                                    .fadeIn(duration: vibe.animationDuration),
-                          );
-                        }
-
-                        // New Error Handling UI for Search
-                        if (snapshot.hasError) {
-                          return Center(
-                            child: Text(
-                              'Error searching: ${snapshot.error}',
-                              style: GoogleFonts.robotoMono(color: Colors.red),
-                            ),
-                          );
-                        }
-
-                        final animeList = snapshot.data ?? [];
-
-                        if (animeList.isEmpty) {
-                          if (_searchQuery.isEmpty) {
-                            return Center(
-                              child: Animate(
-                                onPlay: (controller) => controller.repeat(),
-                                effects: const [
-                                  RotateEffect(
-                                    duration: Duration(seconds: 3),
-                                    curve: Curves.linear,
-                                  ),
-                                ],
-                                child: const OctopusMascot(size: 60),
-                              ),
-                            );
-                          }
-                          return Center(
-                            child: Text(
-                              'NO RESULTS FOUND',
-                              style: GoogleFonts.teko(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                                color: vibe.primaryText.withValues(alpha: 0.5),
-                              ),
-                            ),
-                          );
-                        }
-
-                        return GridView.builder(
-                          cacheExtent: 1000,
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount: 2,
-                                mainAxisSpacing: 16,
-                                crossAxisSpacing: 16,
-                                childAspectRatio: 0.7,
-                              ),
-                          itemCount: animeList.length,
-                          itemBuilder: (context, index) {
-                            return _AnimatedVisibilityCard(
-                              id: 'search_${animeList[index].id}',
-                              vibeScore: widget.vibeScore,
-                              child: MangaCard(
-                                anime: animeList[index],
-                                vibeScore: widget.vibeScore,
-                              ),
-                            );
-                          },
-                        );
-                      },
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
           LibraryPage(key: _libraryKey, initialTabName: _libraryInitialTab),
+          const SocialPage(),
         ],
       ),
       bottomNavigationBar: Container(
@@ -730,7 +542,7 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
               HapticFeedback.lightImpact();
               setState(() {
                 _selectedIndex = index;
-                if (index != 2) {
+                if (index != 1) {
                   _libraryInitialTab = null;
                 }
               });
@@ -745,14 +557,14 @@ class _ExpressiveHomePageState extends State<ExpressiveHomePage> {
                 label: 'HOME',
               ),
               NavigationDestination(
-                icon: Icon(Icons.search_outlined),
-                selectedIcon: Icon(Icons.search),
-                label: 'EXPLORE',
-              ),
-              NavigationDestination(
                 icon: Icon(Icons.video_library_outlined),
                 selectedIcon: Icon(Icons.video_library),
                 label: 'LIBRARY',
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.people_outline),
+                selectedIcon: Icon(Icons.people),
+                label: 'SOCIAL',
               ),
             ],
           ),

@@ -1,6 +1,7 @@
 import '../models/anime.dart';
 import '../models/user_profile.dart';
 import '../models/watching_entry.dart';
+import 'discussion_service.dart';
 
 abstract class IAnimeService {
   Future<UserProfile?> getUserProfile();
@@ -14,10 +15,19 @@ abstract class IAnimeService {
   Future<List<Anime>> searchAnime(String query);
   Future<List<String>> getAvailableListNames();
   Future<WatchingEntry?> getMediaListEntry(int animeId);
-  Future<void> saveMediaListEntry(int animeId, String listName, int progress, {double? score});
+  Future<void> saveMediaListEntry(
+    int animeId,
+    String listName,
+    int progress, {
+    double? score,
+  });
   Future<void> updateEpisodeProgress(
     int animeId,
     int progress,
     int? totalEpisodes,
+  );
+  Future<List<DiscussionOption>> getDiscussionLinks(
+    Anime anime,
+    int episodeNumber,
   );
 }

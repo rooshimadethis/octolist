@@ -6,6 +6,7 @@ import '../models/anime.dart';
 import '../models/user_profile.dart';
 import 'anime_service_interface.dart';
 import 'anilist_service.dart';
+import 'discussion_service.dart';
 
 /// Single source of truth for Anime data and User Library.
 class AnimeStore extends ChangeNotifier {
@@ -332,5 +333,13 @@ class AnimeStore extends ChangeNotifier {
     } catch (e) {
       debugPrint('Error saving vibe score: $e');
     }
+  }
+
+  /// Get discussion links for an episode
+  Future<List<DiscussionOption>> getDiscussionLinks(
+    Anime anime,
+    int episodeNumber,
+  ) {
+    return _service.getDiscussionLinks(anime, episodeNumber);
   }
 }

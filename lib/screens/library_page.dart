@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ import '../widgets/anime_card_skeleton.dart';
 import '../widgets/outlined_star.dart';
 import '../widgets/octopus_mascot.dart';
 import '../theme/expressive_theme.dart';
+import 'search_page.dart';
 
 import '../widgets/pressable_card.dart';
 
@@ -168,6 +170,18 @@ class _LibraryPageState extends State<LibraryPage> {
                     .toList(),
               ),
               actions: [
+                IconButton(
+                  icon: Icon(Icons.search, color: primaryText, size: 28),
+                  onPressed: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SearchPage(vibeScore: vibeScore),
+                      ),
+                    );
+                  },
+                ),
                 PopupMenuButton<LibrarySortMode>(
                   icon: Icon(Icons.sort, color: primaryText, size: 28),
                   surfaceTintColor: Colors.transparent,

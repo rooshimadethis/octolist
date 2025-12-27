@@ -1,4 +1,3 @@
-import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animate/flutter_animate.dart';
@@ -8,7 +7,10 @@ import 'package:provider/provider.dart';
 import '../models/anime.dart';
 import '../services/anime_service_interface.dart';
 import '../services/anime_store.dart';
+import 'search_page.dart';
 
+import '../services/discussion_service.dart';
+import 'web_view_page.dart';
 import '../widgets/expressive_image.dart';
 import '../widgets/expressive_vibe_image.dart';
 import '../widgets/outlined_star.dart';
@@ -34,6 +36,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
   late Future<Anime?> _fullDetailsFuture;
   late IAnimeService _animeService;
   late ConfettiController _confettiController;
+  final Map<int, List<DiscussionOption>> _discussionCache = {};
   bool _isUpdating = false;
 
   // Store initial animation values so they don't change during rebuilds
@@ -269,13 +272,202 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
     }
   }
 
+  /// Show discussion options dialog
+  Future<void> _showDiscussionDialog(
+    Anime anime,
+    int episode,
+    double vibeScore,
+  ) async {
+    if (episode <= 0) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Mark an episode as watched first!',
+            style: TextStyle(color: Colors.white),
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+      return;
+    }
+
+    // Check cache first
+    if (_discussionCache.containsKey(episode)) {
+      if (!mounted) return;
+      _showOptionsDialog(episode, _discussionCache[episode]!, vibeScore);
+      return;
+    }
+
+    // Show loading dialog immediately
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      builder: (context) => const Center(child: CircularProgressIndicator()),
+    );
+
+    try {
+      final links = await context.read<AnimeStore>().getDiscussionLinks(
+        anime,
+        episode,
+      );
+
+      _discussionCache[episode] = links;
+
+      if (!mounted) return;
+      Navigator.pop(context); // Dismiss loading
+
+      // Show options dialog
+      if (!mounted) return;
+      _showOptionsDialog(episode, links, vibeScore);
+    } catch (e) {
+      if (mounted) {
+        Navigator.pop(context); // Dismiss loading
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to load discussions: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  void _showOptionsDialog(
+    int episode,
+    List<DiscussionOption> links,
+    double vibeScore,
+  ) {
+    final primaryText = ExpressiveTheme.getPrimaryText(vibeScore);
+    final scaffoldBg = Theme.of(context).scaffoldBackgroundColor;
+
+    showDialog(
+      context: context,
+      builder: (context) => Dialog(
+        backgroundColor: scaffoldBg,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.zero,
+          side: BorderSide(color: primaryText, width: 3),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'JOIN THE CONVERSATION',
+                style: GoogleFonts.teko(
+                  fontSize: 28,
+                  fontWeight: FontWeight.bold,
+                  color: primaryText,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              Text(
+                'Episode $episode',
+                style: GoogleFonts.robotoMono(
+                  fontSize: 14,
+                  color: primaryText.withValues(alpha: 0.7),
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 24),
+              Flexible(
+                child: SingleChildScrollView(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      ...links.map(
+                        (link) => Padding(
+                          padding: const EdgeInsets.only(bottom: 12.0),
+                          child: ExpressiveButton(
+                            onTap: () {
+                              _openWebView(link.url, link.title, vibeScore);
+                            },
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16,
+                              horizontal: 16,
+                            ),
+                            backgroundColor: scaffoldBg,
+                            borderColor: primaryText,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  _getIconForSource(link.source),
+                                  color: primaryText,
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: Text(
+                                    link.title.toUpperCase(),
+                                    style: GoogleFonts.teko(
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.bold,
+                                      color: primaryText,
+                                    ),
+                                  ),
+                                ),
+                                Icon(
+                                  Icons.arrow_outward_rounded,
+                                  color: primaryText,
+                                  size: 16,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text(
+                  'CLOSE',
+                  style: GoogleFonts.robotoMono(
+                    color: primaryText,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void _openWebView(String url, String title, double vibeScore) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) =>
+            WebViewPage(url: url, title: title, vibeScore: vibeScore),
+      ),
+    );
+  }
+
+  IconData _getIconForSource(DiscussionSource source) {
+    switch (source) {
+      case DiscussionSource.myAnimeList:
+        return Icons.forum_rounded; // Or custom MAL icon
+      case DiscussionSource.aniList:
+        return Icons.chat_bubble_rounded; // Custom AniList icon
+      case DiscussionSource.redditSearch:
+        return Icons
+            .reddit; // Material Design has Reddit icon? Maybe not. Use generally
+      case DiscussionSource.googleSearch:
+        return Icons.search_rounded;
+    }
+  }
+
+  // final primaryColor = widget.anime.color != null
+  //     ? Color(int.parse(widget.anime.color!.replaceAll('#', '0xFF')))
+  //     : Colors.black;
+
   @override
   Widget build(BuildContext context) {
-    // Parse color or use default black for Manga style
-    // final primaryColor = widget.anime.color != null
-    //     ? Color(int.parse(widget.anime.color!.replaceAll('#', '0xFF')))
-    //     : Colors.black;
-
     return Consumer<AnimeStore>(
       builder: (context, store, _) {
         final entry = store.getEntry(widget.anime.id);
@@ -338,6 +530,22 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                             ),
                           ),
                         ),
+                        actions: [
+                          IconButton(
+                            icon: Icon(Icons.search, color: primaryText),
+                            onPressed: () {
+                              HapticFeedback.lightImpact();
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      SearchPage(vibeScore: vibeScore),
+                                ),
+                              );
+                            },
+                          ),
+                          const SizedBox(width: 8),
+                        ],
                         flexibleSpace: FlexibleSpaceBar(
                           stretchModes: const [
                             StretchMode.zoomBackground,
@@ -803,6 +1011,57 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                                                     ),
                                                   ),
                                                 ],
+                                              ),
+                                              const SizedBox(height: 12),
+                                              // Discussion Button
+                                              SizedBox(
+                                                width: double.infinity,
+                                                child: ExpressiveButton(
+                                                  onTap: () {
+                                                    _showDiscussionDialog(
+                                                      anime,
+                                                      currentEpisode,
+                                                      vibeScore,
+                                                    );
+                                                  },
+                                                  padding:
+                                                      const EdgeInsets.symmetric(
+                                                        vertical: 12,
+                                                      ),
+                                                  backgroundColor: scaffoldBg,
+                                                  borderColor: primaryText,
+                                                  shadowColor:
+                                                      dynamicShadowColor
+                                                          .withValues(
+                                                            alpha: 0.5,
+                                                          ),
+                                                  shadowOffset: const Offset(
+                                                    2,
+                                                    2,
+                                                  ),
+                                                  child: Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      Icon(
+                                                        Icons.forum_outlined,
+                                                        color: primaryText,
+                                                        size: 20,
+                                                      ),
+                                                      const SizedBox(width: 8),
+                                                      Text(
+                                                        'DISCUSS EPISODE $currentEpisode',
+                                                        style: GoogleFonts.teko(
+                                                          fontSize: 20,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          color: primaryText,
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
                                             ],
                                           ),

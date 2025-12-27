@@ -6,6 +6,7 @@ import '../models/anime.dart';
 import '../models/user_profile.dart';
 import '../models/watching_entry.dart';
 import 'anime_service_interface.dart';
+import 'discussion_service.dart';
 
 /// Service for loading mock AniList data from JSON assets.
 ///
@@ -236,5 +237,13 @@ class MockDataService implements IAnimeService {
     debugPrint(
       'Mock mutation: Updating anime $animeId progress to $progress (target list: $targetList)',
     );
+  }
+
+  @override
+  Future<List<DiscussionOption>> getDiscussionLinks(
+    Anime anime,
+    int episodeNumber,
+  ) async {
+    return [];
   }
 }

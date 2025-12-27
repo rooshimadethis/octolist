@@ -2,6 +2,7 @@ class AnimeQueries {
   static const String mediaFragment = r"""
     fragment MediaFragment on Media {
       id
+      idMal
       title {
         english
         romaji
@@ -143,6 +144,40 @@ class AnimeQueries {
         status
         progress
         score
+      }
+    }
+  """;
+
+  static const String getGlobalTextActivities = r"""
+    query GetGlobalTextActivities($page: Int = 1, $perPage: Int = 20) {
+      Page(page: $page, perPage: $perPage) {
+        pageInfo {
+          total
+          currentPage
+          lastPage
+          hasNextPage
+          perPage
+        }
+        activities(type: TEXT, sort: ID_DESC) {
+          ... on TextActivity {
+            id
+            userId
+            type
+            text(asHtml: true)
+            createdAt
+            replyCount
+            likeCount
+            siteUrl
+            user {
+              id
+              name
+              avatar {
+                large
+                medium
+              }
+            }
+          }
+        }
       }
     }
   """;
