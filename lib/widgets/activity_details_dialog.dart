@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 import 'package:timeago/timeago.dart' as timeago;
 import '../graphql/queries.dart';
 import '../theme/expressive_theme.dart';
 import '../widgets/expressive_image.dart';
 import '../widgets/anime_card_skeleton.dart';
+import '../screens/web_view_page.dart';
 
 class ActivityDetailsDialog extends StatelessWidget {
   final int activityId;
@@ -207,14 +208,17 @@ class ActivityDetailsDialog extends StatelessWidget {
                                       height: 1.4,
                                     ),
                                     onTapUrl: (url) async {
-                                      if (await canLaunchUrl(Uri.parse(url))) {
-                                        await launchUrl(
-                                          Uri.parse(url),
-                                          mode: LaunchMode.externalApplication,
-                                        );
-                                        return true;
-                                      }
-                                      return false;
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => WebViewPage(
+                                            url: url,
+                                            title: 'LINK',
+                                            vibeScore: vibeScore,
+                                          ),
+                                        ),
+                                      );
+                                      return true;
                                     },
                                   ),
 
@@ -392,17 +396,19 @@ class ActivityDetailsDialog extends StatelessWidget {
                                                   height: 1.3,
                                                 ),
                                                 onTapUrl: (url) async {
-                                                  if (await canLaunchUrl(
-                                                    Uri.parse(url),
-                                                  )) {
-                                                    await launchUrl(
-                                                      Uri.parse(url),
-                                                      mode: LaunchMode
-                                                          .externalApplication,
-                                                    );
-                                                    return true;
-                                                  }
-                                                  return false;
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          WebViewPage(
+                                                            url: url,
+                                                            title: 'LINK',
+                                                            vibeScore:
+                                                                vibeScore,
+                                                          ),
+                                                    ),
+                                                  );
+                                                  return true;
                                                 },
                                               ),
                                             ],

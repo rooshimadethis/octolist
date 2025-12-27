@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
-import 'package:url_launcher/url_launcher.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/expressive_theme.dart';
 import '../widgets/expressive_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
+import '../screens/web_view_page.dart';
 
 /// A card widget for displaying a single text activity post from the global feed
 class ActivityCard extends StatelessWidget {
@@ -162,14 +162,17 @@ class ActivityCard extends StatelessWidget {
                         height: 1.3,
                       ),
                       onTapUrl: (url) async {
-                        if (await canLaunchUrl(Uri.parse(url))) {
-                          await launchUrl(
-                            Uri.parse(url),
-                            mode: LaunchMode.externalApplication,
-                          );
-                          return true;
-                        }
-                        return false;
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => WebViewPage(
+                              url: url,
+                              title: 'LINK',
+                              vibeScore: vibeScore,
+                            ),
+                          ),
+                        );
+                        return true;
                       },
                     ),
                   ),
