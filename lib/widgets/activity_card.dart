@@ -5,7 +5,6 @@ import 'package:google_fonts/google_fonts.dart';
 import '../theme/expressive_theme.dart';
 import '../widgets/expressive_image.dart';
 import 'package:timeago/timeago.dart' as timeago;
-import '../screens/web_view_page.dart';
 
 /// A card widget for displaying a single text activity post from the global feed
 class ActivityCard extends StatelessWidget {
@@ -36,27 +35,6 @@ class ActivityCard extends StatelessWidget {
     final createdAt = activity['createdAt'] as int? ?? 0;
     final replyCount = activity['replyCount'] as int? ?? 0;
     final likeCount = activity['likeCount'] as int? ?? 0;
-
-    // Attached Media Data
-    final media = activity['media'] as Map<String, dynamic>?;
-    final hasMedia = media != null;
-
-    String? mediaTitle;
-    String? mediaCoverUrl;
-
-    if (hasMedia) {
-      final titleObj = media['title'] ?? {};
-      mediaTitle =
-          titleObj['english'] ??
-          titleObj['romaji'] ??
-          titleObj['native'] ??
-          'Unknown';
-
-      final coverObj = media['coverImage'] ?? {};
-      // Match Anime.fromJson logic: prefer extraLarge
-      mediaCoverUrl =
-          coverObj['extraLarge'] ?? coverObj['large'] ?? coverObj['medium'];
-    }
 
     return GestureDetector(
       onTap: () {
@@ -146,89 +124,22 @@ class ActivityCard extends StatelessWidget {
               ),
             ),
 
-            // Middle Section: Text + Optional Media
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Activity Text
-                Expanded(
-                  child: Padding(
-                    padding: const EdgeInsets.all(12),
-                    child: HtmlWidget(
-                      text,
-                      textStyle: GoogleFonts.teko(
-                        fontSize: 18,
-                        color: vibe.primaryText,
-                        height: 1.3,
-                      ),
-                      onTapUrl: (url) async {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => WebViewPage(
-                              url: url,
-                              title: 'LINK',
-                              vibeScore: vibeScore,
-                            ),
-                          ),
-                        );
-                        return true;
-                      },
-                    ),
+            // Middle Section: Text
+            Padding(
+              padding: const EdgeInsets.all(12),
+              child: IgnorePointer(
+                child: HtmlWidget(
+                  text,
+                  textStyle: GoogleFonts.teko(
+                    fontSize: 18,
+                    color: vibe.primaryText,
+                    height: 1.3,
                   ),
+                  // Disable all interactive handlers - taps should open the dialog
+                  onTapUrl: (_) => false,
+                  onTapImage: (_) => false,
                 ),
-
-                // Attached Media (Right Side)
-                if (hasMedia && mediaCoverUrl != null)
-                  Container(
-                    width: 80,
-                    margin: const EdgeInsets.only(
-                      top: 12,
-                      right: 12,
-                      bottom: 12,
-                    ),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            border: Border.all(
-                              color: vibe.primaryText,
-                              width: 2,
-                            ),
-                            boxShadow: [
-                              BoxShadow(
-                                color: vibe.shadowColor,
-                                offset: const Offset(3, 3),
-                                blurRadius: 0,
-                              ),
-                            ],
-                          ),
-                          child: AspectRatio(
-                            aspectRatio: 2 / 3,
-                            child: ExpressiveImage(
-                              imageUrl: mediaCoverUrl,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        if (mediaTitle != null)
-                          Text(
-                            mediaTitle,
-                            style: GoogleFonts.teko(
-                              fontSize: 12,
-                              color: vibe.primaryText,
-                              height: 1.1,
-                            ),
-                            maxLines: 2,
-                            textAlign: TextAlign.center,
-                            overflow: TextOverflow.ellipsis,
-                          ),
-                      ],
-                    ),
-                  ),
-              ],
+              ),
             ),
 
             // Footer with stats

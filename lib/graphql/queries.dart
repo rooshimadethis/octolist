@@ -167,6 +167,7 @@ class AnimeQueries {
             createdAt
             replyCount
             likeCount
+            isLiked
             siteUrl
             user {
               id
@@ -176,7 +177,14 @@ class AnimeQueries {
                 medium
               }
             }
-
+            likes {
+              id
+              name
+              avatar {
+                large
+                medium
+              }
+            }
           }
         }
       }
@@ -194,6 +202,7 @@ class AnimeQueries {
           createdAt
           replyCount
           likeCount
+          isLiked
           siteUrl
           user {
             id
@@ -203,12 +212,20 @@ class AnimeQueries {
               medium
             }
           }
-
+          likes {
+            id
+            name
+            avatar {
+              large
+              medium
+            }
+          }
           replies {
             ... on ActivityReply {
               id
               text(asHtml: true)
               likeCount
+              isLiked
               createdAt
               user {
                 id
@@ -217,7 +234,52 @@ class AnimeQueries {
                   large
                 }
               }
+              likes {
+                id
+                name
+                avatar {
+                  large
+                  medium
+                }
+              }
             }
+          }
+        }
+      }
+    }
+  """;
+
+  static const String toggleLike = r"""
+    mutation ToggleLike($id: Int, $type: LikeableType) {
+      ToggleLikeV2(id: $id, type: $type) {
+        ... on TextActivity {
+          id
+          likeCount
+          isLiked
+        }
+        ... on ActivityReply {
+          id
+          likeCount
+          isLiked
+        }
+      }
+    }
+  """;
+
+  static const String saveActivityReply = r"""
+    mutation SaveActivityReply($activityId: Int, $text: String) {
+      SaveActivityReply(activityId: $activityId, text: $text) {
+        id
+        text(asHtml: true)
+        likeCount
+        isLiked
+        createdAt
+        user {
+          id
+          name
+          avatar {
+            large
+            medium
           }
         }
       }

@@ -10,6 +10,7 @@ import '../widgets/activity_card.dart';
 import '../widgets/anime_card_skeleton.dart';
 import '../widgets/activity_details_dialog.dart';
 import '../graphql/queries.dart';
+import '../utils/snackbar_helper.dart';
 import 'search_page.dart';
 
 class SocialPage extends StatefulWidget {
@@ -23,6 +24,20 @@ class _SocialPageState extends State<SocialPage> {
   final ScrollController _scrollController = ScrollController();
   int _currentPage = 1;
   final int _perPage = 20;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted) {
+        SnackBarHelper.showInfo(
+          context,
+          message: 'Loading social feed...',
+          duration: const Duration(milliseconds: 500),
+        );
+      }
+    });
+  }
 
   @override
   void dispose() {
@@ -71,172 +86,195 @@ class _SocialPageState extends State<SocialPage> {
         options: QueryOptions(
           document: gql(AnimeQueries.getGlobalTextActivities),
           variables: {'page': _currentPage, 'perPage': _perPage},
-          fetchPolicy: FetchPolicy.networkOnly,
+          fetchPolicy: FetchPolicy.cacheFirst,
         ),
-        builder:
-            (
-              QueryResult result, {
-              VoidCallback? refetch,
-              FetchMore? fetchMore,
-            }) {
-              if (result.hasException) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.error_outline, size: 64, color: primaryText),
-                        const SizedBox(height: 16),
-                        Text(
-                          'FAILED TO LOAD FEED',
-                          style: GoogleFonts.teko(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: primaryText,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          result.exception.toString(),
-                          textAlign: TextAlign.center,
-                          style: GoogleFonts.teko(
-                            fontSize: 16,
-                            color: primaryText.withValues(alpha: 0.7),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        ElevatedButton(
-                          onPressed: refetch,
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryText,
-                            foregroundColor: scaffoldBg,
-                            shape: const RoundedRectangleBorder(),
-                          ),
-                          child: Text(
-                            'RETRY',
-                            style: GoogleFonts.teko(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ),
-                      ],
+        builder: (QueryResult result, {VoidCallback? refetch, FetchMore? fetchMore}) {
+          if (result.hasException) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline, size: 64, color: primaryText),
+                    const SizedBox(height: 16),
+                    Text(
+                      'FAILED TO LOAD FEED',
+                      style: GoogleFonts.teko(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: primaryText,
+                      ),
                     ),
+                    const SizedBox(height: 8),
+                    Text(
+                      result.exception.toString(),
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.teko(
+                        fontSize: 16,
+                        color: primaryText.withValues(alpha: 0.7),
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: refetch,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: primaryText,
+                        foregroundColor: scaffoldBg,
+                        shape: const RoundedRectangleBorder(),
+                      ),
+                      child: Text(
+                        'RETRY',
+                        style: GoogleFonts.teko(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          if (result.isLoading && result.data == null) {
+            return ListView.builder(
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
                   ),
+                  child: const AnimeCardSkeleton(
+                    height: 180,
+                  ).animate(delay: (index * 100).ms).fadeIn(),
+                );
+              },
+            );
+          }
+
+          final activities =
+              result.data?['Page']?['activities'] as List<dynamic>? ?? [];
+          final pageInfo =
+              result.data?['Page']?['pageInfo'] as Map<String, dynamic>?;
+          final hasNextPage = pageInfo?['hasNextPage'] as bool? ?? false;
+
+          if (activities.isEmpty) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.chat_bubble_outline,
+                      size: 64,
+                      color: primaryText.withValues(alpha: 0.5),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'NO ACTIVITIES FOUND',
+                      style: GoogleFonts.teko(
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                        color: primaryText,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return RefreshIndicator(
+            onRefresh: () async {
+              if (mounted) {
+                SnackBarHelper.showInfo(
+                  context,
+                  message: 'Refreshing feed...',
+                  duration: const Duration(milliseconds: 500),
                 );
               }
+              setState(() {
+                _currentPage = 1;
+              });
+              refetch?.call();
+            },
+            child: ListView.builder(
+              controller: _scrollController,
+              padding: const EdgeInsets.symmetric(vertical: 16),
+              itemCount: activities.length + (hasNextPage ? 1 : 0),
+              itemBuilder: (context, index) {
+                if (index == activities.length) {
+                  // Load more indicator
+                  return Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Center(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          fetchMore!(
+                            FetchMoreOptions(
+                              variables: {
+                                'page': _currentPage + 1,
+                                'perPage': _perPage,
+                              },
+                              updateQuery: (previousResultData, fetchMoreResultData) {
+                                final List<dynamic> oldActivities =
+                                    previousResultData?['Page']?['activities'] ??
+                                    [];
+                                final List<dynamic> newActivities =
+                                    fetchMoreResultData?['Page']?['activities'] ??
+                                    [];
 
-              if (result.isLoading && result.data == null) {
-                return ListView.builder(
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
+                                fetchMoreResultData!['Page']['activities'] = [
+                                  ...oldActivities,
+                                  ...newActivities,
+                                ];
+
+                                setState(() => _currentPage++);
+                                return fetchMoreResultData;
+                              },
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: primaryText,
+                          foregroundColor: scaffoldBg,
+                          shape: const RoundedRectangleBorder(),
+                        ),
+                        child: Text(
+                          'LOAD MORE',
+                          style: GoogleFonts.teko(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                      child: const AnimeCardSkeleton(
-                        height: 180,
-                      ).animate(delay: (index * 100).ms).fadeIn(),
+                    ),
+                  );
+                }
+
+                final activity = activities[index] as Map<String, dynamic>;
+                return ActivityCard(
+                  activity: activity,
+                  vibeScore: vibeScore,
+                  onTap: () {
+                    showDialog(
+                      context: context,
+                      builder: (context) => ActivityDetailsDialog(
+                        activityId: activity['id'],
+                        initialActivity: activity,
+                        vibeScore: vibeScore,
+                      ),
                     );
                   },
-                );
-              }
-
-              final activities =
-                  result.data?['Page']?['activities'] as List<dynamic>? ?? [];
-              final pageInfo =
-                  result.data?['Page']?['pageInfo'] as Map<String, dynamic>?;
-              final hasNextPage = pageInfo?['hasNextPage'] as bool? ?? false;
-
-              if (activities.isEmpty) {
-                return Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(24.0),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.chat_bubble_outline,
-                          size: 64,
-                          color: primaryText.withValues(alpha: 0.5),
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          'NO ACTIVITIES FOUND',
-                          style: GoogleFonts.teko(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                            color: primaryText,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                );
-              }
-
-              return RefreshIndicator(
-                onRefresh: () async {
-                  setState(() {
-                    _currentPage = 1;
-                  });
-                  refetch?.call();
-                },
-                child: ListView.builder(
-                  controller: _scrollController,
-                  padding: const EdgeInsets.symmetric(vertical: 16),
-                  itemCount: activities.length + (hasNextPage ? 1 : 0),
-                  itemBuilder: (context, index) {
-                    if (index == activities.length) {
-                      // Load more indicator
-                      return Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Center(
-                          child: ElevatedButton(
-                            onPressed: () {
-                              setState(() {
-                                _currentPage++;
-                              });
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: primaryText,
-                              foregroundColor: scaffoldBg,
-                              shape: const RoundedRectangleBorder(),
-                            ),
-                            child: Text(
-                              'LOAD MORE',
-                              style: GoogleFonts.teko(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                        ),
-                      );
-                    }
-
-                    final activity = activities[index] as Map<String, dynamic>;
-                    return ActivityCard(
-                      activity: activity,
-                      vibeScore: vibeScore,
-                      onTap: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => ActivityDetailsDialog(
-                            activityId: activity['id'],
-                            initialActivity: activity,
-                            vibeScore: vibeScore,
-                          ),
-                        );
-                      },
-                    ).animate(delay: (index * 50).ms).fadeIn(duration: 300.ms);
-                  },
-                ),
-              );
-            },
+                ).animate(delay: (index * 50).ms).fadeIn(duration: 300.ms);
+              },
+            ),
+          );
+        },
       ),
     );
   }

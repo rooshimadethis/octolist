@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -11,7 +12,7 @@ import '../widgets/expressive_image.dart';
 import '../widgets/anime_card_skeleton.dart';
 import '../screens/web_view_page.dart';
 
-class ActivityDetailsDialog extends StatelessWidget {
+class ActivityDetailsDialog extends StatefulWidget {
   final int activityId;
   final Map<String, dynamic>? initialActivity;
   final double vibeScore;
@@ -23,6 +24,21 @@ class ActivityDetailsDialog extends StatelessWidget {
     this.vibeScore = 0.0,
   });
 
+  @override
+  State<ActivityDetailsDialog> createState() => _ActivityDetailsDialogState();
+}
+
+class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
+  final TextEditingController _commentController = TextEditingController();
+  final FocusNode _commentFocusNode = FocusNode();
+
+  @override
+  void dispose() {
+    _commentController.dispose();
+    _commentFocusNode.dispose();
+    super.dispose();
+  }
+
   String _getRelativeTime(int timestamp) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     return timeago.format(dateTime, locale: 'en_short');
@@ -30,7 +46,7 @@ class ActivityDetailsDialog extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final vibe = VibeColors.fromScore(vibeScore);
+    final vibe = VibeColors.fromScore(widget.vibeScore);
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -91,8 +107,10 @@ class ActivityDetailsDialog extends StatelessWidget {
                 child: Query(
                   options: QueryOptions(
                     document: gql(AnimeQueries.getActivityDetails),
-                    variables: {'id': activityId},
-                    fetchPolicy: FetchPolicy.networkOnly,
+                    variables: {'id': widget.activityId},
+                    fetchPolicy: widget.initialActivity?['replies'] != null
+                        ? FetchPolicy.cacheOnly
+                        : FetchPolicy.cacheFirst,
                   ),
                   builder:
                       (
@@ -100,7 +118,8 @@ class ActivityDetailsDialog extends StatelessWidget {
                         VoidCallback? refetch,
                         FetchMore? fetchMore,
                       }) {
-                        if (result.isLoading && initialActivity == null) {
+                        if (result.isLoading &&
+                            widget.initialActivity == null) {
                           return Padding(
                             padding: const EdgeInsets.all(16),
                             child: const AnimeCardSkeleton(height: 200),
@@ -108,7 +127,7 @@ class ActivityDetailsDialog extends StatelessWidget {
                         }
 
                         final data =
-                            result.data?['Activity'] ?? initialActivity;
+                            result.data?['Activity'] ?? widget.initialActivity;
 
                         if (data == null) {
                           return Center(
@@ -131,26 +150,6 @@ class ActivityDetailsDialog extends StatelessWidget {
                         final replies =
                             (data['replies'] as List<dynamic>?) ?? [];
                         final replyCount = replies.length;
-
-                        // Attached Media Data
-                        final media = data['media'] as Map<String, dynamic>?;
-                        final hasMedia = media != null;
-                        String? mediaTitle;
-                        String? mediaCoverUrl;
-
-                        if (hasMedia) {
-                          final titleObj = media['title'] ?? {};
-                          mediaTitle =
-                              titleObj['english'] ??
-                              titleObj['romaji'] ??
-                              titleObj['native'] ??
-                              'Unknown';
-                          final coverObj = media['coverImage'] ?? {};
-                          mediaCoverUrl =
-                              coverObj['extraLarge'] ??
-                              coverObj['large'] ??
-                              coverObj['medium'];
-                        }
 
                         return ListView(
                           padding: EdgeInsets.zero,
@@ -214,80 +213,311 @@ class ActivityDetailsDialog extends StatelessWidget {
                                           builder: (context) => WebViewPage(
                                             url: url,
                                             title: 'LINK',
-                                            vibeScore: vibeScore,
+                                            vibeScore: widget.vibeScore,
                                           ),
                                         ),
                                       );
                                       return true;
                                     },
                                   ),
-
-                                  // Attached Media (If any)
-                                  if (hasMedia && mediaCoverUrl != null) ...[
-                                    const SizedBox(height: 16),
-                                    Container(
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: vibe.primaryText,
-                                          width: 2,
-                                        ),
-                                        boxShadow: [
-                                          BoxShadow(
-                                            color: vibe.shadowColor,
-                                            offset: const Offset(4, 4),
-                                            blurRadius: 0,
-                                          ),
-                                        ],
-                                      ),
-                                      child: Row(
-                                        children: [
-                                          SizedBox(
-                                            width: 80,
-                                            height: 120,
-                                            child: ExpressiveImage(
-                                              imageUrl: mediaCoverUrl,
-                                              fit: BoxFit.cover,
-                                            ),
-                                          ),
-                                          Expanded(
-                                            child: Padding(
-                                              padding: const EdgeInsets.all(12),
-                                              child: Column(
-                                                crossAxisAlignment:
-                                                    CrossAxisAlignment.start,
-                                                children: [
-                                                  Text(
-                                                    'TALKING ABOUT:',
-                                                    style: GoogleFonts.teko(
-                                                      fontSize: 14,
-                                                      color: vibe.primaryText
-                                                          .withValues(
-                                                            alpha: 0.7,
-                                                          ),
-                                                    ),
-                                                  ),
-                                                  Text(
-                                                    mediaTitle!,
-                                                    style: GoogleFonts.teko(
-                                                      fontSize: 20,
-                                                      fontWeight:
-                                                          FontWeight.bold,
-                                                      color: vibe.primaryText,
-                                                    ),
-                                                    maxLines: 2,
-                                                    overflow:
-                                                        TextOverflow.ellipsis,
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ],
                                 ],
                               ),
+                            ),
+
+                            // Liked by section
+                            Builder(
+                              builder: (context) {
+                                final likes =
+                                    (data['likes'] as List<dynamic>?) ?? [];
+                                if (likes.isEmpty) {
+                                  return const SizedBox.shrink();
+                                }
+
+                                return Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    16,
+                                    8,
+                                    16,
+                                    16,
+                                  ),
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'LIKED BY ${likes.length}',
+                                        style: GoogleFonts.teko(
+                                          fontSize: 14,
+                                          fontWeight: FontWeight.bold,
+                                          color: vibe.primaryText.withValues(
+                                            alpha: 0.6,
+                                          ),
+                                          letterSpacing: 1,
+                                        ),
+                                      ),
+                                      const SizedBox(height: 8),
+                                      SizedBox(
+                                        height: 50,
+                                        child: ListView.separated(
+                                          scrollDirection: Axis.horizontal,
+                                          itemCount: likes.length > 10
+                                              ? 10
+                                              : likes.length,
+                                          separatorBuilder: (c, i) =>
+                                              const SizedBox(width: 8),
+                                          itemBuilder: (context, index) {
+                                            final user =
+                                                likes[index]
+                                                    as Map<String, dynamic>;
+                                            final userName =
+                                                user['name'] as String? ??
+                                                'Unknown';
+                                            final avatarUrl =
+                                                user['avatar']?['large']
+                                                    as String? ??
+                                                '';
+
+                                            return Tooltip(
+                                              message: userName,
+                                              child: Container(
+                                                decoration: BoxDecoration(
+                                                  shape: BoxShape.circle,
+                                                  border: Border.all(
+                                                    color: vibe.primaryText,
+                                                    width: 2,
+                                                  ),
+                                                ),
+                                                child: ClipOval(
+                                                  child: avatarUrl.isNotEmpty
+                                                      ? ExpressiveImage(
+                                                          imageUrl: avatarUrl,
+                                                          width: 40,
+                                                          height: 40,
+                                                          fit: BoxFit.cover,
+                                                        )
+                                                      : Container(
+                                                          width: 40,
+                                                          height: 40,
+                                                          color: vibe
+                                                              .primaryText
+                                                              .withValues(
+                                                                alpha: 0.2,
+                                                              ),
+                                                          child: Icon(
+                                                            Icons.person,
+                                                            color: vibe
+                                                                .primaryText,
+                                                            size: 24,
+                                                          ),
+                                                        ),
+                                                ),
+                                              ),
+                                            );
+                                          },
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+
+                            // Action buttons (Like & Comment)
+                            Mutation(
+                              options: MutationOptions(
+                                document: gql(AnimeQueries.toggleLike),
+                                onCompleted: (data) {
+                                  // Refetch to update likes list
+                                  refetch?.call();
+                                },
+                              ),
+                              builder: (runMutation, result) {
+                                final isLiked =
+                                    data['isLiked'] as bool? ?? false;
+                                final likeCount =
+                                    data['likeCount'] as int? ?? 0;
+
+                                return Padding(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 16,
+                                    vertical: 12,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      // Like button
+                                      GestureDetector(
+                                        onTap: () {
+                                          HapticFeedback.lightImpact();
+                                          runMutation({
+                                            'id': widget.activityId,
+                                            'type': 'ACTIVITY',
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 8,
+                                          ),
+                                          decoration: BoxDecoration(
+                                            color: isLiked
+                                                ? vibe.primaryText
+                                                : Colors.transparent,
+                                            border: Border.all(
+                                              color: vibe.primaryText,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            children: [
+                                              Icon(
+                                                isLiked
+                                                    ? Icons.favorite
+                                                    : Icons.favorite_border,
+                                                size: 18,
+                                                color: isLiked
+                                                    ? vibe.scaffoldBg
+                                                    : vibe.primaryText,
+                                              ),
+                                              const SizedBox(width: 6),
+                                              Text(
+                                                '$likeCount',
+                                                style: GoogleFonts.teko(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: isLiked
+                                                      ? vibe.scaffoldBg
+                                                      : vibe.primaryText,
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 12),
+                                      // Comment count indicator
+                                      Container(
+                                        padding: const EdgeInsets.symmetric(
+                                          horizontal: 16,
+                                          vertical: 8,
+                                        ),
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: vibe.primaryText,
+                                            width: 2,
+                                          ),
+                                        ),
+                                        child: Row(
+                                          children: [
+                                            Icon(
+                                              Icons.chat_bubble_outline,
+                                              size: 18,
+                                              color: vibe.primaryText,
+                                            ),
+                                            const SizedBox(width: 6),
+                                            Text(
+                                              '${replies.length}',
+                                              style: GoogleFonts.teko(
+                                                fontSize: 16,
+                                                fontWeight: FontWeight.bold,
+                                                color: vibe.primaryText,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
+                            ),
+
+                            // Comment input section
+                            Mutation(
+                              options: MutationOptions(
+                                document: gql(AnimeQueries.saveActivityReply),
+                                onCompleted: (data) {
+                                  _commentController.clear();
+                                  _commentFocusNode.unfocus();
+                                  // Refetch to show new comment
+                                  refetch?.call();
+                                },
+                              ),
+                              builder: (runMutation, result) {
+                                return Padding(
+                                  padding: const EdgeInsets.fromLTRB(
+                                    16,
+                                    0,
+                                    16,
+                                    16,
+                                  ),
+                                  child: Row(
+                                    children: [
+                                      Expanded(
+                                        child: Container(
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: vibe.primaryText,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: TextField(
+                                            controller: _commentController,
+                                            focusNode: _commentFocusNode,
+                                            style: GoogleFonts.teko(
+                                              fontSize: 16,
+                                              color: vibe.primaryText,
+                                            ),
+                                            decoration: InputDecoration(
+                                              hintText: 'ADD A COMMENT...',
+                                              hintStyle: GoogleFonts.teko(
+                                                fontSize: 16,
+                                                color: vibe.primaryText
+                                                    .withValues(alpha: 0.4),
+                                              ),
+                                              border: InputBorder.none,
+                                              contentPadding:
+                                                  const EdgeInsets.symmetric(
+                                                    horizontal: 12,
+                                                    vertical: 10,
+                                                  ),
+                                            ),
+                                            maxLines: null,
+                                          ),
+                                        ),
+                                      ),
+                                      const SizedBox(width: 8),
+                                      GestureDetector(
+                                        onTap: () {
+                                          final text = _commentController.text
+                                              .trim();
+                                          if (text.isEmpty) return;
+
+                                          HapticFeedback.lightImpact();
+                                          runMutation({
+                                            'activityId': widget.activityId,
+                                            'text': text,
+                                          });
+                                        },
+                                        child: Container(
+                                          padding: const EdgeInsets.all(12),
+                                          decoration: BoxDecoration(
+                                            color: vibe.primaryText,
+                                            border: Border.all(
+                                              color: vibe.primaryText,
+                                              width: 2,
+                                            ),
+                                          ),
+                                          child: Icon(
+                                            Icons.send,
+                                            color: vibe.scaffoldBg,
+                                            size: 20,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              },
                             ),
 
                             // Divider
@@ -403,8 +633,8 @@ class ActivityDetailsDialog extends StatelessWidget {
                                                           WebViewPage(
                                                             url: url,
                                                             title: 'LINK',
-                                                            vibeScore:
-                                                                vibeScore,
+                                                            vibeScore: widget
+                                                                .vibeScore,
                                                           ),
                                                     ),
                                                   );
