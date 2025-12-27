@@ -176,6 +176,48 @@ class AnimeQueries {
                 medium
               }
             }
+
+          }
+        }
+      }
+    }
+  """;
+
+  static const String getActivityDetails = r"""
+    query GetActivityDetails($id: Int) {
+      Activity(id: $id) {
+        ... on TextActivity {
+          id
+          userId
+          type
+          text(asHtml: true)
+          createdAt
+          replyCount
+          likeCount
+          siteUrl
+          user {
+            id
+            name
+            avatar {
+              large
+              medium
+            }
+          }
+
+          replies {
+            ... on ActivityReply {
+              id
+              text(asHtml: true)
+              likeCount
+              createdAt
+              user {
+                id
+                name
+                avatar {
+                  large
+                }
+              }
+            }
           }
         }
       }

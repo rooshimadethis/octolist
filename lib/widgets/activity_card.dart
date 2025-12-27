@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:google_fonts/google_fonts.dart';
 import '../theme/expressive_theme.dart';
@@ -10,19 +11,18 @@ import 'package:timeago/timeago.dart' as timeago;
 class ActivityCard extends StatelessWidget {
   final Map<String, dynamic> activity;
   final double vibeScore;
+  final VoidCallback? onTap;
 
-  const ActivityCard({super.key, required this.activity, this.vibeScore = 0.0});
+  const ActivityCard({
+    super.key,
+    required this.activity,
+    this.vibeScore = 0.0,
+    this.onTap,
+  });
 
   String _getRelativeTime(int timestamp) {
     final dateTime = DateTime.fromMillisecondsSinceEpoch(timestamp * 1000);
     return timeago.format(dateTime, locale: 'en_short');
-  }
-
-  Future<void> _openUrl(String url) async {
-    final uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri, mode: LaunchMode.externalApplication);
-    }
   }
 
   @override
@@ -36,7 +36,6 @@ class ActivityCard extends StatelessWidget {
     final createdAt = activity['createdAt'] as int? ?? 0;
     final replyCount = activity['replyCount'] as int? ?? 0;
     final likeCount = activity['likeCount'] as int? ?? 0;
-    final siteUrl = activity['siteUrl'] as String? ?? '';
 
     // Attached Media Data
     final media = activity['media'] as Map<String, dynamic>?;
@@ -62,9 +61,7 @@ class ActivityCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
-        if (siteUrl.isNotEmpty) {
-          _openUrl(siteUrl);
-        }
+        onTap?.call();
       },
       child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -157,18 +154,23 @@ class ActivityCard extends StatelessWidget {
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.all(12),
-                    child: Text(
-                      text.replaceAll(
-                        RegExp(r'<[^>]*>'),
-                        '',
-                      ), // Strip HTML tags
-                      style: GoogleFonts.teko(
-                        fontSize: 16,
+                    child: HtmlWidget(
+                      text,
+                      textStyle: GoogleFonts.teko(
+                        fontSize: 18,
                         color: vibe.primaryText,
                         height: 1.3,
                       ),
-                      maxLines: 8,
-                      overflow: TextOverflow.ellipsis,
+                      onTapUrl: (url) async {
+                        if (await canLaunchUrl(Uri.parse(url))) {
+                          await launchUrl(
+                            Uri.parse(url),
+                            mode: LaunchMode.externalApplication,
+                          );
+                          return true;
+                        }
+                        return false;
+                      },
                     ),
                   ),
                 ),

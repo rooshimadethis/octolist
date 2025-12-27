@@ -8,6 +8,7 @@ import '../services/anime_store.dart';
 import '../theme/expressive_theme.dart';
 import '../widgets/activity_card.dart';
 import '../widgets/anime_card_skeleton.dart';
+import '../widgets/activity_details_dialog.dart';
 import '../graphql/queries.dart';
 import 'search_page.dart';
 
@@ -221,6 +222,16 @@ class _SocialPageState extends State<SocialPage> {
                     return ActivityCard(
                       activity: activity,
                       vibeScore: vibeScore,
+                      onTap: () {
+                        showDialog(
+                          context: context,
+                          builder: (context) => ActivityDetailsDialog(
+                            activityId: activity['id'],
+                            initialActivity: activity,
+                            vibeScore: vibeScore,
+                          ),
+                        );
+                      },
                     ).animate(delay: (index * 50).ms).fadeIn(duration: 300.ms);
                   },
                 ),
