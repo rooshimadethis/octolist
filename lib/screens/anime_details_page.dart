@@ -69,7 +69,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
       }
     });
     _confettiController = ConfettiController(
-      duration: const Duration(seconds: 5), // Slowed down from 3s
+      duration: const Duration(milliseconds: 2500),
     );
   }
 
