@@ -239,6 +239,12 @@ class MockDataService implements IAnimeService {
     );
   }
 
+  /// Deletes a media list entry.
+  @override
+  Future<void> deleteMediaListEntry(int entryId) async {
+    debugPrint('Mock mutation: Deleting entry $entryId');
+  }
+
   @override
   Future<List<DiscussionOption>> getDiscussionLinks(
     Anime anime,

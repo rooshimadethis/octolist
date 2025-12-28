@@ -13,6 +13,7 @@ import 'anime_card_skeleton.dart';
 import 'user_accent_builder.dart';
 import 'liked_by_section.dart';
 import 'activity_reply_item.dart';
+import 'zoomable_image.dart';
 
 class ActivityDetailsDialog extends StatefulWidget {
   final int activityId;
@@ -260,6 +261,21 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
                 ),
               );
               return true;
+            },
+            customWidgetBuilder: (element) {
+              if (element.localName == 'img' &&
+                  element.attributes.containsKey('src')) {
+                final src = element.attributes['src']!;
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: ZoomableImage(
+                    imageUrl: src,
+                    vibeScore: widget.vibeScore,
+                    child: ExpressiveImage(imageUrl: src),
+                  ),
+                );
+              }
+              return null;
             },
           ),
         ],

@@ -21,6 +21,7 @@ abstract class IAnimeService {
     int progress, {
     double? score,
   });
+  Future<void> deleteMediaListEntry(int entryId);
   Future<void> updateEpisodeProgress(
     int animeId,
     int progress,

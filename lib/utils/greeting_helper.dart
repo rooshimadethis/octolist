@@ -53,7 +53,7 @@ class GreetingHelper {
       ),
       TimeRange.evening: GreetingData(
         'Rest well!',
-        'Dream of magic and starlight. ✨',
+        'Dream of magic and starlight ✨',
       ),
       TimeRange.deepNight: GreetingData(
         'Still awake?',

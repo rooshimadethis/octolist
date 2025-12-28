@@ -303,6 +303,20 @@ class AniListService implements IAnimeService {
     }
   }
 
+  /// Deletes a media list entry.
+  @override
+  Future<void> deleteMediaListEntry(int entryId) async {
+    final MutationOptions options = MutationOptions(
+      document: gql(AnimeQueries.deleteMediaListEntry),
+      variables: {'id': entryId},
+    );
+
+    final QueryResult result = await _client.mutate(options);
+    if (result.hasException) {
+      throw result.exception!;
+    }
+  }
+
   /// Updates the episode progress for an anime with debouncing.
   ///
   /// This method automatically handles:

@@ -210,6 +210,15 @@ class AnimeStore extends ChangeNotifier {
     await fetchLibrary(); // Easiest way to sync complex list moves for now
   }
 
+  /// Remove an entry from all lists.
+  Future<void> removeFromList(int mediaId) async {
+    final entry = getEntry(mediaId);
+    if (entry == null) return;
+
+    await _service.deleteMediaListEntry(entry.id);
+    await fetchLibrary(); // Easiest way to sync state
+  }
+
   /// Updates the user score for an anime.
   Future<void> updateScore(int mediaId, double score) async {
     final entry = _allEntries[mediaId];

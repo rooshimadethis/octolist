@@ -57,14 +57,33 @@ class _SocialPageState extends State<SocialPage> {
       appBar: AppBar(
         backgroundColor: scaffoldBg,
         elevation: 0,
-        title: Text(
-          'SOCIAL',
-          style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-            fontWeight: FontWeight.bold,
-            fontStyle: FontStyle.italic,
-            fontSize: 32,
-            color: primaryText,
-          ),
+        title: Row(
+          children: [
+            Text(
+              'SOCIAL',
+              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                fontStyle: FontStyle.italic,
+                fontSize: 32,
+                color: primaryText,
+              ),
+            ),
+            Transform.translate(
+              offset: const Offset(0, -5),
+              child: Row(
+                children: [
+                  Image.asset('assets/icons/icon2-shadow.png', height: 50),
+                  Transform.translate(
+                    offset: const Offset(-20, 0),
+                    child: Image.asset(
+                      'assets/icons/icon2-shadow.png',
+                      height: 50,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
         ),
         actions: [
           IconButton(

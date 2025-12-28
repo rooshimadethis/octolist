@@ -148,6 +148,14 @@ class AnimeQueries {
     }
   """;
 
+  static const String deleteMediaListEntry = r"""
+    mutation DeleteMediaListEntry($id: Int) {
+      DeleteMediaListEntry(id: $id) {
+        deleted
+      }
+    }
+  """;
+
   static const String getGlobalTextActivities = r"""
     query GetGlobalTextActivities($page: Int = 1, $perPage: Int = 20) {
       Page(page: $page, perPage: $perPage) {

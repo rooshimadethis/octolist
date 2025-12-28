@@ -13,6 +13,7 @@ import '../services/discussion_service.dart';
 import 'web_view_page.dart';
 import '../widgets/expressive_image.dart';
 import '../widgets/expressive_vibe_image.dart';
+import '../widgets/zoomable_image.dart';
 import '../widgets/outlined_star.dart';
 import '../widgets/metadata_chip.dart';
 import '../widgets/rating_slider.dart';
@@ -25,8 +26,9 @@ import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 
 class AnimeDetailsPage extends StatefulWidget {
   final Anime anime;
+  final String? heroTag;
 
-  const AnimeDetailsPage({super.key, required this.anime});
+  const AnimeDetailsPage({super.key, required this.anime, this.heroTag});
 
   @override
   State<AnimeDetailsPage> createState() => _AnimeDetailsPageState();
@@ -187,6 +189,35 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                   );
                 },
               ),
+              if (currentList != null) ...[
+                Divider(height: 1, thickness: 2, color: primaryText),
+                InkWell(
+                  onTap: () {
+                    HapticFeedback.lightImpact();
+                    Navigator.pop(context);
+                    _removeFromList(anime, vibeScore);
+                  },
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    color: scaffoldBg,
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Text(
+                            'REMOVE FROM LIST',
+                            style: GoogleFonts.teko(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.red,
+                            ),
+                          ),
+                        ),
+                        const Icon(Icons.delete_outline, color: Colors.red),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
             ],
           ),
         ),
@@ -230,6 +261,45 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Failed to update list: $e'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    }
+  }
+
+  /// Remove the anime from the list
+  Future<void> _removeFromList(Anime anime, double vibeScore) async {
+    setState(() => _isUpdating = true);
+    try {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: const Text('Removing from list...'),
+            duration: const Duration(milliseconds: 500),
+            backgroundColor: ExpressiveTheme.getPrimaryText(vibeScore),
+          ),
+        );
+      }
+
+      await context.read<AnimeStore>().removeFromList(anime.id);
+
+      if (mounted) {
+        setState(() => _isUpdating = false);
+
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Removed from list!'),
+            backgroundColor: Colors.green,
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() => _isUpdating = false);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Failed to remove from list: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -602,8 +672,12 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
                               // Hovering Cover Image
                               Positioned(
                                 bottom: 40,
-                                child: Hero(
-                                  tag: 'anime_cover_${anime.id}',
+                                child: ZoomableImage(
+                                  heroTag:
+                                      widget.heroTag ??
+                                      'anime_cover_${anime.id}',
+                                  imageUrl: anime.coverImage ?? '',
+                                  vibeScore: vibeScore,
                                   child: Container(
                                     width: 180, // Larger Poster size
                                     height: 270,

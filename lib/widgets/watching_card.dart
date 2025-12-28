@@ -63,6 +63,7 @@ class _WatchingCardState extends State<WatchingCard> {
       widget.vibeScore,
       widget.entry.anime.parsedColor,
     );
+    final heroTag = '${widget.heroPrefix ?? 'watching'}_${widget.entry.id}';
 
     return RepaintBoundary(
       child: PressableCard(
@@ -71,7 +72,8 @@ class _WatchingCardState extends State<WatchingCard> {
           if (!context.mounted) return;
           Navigator.of(context).push(
             MaterialPageRoute(
-              builder: (context) => AnimeDetailsPage(anime: widget.entry.anime),
+              builder: (context) =>
+                  AnimeDetailsPage(anime: widget.entry.anime, heroTag: heroTag),
             ),
           );
         },
@@ -104,7 +106,7 @@ class _WatchingCardState extends State<WatchingCard> {
                   ),
                 ),
                 child: Hero(
-                  tag: '${widget.heroPrefix ?? 'watching'}_${widget.entry.id}',
+                  tag: heroTag,
                   child: SizedBox(
                     width: 100,
                     child: ExpressiveVibeImage(
