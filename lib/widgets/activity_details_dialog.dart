@@ -577,78 +577,151 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
                               final rText = reply['text'] as String? ?? '';
                               final rTime = reply['createdAt'] as int? ?? 0;
 
-                              return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                  horizontal: 16,
-                                  vertical: 12,
+                              return Mutation(
+                                options: MutationOptions(
+                                  document: gql(AnimeQueries.toggleLike),
+                                  onCompleted: (data) {
+                                    refetch?.call();
+                                  },
                                 ),
-                                child: Row(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    ClipOval(
-                                      child: ExpressiveImage(
-                                        imageUrl: rAvatar,
-                                        width: 32,
-                                        height: 32,
-                                      ),
+                                builder: (runMutation, mutResult) {
+                                  final rId = reply['id'];
+                                  final rIsLiked =
+                                      reply['isLiked'] as bool? ?? false;
+                                  final rLikeCount =
+                                      reply['likeCount'] as int? ?? 0;
+
+                                  return Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 12,
                                     ),
-                                    const SizedBox(width: 12),
-                                    Expanded(
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Row(
+                                    child: Row(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        ClipOval(
+                                          child: ExpressiveImage(
+                                            imageUrl: rAvatar,
+                                            width: 32,
+                                            height: 32,
+                                          ),
+                                        ),
+                                        const SizedBox(width: 12),
+                                        Expanded(
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
                                             children: [
-                                              Text(
-                                                rName.toUpperCase(),
-                                                style: GoogleFonts.teko(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: vibe.primaryText,
-                                                ),
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                    rName.toUpperCase(),
+                                                    style: GoogleFonts.teko(
+                                                      fontSize: 16,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                      color: vibe.primaryText,
+                                                    ),
+                                                  ),
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    _getRelativeTime(rTime),
+                                                    style: GoogleFonts.teko(
+                                                      fontSize: 12,
+                                                      color: vibe.primaryText
+                                                          .withValues(
+                                                            alpha: 0.6,
+                                                          ),
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
-                                              const SizedBox(width: 8),
-                                              Text(
-                                                _getRelativeTime(rTime),
-                                                style: GoogleFonts.teko(
-                                                  fontSize: 12,
+                                              const SizedBox(height: 4),
+                                              HtmlWidget(
+                                                rText,
+                                                textStyle: GoogleFonts.teko(
+                                                  fontSize: 16,
                                                   color: vibe.primaryText
-                                                      .withValues(alpha: 0.6),
+                                                      .withValues(alpha: 0.9),
+                                                  height: 1.3,
                                                 ),
+                                                onTapUrl: (url) async {
+                                                  Navigator.push(
+                                                    context,
+                                                    MaterialPageRoute(
+                                                      builder: (context) =>
+                                                          WebViewPage(
+                                                            url: url,
+                                                            title: 'LINK',
+                                                            vibeScore: widget
+                                                                .vibeScore,
+                                                          ),
+                                                    ),
+                                                  );
+                                                  return true;
+                                                },
                                               ),
                                             ],
                                           ),
-                                          const SizedBox(height: 4),
-                                          HtmlWidget(
-                                            rText,
-                                            textStyle: GoogleFonts.teko(
-                                              fontSize: 16,
-                                              color: vibe.primaryText
-                                                  .withValues(alpha: 0.9),
-                                              height: 1.3,
+                                        ),
+                                        const SizedBox(width: 12),
+                                        GestureDetector(
+                                          onTap: () {
+                                            HapticFeedback.lightImpact();
+                                            runMutation({
+                                              'id': rId,
+                                              'type': 'ACTIVITY_REPLY',
+                                            });
+                                          },
+                                          behavior: HitTestBehavior.opaque,
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              horizontal: 4,
+                                              vertical: 4,
                                             ),
-                                            onTapUrl: (url) async {
-                                              Navigator.push(
-                                                context,
-                                                MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      WebViewPage(
-                                                        url: url,
-                                                        title: 'LINK',
-                                                        vibeScore:
-                                                            widget.vibeScore,
-                                                      ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              children: [
+                                                Icon(
+                                                  rIsLiked
+                                                      ? Icons.favorite
+                                                      : Icons.favorite_border,
+                                                  size: 24,
+                                                  color: rIsLiked
+                                                      ? ExpressiveTheme.getHeartColor(
+                                                          widget.vibeScore,
+                                                        )
+                                                      : vibe.primaryText
+                                                            .withValues(
+                                                              alpha: 0.5,
+                                                            ),
                                                 ),
-                                              );
-                                              return true;
-                                            },
+                                                if (rLikeCount > 0) ...[
+                                                  const SizedBox(width: 8),
+                                                  Text(
+                                                    '$rLikeCount',
+                                                    style: GoogleFonts.teko(
+                                                      fontSize: 18,
+                                                      color: rIsLiked
+                                                          ? ExpressiveTheme.getHeartColor(
+                                                              widget.vibeScore,
+                                                            )
+                                                          : vibe.primaryText
+                                                                .withValues(
+                                                                  alpha: 0.5,
+                                                                ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ],
+                                            ),
                                           ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
                                     ),
-                                  ],
-                                ),
+                                  );
+                                },
                               );
                             },
                           ),
