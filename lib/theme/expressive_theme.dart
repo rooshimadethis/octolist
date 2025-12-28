@@ -101,6 +101,38 @@ class ExpressiveTheme {
   static const Color bloodRed = Color(0xFF8B0000);
   static final Color indicatorGrey = Colors.grey[300]!;
 
+  /// Parses AniList color names or hex codes into Flutter Color objects
+  static Color? parseAniListColor(String? colorName) {
+    if (colorName == null) return null;
+
+    if (colorName.startsWith('#')) {
+      try {
+        return Color(int.parse(colorName.replaceAll('#', '0xFF')));
+      } catch (_) {
+        return null;
+      }
+    }
+
+    switch (colorName.toLowerCase()) {
+      case 'blue':
+        return Colors.blue;
+      case 'purple':
+        return Colors.purple;
+      case 'pink':
+        return Colors.pink;
+      case 'orange':
+        return Colors.orange;
+      case 'red':
+        return Colors.red;
+      case 'green':
+        return Colors.green;
+      case 'gray':
+        return Colors.grey;
+      default:
+        return null;
+    }
+  }
+
   // ============================================================================
   // BORDERS
   // ============================================================================

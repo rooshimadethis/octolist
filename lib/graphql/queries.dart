@@ -176,6 +176,9 @@ class AnimeQueries {
                 large
                 medium
               }
+              options {
+                profileColor
+              }
             }
             likes {
               id
@@ -211,6 +214,9 @@ class AnimeQueries {
               large
               medium
             }
+            options {
+              profileColor
+            }
           }
           likes {
             id
@@ -232,6 +238,9 @@ class AnimeQueries {
                 name
                 avatar {
                   large
+                }
+                options {
+                  profileColor
                 }
               }
               likes {
@@ -280,6 +289,9 @@ class AnimeQueries {
           avatar {
             large
             medium
+          }
+          options {
+            profileColor
           }
         }
       }

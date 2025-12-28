@@ -15,8 +15,17 @@ OctoList is a Flutter application for tracking anime. It consumes the [AniList G
 - **Feature-first or Layer-first**: Currently simple layer-based.
   - `lib/graphql/`: Contains Client configuration (`client.dart`) and Queries (`queries.dart`).
   - `lib/screens/`: Contains UI screens (e.g., `home_screen.dart`).
-  - `lib/services/`: Contains core services (`DiscussionService`, `AniListService`, `AnimeStore`).
+  - `lib/services/`: Contains core services - see `lib/services/README.md` for details.
+  - `lib/widgets/`: Contains reusable UI components - see `lib/widgets/README.md` for details.
+  - `lib/utils/`: Contains utility functions and helpers.
+  - `lib/models/`: Contains data models.
+  - `lib/theme/`: Contains theme configuration.
 - **Styling**: Material 3 (`useMaterial3: true`), `Colors.deepPurple` seed.
+
+## 📚 Documentation
+- **Widget Reference**: See `lib/widgets/README.md` for all UI components
+- **Service Reference**: See `lib/services/README.md` for all business logic services
+- **Social Code**: See `.gemini/social_cleanup_summary.md` for recent refactoring details
 
 ## API & Data Strategy
 > [!WARNING]

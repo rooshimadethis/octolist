@@ -60,29 +60,40 @@ class _PressableCardState extends State<PressableCard> {
 
   void _handleTapDown(TapDownDetails details) {
     if (!_isPressed) {
+      HapticFeedback.selectionClick();
       setState(() => _isPressed = true);
     }
   }
 
   void _handleTapCancel() {
     if (_isPressed) {
+      HapticFeedback.selectionClick();
       setState(() => _isPressed = false);
     }
   }
 
   Future<void> _handleTap() async {
-    if (widget.onTap == null) return;
-
-    // Only trigger haptic if not already pressed (avoid duplicate from onTapDown)
+    // Only trigger haptic and state change if not already pressed (avoid duplicate from onTapDown)
     if (!_isPressed) {
+      HapticFeedback.selectionClick();
       setState(() => _isPressed = true);
     }
-    HapticFeedback.lightImpact();
+
+    if (widget.onTap == null) {
+      // Just pop back up if no callback
+      await Future.delayed(widget.animationDuration);
+      if (mounted) {
+        HapticFeedback.selectionClick();
+        setState(() => _isPressed = false);
+      }
+      return;
+    }
 
     // Wait for animation to complete
     await Future.delayed(widget.tapDelay ?? widget.animationDuration);
 
     if (mounted && _isPressed) {
+      HapticFeedback.selectionClick();
       setState(() => _isPressed = false);
     }
 
