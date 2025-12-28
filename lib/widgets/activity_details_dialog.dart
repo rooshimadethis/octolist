@@ -112,563 +112,566 @@ class _ActivityDetailsDialogState extends State<ActivityDetailsDialog> {
                         ? FetchPolicy.cacheOnly
                         : FetchPolicy.cacheFirst,
                   ),
-                  builder:
-                      (
-                        QueryResult result, {
-                        VoidCallback? refetch,
-                        FetchMore? fetchMore,
-                      }) {
-                        if (result.isLoading &&
-                            widget.initialActivity == null) {
-                          return Padding(
-                            padding: const EdgeInsets.all(16),
-                            child: const AnimeCardSkeleton(height: 200),
-                          );
-                        }
+                  builder: (QueryResult result, {VoidCallback? refetch, FetchMore? fetchMore}) {
+                    if (result.isLoading && widget.initialActivity == null) {
+                      return Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: const AnimeCardSkeleton(height: 200),
+                      );
+                    }
 
-                        final data =
-                            result.data?['Activity'] ?? widget.initialActivity;
+                    final data =
+                        result.data?['Activity'] ?? widget.initialActivity;
 
-                        if (data == null) {
-                          return Center(
-                            child: Text(
-                              'COULD NOT LOAD ACTIVITY',
-                              style: GoogleFonts.teko(
-                                color: vibe.primaryText,
-                                fontSize: 20,
-                              ),
-                            ),
-                          );
-                        }
+                    if (data == null) {
+                      return Center(
+                        child: Text(
+                          'COULD NOT LOAD ACTIVITY',
+                          style: GoogleFonts.teko(
+                            color: vibe.primaryText,
+                            fontSize: 20,
+                          ),
+                        ),
+                      );
+                    }
 
-                        final user = data['user'] as Map<String, dynamic>?;
-                        final userName = user?['name'] as String? ?? 'Unknown';
-                        final avatarUrl =
-                            user?['avatar']?['large'] as String? ?? '';
-                        final text = data['text'] as String? ?? '';
-                        final createdAt = data['createdAt'] as int? ?? 0;
-                        final replies =
-                            (data['replies'] as List<dynamic>?) ?? [];
-                        final replyCount = replies.length;
+                    final user = data['user'] as Map<String, dynamic>?;
+                    final userName = user?['name'] as String? ?? 'Unknown';
+                    final avatarUrl =
+                        user?['avatar']?['large'] as String? ?? '';
+                    final text = data['text'] as String? ?? '';
+                    final createdAt = data['createdAt'] as int? ?? 0;
+                    final replies = (data['replies'] as List<dynamic>?) ?? [];
+                    final replyCount = replies.length;
 
-                        return ListView(
-                          padding: EdgeInsets.zero,
-                          shrinkWrap: true,
-                          children: [
-                            // Main Post
-                            Padding(
-                              padding: const EdgeInsets.all(16),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
+                    return ListView(
+                      padding: EdgeInsets.zero,
+                      shrinkWrap: true,
+                      children: [
+                        // Main Post
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // User Info
+                              Row(
                                 children: [
-                                  // User Info
-                                  Row(
-                                    children: [
-                                      ClipOval(
-                                        child: ExpressiveImage(
-                                          imageUrl: avatarUrl,
-                                          width: 48,
-                                          height: 48,
-                                        ),
-                                      ),
-                                      const SizedBox(width: 12),
-                                      Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            userName.toUpperCase(),
-                                            style: GoogleFonts.teko(
-                                              fontSize: 20,
-                                              fontWeight: FontWeight.bold,
-                                              color: vibe.primaryText,
-                                            ),
-                                          ),
-                                          Text(
-                                            _getRelativeTime(createdAt),
-                                            style: GoogleFonts.teko(
-                                              fontSize: 14,
-                                              color: vibe.primaryText
-                                                  .withValues(alpha: 0.7),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
-                                  const SizedBox(height: 16),
-
-                                  // Body
-                                  HtmlWidget(
-                                    text,
-                                    textStyle: GoogleFonts.teko(
-                                      fontSize: 18,
-                                      color: vibe.primaryText,
-                                      height: 1.4,
+                                  ClipOval(
+                                    child: ExpressiveImage(
+                                      imageUrl: avatarUrl,
+                                      width: 48,
+                                      height: 48,
                                     ),
-                                    onTapUrl: (url) async {
-                                      Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                          builder: (context) => WebViewPage(
-                                            url: url,
-                                            title: 'LINK',
-                                            vibeScore: widget.vibeScore,
-                                          ),
-                                        ),
-                                      );
-                                      return true;
-                                    },
                                   ),
-                                ],
-                              ),
-                            ),
-
-                            // Liked by section
-                            Builder(
-                              builder: (context) {
-                                final likes =
-                                    (data['likes'] as List<dynamic>?) ?? [];
-                                if (likes.isEmpty) {
-                                  return const SizedBox.shrink();
-                                }
-
-                                return Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    16,
-                                    8,
-                                    16,
-                                    16,
-                                  ),
-                                  child: Column(
+                                  const SizedBox(width: 12),
+                                  Column(
                                     crossAxisAlignment:
                                         CrossAxisAlignment.start,
                                     children: [
                                       Text(
-                                        'LIKED BY ${likes.length}',
+                                        userName.toUpperCase(),
+                                        style: GoogleFonts.teko(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: vibe.primaryText,
+                                        ),
+                                      ),
+                                      Text(
+                                        _getRelativeTime(createdAt),
                                         style: GoogleFonts.teko(
                                           fontSize: 14,
-                                          fontWeight: FontWeight.bold,
                                           color: vibe.primaryText.withValues(
-                                            alpha: 0.6,
+                                            alpha: 0.7,
                                           ),
-                                          letterSpacing: 1,
-                                        ),
-                                      ),
-                                      const SizedBox(height: 8),
-                                      SizedBox(
-                                        height: 50,
-                                        child: ListView.separated(
-                                          scrollDirection: Axis.horizontal,
-                                          itemCount: likes.length > 10
-                                              ? 10
-                                              : likes.length,
-                                          separatorBuilder: (c, i) =>
-                                              const SizedBox(width: 8),
-                                          itemBuilder: (context, index) {
-                                            final user =
-                                                likes[index]
-                                                    as Map<String, dynamic>;
-                                            final userName =
-                                                user['name'] as String? ??
-                                                'Unknown';
-                                            final avatarUrl =
-                                                user['avatar']?['large']
-                                                    as String? ??
-                                                '';
-
-                                            return Tooltip(
-                                              message: userName,
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  shape: BoxShape.circle,
-                                                  border: Border.all(
-                                                    color: vibe.primaryText,
-                                                    width: 2,
-                                                  ),
-                                                ),
-                                                child: ClipOval(
-                                                  child: avatarUrl.isNotEmpty
-                                                      ? ExpressiveImage(
-                                                          imageUrl: avatarUrl,
-                                                          width: 40,
-                                                          height: 40,
-                                                          fit: BoxFit.cover,
-                                                        )
-                                                      : Container(
-                                                          width: 40,
-                                                          height: 40,
-                                                          color: vibe
-                                                              .primaryText
-                                                              .withValues(
-                                                                alpha: 0.2,
-                                                              ),
-                                                          child: Icon(
-                                                            Icons.person,
-                                                            color: vibe
-                                                                .primaryText,
-                                                            size: 24,
-                                                          ),
-                                                        ),
-                                                ),
-                                              ),
-                                            );
-                                          },
                                         ),
                                       ),
                                     ],
                                   ),
-                                );
-                              },
-                            ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
 
-                            // Action buttons (Like & Comment)
-                            Mutation(
-                              options: MutationOptions(
-                                document: gql(AnimeQueries.toggleLike),
-                                onCompleted: (data) {
-                                  // Refetch to update likes list
-                                  refetch?.call();
+                              // Body
+                              HtmlWidget(
+                                text,
+                                textStyle: GoogleFonts.teko(
+                                  fontSize: 18,
+                                  color: vibe.primaryText,
+                                  height: 1.4,
+                                ),
+                                onTapUrl: (url) async {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => WebViewPage(
+                                        url: url,
+                                        title: 'LINK',
+                                        vibeScore: widget.vibeScore,
+                                      ),
+                                    ),
+                                  );
+                                  return true;
                                 },
                               ),
-                              builder: (runMutation, result) {
-                                final isLiked =
-                                    data['isLiked'] as bool? ?? false;
-                                final likeCount =
-                                    data['likeCount'] as int? ?? 0;
+                            ],
+                          ),
+                        ),
 
-                                return Padding(
-                                  padding: const EdgeInsets.symmetric(
-                                    horizontal: 16,
-                                    vertical: 12,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      // Like button
-                                      GestureDetector(
-                                        onTap: () {
-                                          HapticFeedback.lightImpact();
-                                          runMutation({
-                                            'id': widget.activityId,
-                                            'type': 'ACTIVITY',
-                                          });
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.symmetric(
-                                            horizontal: 16,
-                                            vertical: 8,
-                                          ),
-                                          decoration: BoxDecoration(
-                                            color: isLiked
-                                                ? vibe.primaryText
-                                                : Colors.transparent,
-                                            border: Border.all(
-                                              color: vibe.primaryText,
-                                              width: 2,
-                                            ),
-                                          ),
-                                          child: Row(
-                                            children: [
-                                              Icon(
-                                                isLiked
-                                                    ? Icons.favorite
-                                                    : Icons.favorite_border,
-                                                size: 18,
-                                                color: isLiked
-                                                    ? vibe.scaffoldBg
-                                                    : vibe.primaryText,
-                                              ),
-                                              const SizedBox(width: 6),
-                                              Text(
-                                                '$likeCount',
-                                                style: GoogleFonts.teko(
-                                                  fontSize: 16,
-                                                  fontWeight: FontWeight.bold,
-                                                  color: isLiked
-                                                      ? vibe.scaffoldBg
-                                                      : vibe.primaryText,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
+                        // Liked by section
+                        Builder(
+                          builder: (context) {
+                            final likes =
+                                (data['likes'] as List<dynamic>?) ?? [];
+                            if (likes.isEmpty) {
+                              return const SizedBox.shrink();
+                            }
+
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    'LIKED BY ${likes.length}',
+                                    style: GoogleFonts.teko(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.bold,
+                                      color: vibe.primaryText.withValues(
+                                        alpha: 0.6,
                                       ),
-                                      const SizedBox(width: 12),
-                                      // Comment count indicator
-                                      Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 16,
-                                          vertical: 8,
-                                        ),
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                            color: vibe.primaryText,
-                                            width: 2,
-                                          ),
-                                        ),
-                                        child: Row(
-                                          children: [
-                                            Icon(
-                                              Icons.chat_bubble_outline,
-                                              size: 18,
-                                              color: vibe.primaryText,
-                                            ),
-                                            const SizedBox(width: 6),
-                                            Text(
-                                              '${replies.length}',
-                                              style: GoogleFonts.teko(
-                                                fontSize: 16,
-                                                fontWeight: FontWeight.bold,
-                                                color: vibe.primaryText,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-
-                            // Comment input section
-                            Mutation(
-                              options: MutationOptions(
-                                document: gql(AnimeQueries.saveActivityReply),
-                                onCompleted: (data) {
-                                  _commentController.clear();
-                                  _commentFocusNode.unfocus();
-                                  // Refetch to show new comment
-                                  refetch?.call();
-                                },
-                              ),
-                              builder: (runMutation, result) {
-                                return Padding(
-                                  padding: const EdgeInsets.fromLTRB(
-                                    16,
-                                    0,
-                                    16,
-                                    16,
-                                  ),
-                                  child: Row(
-                                    children: [
-                                      Expanded(
-                                        child: Container(
-                                          decoration: BoxDecoration(
-                                            border: Border.all(
-                                              color: vibe.primaryText,
-                                              width: 2,
-                                            ),
-                                          ),
-                                          child: TextField(
-                                            controller: _commentController,
-                                            focusNode: _commentFocusNode,
-                                            style: GoogleFonts.teko(
-                                              fontSize: 16,
-                                              color: vibe.primaryText,
-                                            ),
-                                            decoration: InputDecoration(
-                                              hintText: 'ADD A COMMENT...',
-                                              hintStyle: GoogleFonts.teko(
-                                                fontSize: 16,
-                                                color: vibe.primaryText
-                                                    .withValues(alpha: 0.4),
-                                              ),
-                                              border: InputBorder.none,
-                                              contentPadding:
-                                                  const EdgeInsets.symmetric(
-                                                    horizontal: 12,
-                                                    vertical: 10,
-                                                  ),
-                                            ),
-                                            maxLines: null,
-                                          ),
-                                        ),
-                                      ),
-                                      const SizedBox(width: 8),
-                                      GestureDetector(
-                                        onTap: () {
-                                          final text = _commentController.text
-                                              .trim();
-                                          if (text.isEmpty) return;
-
-                                          HapticFeedback.lightImpact();
-                                          runMutation({
-                                            'activityId': widget.activityId,
-                                            'text': text,
-                                          });
-                                        },
-                                        child: Container(
-                                          padding: const EdgeInsets.all(12),
-                                          decoration: BoxDecoration(
-                                            color: vibe.primaryText,
-                                            border: Border.all(
-                                              color: vibe.primaryText,
-                                              width: 2,
-                                            ),
-                                          ),
-                                          child: Icon(
-                                            Icons.send,
-                                            color: vibe.scaffoldBg,
-                                            size: 20,
-                                          ),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                );
-                              },
-                            ),
-
-                            // Divider
-                            Container(
-                              height: 2,
-                              color: vibe.primaryText.withValues(alpha: 0.2),
-                            ),
-
-                            // Replies
-                            if (replies.isNotEmpty) ...[
-                              Padding(
-                                padding: const EdgeInsets.fromLTRB(
-                                  16,
-                                  16,
-                                  16,
-                                  8,
-                                ),
-                                child: Text(
-                                  'REPLIES ($replyCount)',
-                                  style: GoogleFonts.teko(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.bold,
-                                    color: vibe.primaryText.withValues(
-                                      alpha: 0.7,
+                                      letterSpacing: 1,
                                     ),
                                   ),
-                                ),
-                              ),
-                              ListView.separated(
-                                shrinkWrap: true, // Needed inside ListView
-                                physics:
-                                    const NeverScrollableScrollPhysics(), // Scroll parent
-                                itemCount: replies.length,
-                                separatorBuilder: (c, i) => Divider(
-                                  color: vibe.primaryText.withValues(
-                                    alpha: 0.1,
-                                  ),
-                                  height: 1,
-                                ),
-                                itemBuilder: (context, index) {
-                                  final reply =
-                                      replies[index] as Map<String, dynamic>;
-                                  final rUser =
-                                      reply['user'] as Map<String, dynamic>?;
-                                  final rName =
-                                      rUser?['name'] as String? ?? 'Unknown';
-                                  final rAvatar =
-                                      rUser?['avatar']?['large'] as String? ??
-                                      '';
-                                  final rText = reply['text'] as String? ?? '';
-                                  final rTime = reply['createdAt'] as int? ?? 0;
+                                  const SizedBox(height: 8),
+                                  SizedBox(
+                                    height: 75,
+                                    child: ListView.separated(
+                                      scrollDirection: Axis.horizontal,
+                                      itemCount: likes.length > 10
+                                          ? 10
+                                          : likes.length,
+                                      separatorBuilder: (c, i) =>
+                                          const SizedBox(width: 12),
+                                      itemBuilder: (context, index) {
+                                        final user =
+                                            likes[index]
+                                                as Map<String, dynamic>;
+                                        final userName =
+                                            user['name'] as String? ??
+                                            'Unknown';
+                                        final avatarUrl =
+                                            user['avatar']?['large']
+                                                as String? ??
+                                            '';
 
-                                  return Padding(
-                                    padding: const EdgeInsets.symmetric(
-                                      horizontal: 16,
-                                      vertical: 12,
-                                    ),
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ClipOval(
-                                          child: ExpressiveImage(
-                                            imageUrl: rAvatar,
-                                            width: 32,
-                                            height: 32,
-                                          ),
-                                        ),
-                                        const SizedBox(width: 12),
-                                        Expanded(
+                                        return SizedBox(
+                                          width: 50,
                                           child: Column(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
+                                            mainAxisSize: MainAxisSize.min,
                                             children: [
-                                              Row(
-                                                children: [
-                                                  Text(
-                                                    rName.toUpperCase(),
-                                                    style: GoogleFonts.teko(
-                                                      fontSize: 16,
-                                                      fontWeight:
-                                                          FontWeight.bold,
+                                              Tooltip(
+                                                message: userName,
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    shape: BoxShape.circle,
+                                                    border: Border.all(
                                                       color: vibe.primaryText,
+                                                      width: 2,
                                                     ),
                                                   ),
-                                                  const SizedBox(width: 8),
-                                                  Text(
-                                                    _getRelativeTime(rTime),
-                                                    style: GoogleFonts.teko(
-                                                      fontSize: 12,
-                                                      color: vibe.primaryText
-                                                          .withValues(
-                                                            alpha: 0.6,
+                                                  child: ClipOval(
+                                                    child: avatarUrl.isNotEmpty
+                                                        ? ExpressiveImage(
+                                                            imageUrl: avatarUrl,
+                                                            width: 40,
+                                                            height: 40,
+                                                            fit: BoxFit.cover,
+                                                          )
+                                                        : Container(
+                                                            width: 40,
+                                                            height: 40,
+                                                            color: vibe
+                                                                .primaryText
+                                                                .withValues(
+                                                                  alpha: 0.2,
+                                                                ),
+                                                            child: Icon(
+                                                              Icons.person,
+                                                              color: vibe
+                                                                  .primaryText,
+                                                              size: 24,
+                                                            ),
                                                           ),
-                                                    ),
                                                   ),
-                                                ],
+                                                ),
                                               ),
                                               const SizedBox(height: 4),
-                                              HtmlWidget(
-                                                rText,
-                                                textStyle: GoogleFonts.teko(
-                                                  fontSize: 16,
-                                                  color: vibe.primaryText
-                                                      .withValues(alpha: 0.9),
-                                                  height: 1.3,
+                                              Text(
+                                                userName.toUpperCase(),
+                                                style: GoogleFonts.teko(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: vibe.primaryText,
+                                                  height: 1,
                                                 ),
-                                                onTapUrl: (url) async {
-                                                  Navigator.push(
-                                                    context,
-                                                    MaterialPageRoute(
-                                                      builder: (context) =>
-                                                          WebViewPage(
-                                                            url: url,
-                                                            title: 'LINK',
-                                                            vibeScore: widget
-                                                                .vibeScore,
-                                                          ),
-                                                    ),
-                                                  );
-                                                  return true;
-                                                },
+                                                textAlign: TextAlign.center,
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
                                               ),
                                             ],
+                                          ),
+                                        );
+                                      },
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+
+                        // Action buttons (Like & Comment)
+                        Mutation(
+                          options: MutationOptions(
+                            document: gql(AnimeQueries.toggleLike),
+                            onCompleted: (data) {
+                              // Refetch to update likes list
+                              refetch?.call();
+                            },
+                          ),
+                          builder: (runMutation, result) {
+                            final isLiked = data['isLiked'] as bool? ?? false;
+                            final likeCount = data['likeCount'] as int? ?? 0;
+
+                            return Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                                vertical: 12,
+                              ),
+                              child: Row(
+                                children: [
+                                  // Like button
+                                  GestureDetector(
+                                    onTap: () {
+                                      HapticFeedback.lightImpact();
+                                      runMutation({
+                                        'id': widget.activityId,
+                                        'type': 'ACTIVITY',
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 16,
+                                        vertical: 8,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: isLiked
+                                            ? ExpressiveTheme.getHeartColor(
+                                                widget.vibeScore,
+                                              )
+                                            : Colors.transparent,
+                                        border: Border.all(
+                                          color: isLiked
+                                              ? ExpressiveTheme.getHeartColor(
+                                                  widget.vibeScore,
+                                                )
+                                              : vibe.primaryText,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Row(
+                                        children: [
+                                          Icon(
+                                            isLiked
+                                                ? Icons.favorite
+                                                : Icons.favorite_border,
+                                            size: 18,
+                                            color: isLiked
+                                                ? ExpressiveTheme.getContrastText(
+                                                    ExpressiveTheme.getHeartColor(
+                                                      widget.vibeScore,
+                                                    ),
+                                                  )
+                                                : vibe.primaryText,
+                                          ),
+                                          const SizedBox(width: 6),
+                                          Text(
+                                            '$likeCount',
+                                            style: GoogleFonts.teko(
+                                              fontSize: 16,
+                                              fontWeight: FontWeight.bold,
+                                              color: isLiked
+                                                  ? ExpressiveTheme.getContrastText(
+                                                      ExpressiveTheme.getHeartColor(
+                                                        widget.vibeScore,
+                                                      ),
+                                                    )
+                                                  : vibe.primaryText,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  // Comment count indicator
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                      vertical: 8,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: vibe.primaryText,
+                                        width: 2,
+                                      ),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.chat_bubble_outline,
+                                          size: 18,
+                                          color: vibe.primaryText,
+                                        ),
+                                        const SizedBox(width: 6),
+                                        Text(
+                                          '${replies.length}',
+                                          style: GoogleFonts.teko(
+                                            fontSize: 16,
+                                            fontWeight: FontWeight.bold,
+                                            color: vibe.primaryText,
                                           ),
                                         ),
                                       ],
                                     ),
-                                  );
-                                },
+                                  ),
+                                ],
                               ),
-                            ] else if (!result.isLoading) ...[
-                              Padding(
-                                padding: const EdgeInsets.all(32),
-                                child: Center(
-                                  child: Text(
-                                    'NO REPLIES YET',
-                                    style: GoogleFonts.teko(
-                                      fontSize: 16,
-                                      color: vibe.primaryText.withValues(
-                                        alpha: 0.4,
+                            );
+                          },
+                        ),
+
+                        // Comment input section
+                        Mutation(
+                          options: MutationOptions(
+                            document: gql(AnimeQueries.saveActivityReply),
+                            onCompleted: (data) {
+                              _commentController.clear();
+                              _commentFocusNode.unfocus();
+                              // Refetch to show new comment
+                              refetch?.call();
+                            },
+                          ),
+                          builder: (runMutation, result) {
+                            return Padding(
+                              padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Container(
+                                      decoration: BoxDecoration(
+                                        border: Border.all(
+                                          color: vibe.primaryText,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: TextField(
+                                        controller: _commentController,
+                                        focusNode: _commentFocusNode,
+                                        style: GoogleFonts.teko(
+                                          fontSize: 16,
+                                          color: vibe.primaryText,
+                                        ),
+                                        decoration: InputDecoration(
+                                          hintText: 'ADD A COMMENT...',
+                                          hintStyle: GoogleFonts.teko(
+                                            fontSize: 16,
+                                            color: vibe.primaryText.withValues(
+                                              alpha: 0.4,
+                                            ),
+                                          ),
+                                          border: InputBorder.none,
+                                          contentPadding:
+                                              const EdgeInsets.symmetric(
+                                                horizontal: 12,
+                                                vertical: 10,
+                                              ),
+                                        ),
+                                        maxLines: null,
                                       ),
                                     ),
                                   ),
+                                  const SizedBox(width: 8),
+                                  GestureDetector(
+                                    onTap: () {
+                                      final text = _commentController.text
+                                          .trim();
+                                      if (text.isEmpty) return;
+
+                                      HapticFeedback.lightImpact();
+                                      runMutation({
+                                        'activityId': widget.activityId,
+                                        'text': text,
+                                      });
+                                    },
+                                    child: Container(
+                                      padding: const EdgeInsets.all(12),
+                                      decoration: BoxDecoration(
+                                        color: vibe.primaryText,
+                                        border: Border.all(
+                                          color: vibe.primaryText,
+                                          width: 2,
+                                        ),
+                                      ),
+                                      child: Icon(
+                                        Icons.send,
+                                        color: vibe.scaffoldBg,
+                                        size: 20,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            );
+                          },
+                        ),
+
+                        // Divider
+                        Container(
+                          height: 2,
+                          color: vibe.primaryText.withValues(alpha: 0.2),
+                        ),
+
+                        // Replies
+                        if (replies.isNotEmpty) ...[
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                            child: Text(
+                              'REPLIES ($replyCount)',
+                              style: GoogleFonts.teko(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: vibe.primaryText.withValues(alpha: 0.7),
+                              ),
+                            ),
+                          ),
+                          ListView.separated(
+                            shrinkWrap: true, // Needed inside ListView
+                            physics:
+                                const NeverScrollableScrollPhysics(), // Scroll parent
+                            itemCount: replies.length,
+                            separatorBuilder: (c, i) => Divider(
+                              color: vibe.primaryText.withValues(alpha: 0.1),
+                              height: 1,
+                            ),
+                            itemBuilder: (context, index) {
+                              final reply =
+                                  replies[index] as Map<String, dynamic>;
+                              final rUser =
+                                  reply['user'] as Map<String, dynamic>?;
+                              final rName =
+                                  rUser?['name'] as String? ?? 'Unknown';
+                              final rAvatar =
+                                  rUser?['avatar']?['large'] as String? ?? '';
+                              final rText = reply['text'] as String? ?? '';
+                              final rTime = reply['createdAt'] as int? ?? 0;
+
+                              return Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 16,
+                                  vertical: 12,
+                                ),
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    ClipOval(
+                                      child: ExpressiveImage(
+                                        imageUrl: rAvatar,
+                                        width: 32,
+                                        height: 32,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 12),
+                                    Expanded(
+                                      child: Column(
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Row(
+                                            children: [
+                                              Text(
+                                                rName.toUpperCase(),
+                                                style: GoogleFonts.teko(
+                                                  fontSize: 16,
+                                                  fontWeight: FontWeight.bold,
+                                                  color: vibe.primaryText,
+                                                ),
+                                              ),
+                                              const SizedBox(width: 8),
+                                              Text(
+                                                _getRelativeTime(rTime),
+                                                style: GoogleFonts.teko(
+                                                  fontSize: 12,
+                                                  color: vibe.primaryText
+                                                      .withValues(alpha: 0.6),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                          const SizedBox(height: 4),
+                                          HtmlWidget(
+                                            rText,
+                                            textStyle: GoogleFonts.teko(
+                                              fontSize: 16,
+                                              color: vibe.primaryText
+                                                  .withValues(alpha: 0.9),
+                                              height: 1.3,
+                                            ),
+                                            onTapUrl: (url) async {
+                                              Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                  builder: (context) =>
+                                                      WebViewPage(
+                                                        url: url,
+                                                        title: 'LINK',
+                                                        vibeScore:
+                                                            widget.vibeScore,
+                                                      ),
+                                                ),
+                                              );
+                                              return true;
+                                            },
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          ),
+                        ] else if (!result.isLoading) ...[
+                          Padding(
+                            padding: const EdgeInsets.all(32),
+                            child: Center(
+                              child: Text(
+                                'NO REPLIES YET',
+                                style: GoogleFonts.teko(
+                                  fontSize: 16,
+                                  color: vibe.primaryText.withValues(
+                                    alpha: 0.4,
+                                  ),
                                 ),
                               ),
-                            ],
-                            const SizedBox(height: 32),
-                          ],
-                        );
-                      },
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 32),
+                      ],
+                    );
+                  },
                 ),
               ),
             ],

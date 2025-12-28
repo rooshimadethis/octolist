@@ -452,6 +452,14 @@ class ExpressiveTheme {
     return Color.lerp(pastel, serious, t)!;
   }
 
+  /// Get the vibe-dependent heart color
+  static Color getHeartColor(double score) {
+    // Vibe 0: Bright Red
+    // Vibe 1: Blood Red
+    final t = Curves.easeInOut.transform(score);
+    return Color.lerp(Colors.redAccent, bloodRed, t)!;
+  }
+
   static Offset getShadowOffset(double score) =>
       Offset.lerp(shadowOffsetXLarge, const Offset(10, 10), score)!;
 

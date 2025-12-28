@@ -36,6 +36,8 @@ class ActivityCard extends StatelessWidget {
     final replyCount = activity['replyCount'] as int? ?? 0;
     final likeCount = activity['likeCount'] as int? ?? 0;
 
+    final isLiked = activity['isLiked'] as bool? ?? false;
+
     return GestureDetector(
       onTap: () {
         HapticFeedback.lightImpact();
@@ -167,16 +169,20 @@ class ActivityCard extends StatelessWidget {
                   ),
                   const SizedBox(width: 16),
                   Icon(
-                    Icons.favorite_border,
+                    isLiked ? Icons.favorite : Icons.favorite_border,
                     size: 16,
-                    color: vibe.primaryText.withValues(alpha: 0.7),
+                    color: isLiked
+                        ? ExpressiveTheme.getHeartColor(vibeScore)
+                        : vibe.primaryText.withValues(alpha: 0.7),
                   ),
                   const SizedBox(width: 4),
                   Text(
                     '$likeCount',
                     style: GoogleFonts.teko(
                       fontSize: 14,
-                      color: vibe.primaryText.withValues(alpha: 0.7),
+                      color: isLiked
+                          ? ExpressiveTheme.getHeartColor(vibeScore)
+                          : vibe.primaryText.withValues(alpha: 0.7),
                     ),
                   ),
                 ],
