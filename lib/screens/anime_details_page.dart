@@ -68,9 +68,7 @@ class _AnimeDetailsPageState extends State<AnimeDetailsPage> {
         );
       }
     });
-    _confettiController = ConfettiController(
-      duration: const Duration(milliseconds: 2500),
-    );
+    _confettiController = ConfettiController(duration: _entranceDuration ~/ 3);
   }
 
   @override

@@ -43,7 +43,7 @@ class _WatchingCardState extends State<WatchingCard> {
   void initState() {
     super.initState();
     _confettiController = ConfettiController(
-      duration: const Duration(seconds: 2), // Slowed down from 1s
+      duration: ExpressiveTheme.vibeDuration(widget.vibeScore) ~/ 3,
     );
   }
 

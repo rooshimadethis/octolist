@@ -215,15 +215,19 @@ class _CustomSquareThumbShape extends SliderComponentShape {
           ExpressiveTheme.borderWidthThin; // Match episode progress bar border
     canvas.drawRect(bgRect, borderPaint);
 
-    // Draw inner square (perfectly centered on the current thumb center)
-    final roundedCenter = Offset(
-      animatedCenter.dx.roundToDouble(),
-      animatedCenter.dy.roundToDouble(),
-    );
+    // Draw inner square (perfectly centered with even padding on all sides)
+    // Account for border width (2px on each side = 4px total)
+    // Then add desired padding (4px on each side = 8px total)
+    // Total reduction: 12px
+    const double borderAdjustment = ExpressiveTheme.borderWidthThin * 2; // 4px
+    const double innerPadding = 8.0; // 4px on each side
+    const double totalReduction = borderAdjustment + innerPadding; // 12px
+
     final innerRect = Rect.fromCenter(
-      center: roundedCenter,
-      width: thumbSize - 12, // Maintain proportional inner square
-      height: thumbSize - 12,
+      center:
+          animatedCenter, // Use the same center as bgRect for perfect alignment
+      width: thumbSize - totalReduction,
+      height: thumbSize - totalReduction,
     );
     final innerPaint = Paint()
       ..color = primaryColor

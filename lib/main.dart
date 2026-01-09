@@ -14,7 +14,7 @@ import 'screens/expressive_home_screen.dart';
 import 'graphql/anilist_client.dart';
 
 // SET THIS TO TRUE TO USE MOCK DATA
-const bool useMocks = false;
+const bool useMocks = true;
 
 void main() async {
   // We need to initialize Hive for graphql_flutter's cache
